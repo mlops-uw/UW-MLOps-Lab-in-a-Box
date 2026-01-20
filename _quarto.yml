@@ -1,77 +1,75 @@
 project:
   type: website
+  output-dir: docs
 
 website:
-  title: "MLOps Boeing x WIC"
+  title: ""
+  search: false
+  back-to-top-navigation: true
+  navbar: false
+  page-navigation: true
 
-  navbar:
-    left:
-      - text: "Home"
+  sidebar:
+    style: docked
+    collapse-level: 3
+    contents:
+      - text: 
+
+      - text: Home
         href: index.qmd
-      - text: "Need for MLOps"
+
+      - text: Need for MLOps
         href: need_for_mloqs.qmd
-      - text: "Programming Fundamentals"
+
+      - text: Python resources
         href: python_fundamentals.qmd
-      - text: "ML Fundamentals"
-        href: ml_fundamentals.qmd
-      - text: "Dataset"
-        href: dataset.qmd
-      - text: "Data Preprocessing"
-        href: data_preprocessing.qmd
-      - text: "Algorithms"
-        menu:
-          - text: "Supervised Learning"
-            href: supervised_learning.qmd
-          - text: "Unsupervised Learning"
-            href: unsupervised_learning.qmd
-      - text: "Version Control"
-        menu:
-          - text: "Git"
-            href: version_control.qmd
-          - text: "GitHub"
-            href: version_control.qmd#github
-      - text: "Cloud"
-        menu:
-          - text: "Azure"
-            href: cloud.qmd#azure
-          - text: "Azure ML"
-            href: cloud.qmd#azure-ml
-      - text: "Containerization"
-        menu:
-          - text: "Docker"
-            href: containerization.qmd#docker
-          - text: "Kubernetes"
-            href: containerization.qmd#kubernetes
-      - text: "Data Engineering"
-        menu:
-          - text: "Spark"
-            href: data_engineering.qmd#spark
-          - text: "Airflow"
-            href: data_engineering.qmd#airflow
-      - text: "Model Testing & Validation"
-        href: model_testing.qmd
-      - text: "Deployment"
-        menu:
-          - text: "Jenkins"
-            href: deployment.qmd#jenkins
-          - text: "GitHub Actions"
-            href: deployment.qmd#github-actions
-      - text: "Monitoring"
-        menu:
-          - text: "Prometheus"
-            href: monitoring.qmd#prometheus
-          - text: "Grafana"
-            href: monitoring.qmd#grafana
-      - text: "Security"
-        href: security.qmd
-      - text: "Helpful Resources"
-        href: helpful_resources.qmd
+
+      - section: ML Foundations
+        contents:
+          - text: Understanding dataset
+            href: dataset.qmd
+
+          - text: Data Processing
+            href: data_processing.qmd
+
+          - section: Algorithms
+            contents:
+            - text: Supervised Learning
+              href: supervised.qmd
+
+            - text: Unsupervised Learning
+              href: unsupervised.qmd
+
+      - text: Version Control
+        href: vc.qmd
+
+      - text: Azure Cloud
+        href: azure.qmd
+
+      - text: Containerization
+        href: containers.qmd
+
+      - text: Data Engineering
+        href: DE.qmd
+
+      - text: Testing & Deployment
+        href: Testing_deploying.qmd
+
+      - text: Monitoring & Maintainance
+        href: monitoring_maintainance.qmd
+
+      - text: Security & Best Practices
+        href: security_best_practices.qmd
+
 
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
+    theme: zephyr
     css: styles.css
-    toc: true
+    font:
+      text: "Roboto"
+      heading: "Roboto"
+    toc: false
+    include-before-body: _includes/navbar.html
+    include-after-body: scripts/theme-toggle.js

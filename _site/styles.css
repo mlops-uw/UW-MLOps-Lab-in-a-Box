@@ -1,1 +1,307 @@
-/* css styles */
+:root{
+  --sidebar-width: 250px;
+  --navbar-height: 56px;
+  --footer-height: 0px;
+  --content-gap: 8px;
+
+  --app-bg: #f9f9f9;
+  --surface-bg: #f9f9f9;
+  --text-color: #323435;
+  --border-color: #bbbbbbc0;
+  --accent-blue: #0d6efd;
+}
+
+html[data-bs-theme="dark"]{
+  --app-bg: #1f1f1f;
+  --surface-bg: #1f1f1f;
+  --text-color: #e5dfdf;
+  --border-color: #bbbbbbc0;
+  --accent-blue: #4da3ff;
+  
+}
+
+*{
+  transition: background-color .05s ease, color .05s ease, border-color .05s ease;
+}
+
+html, body{ height: 100%; }
+
+body{
+  margin: 0;
+  background-color: var(--app-bg);
+  color: var(--text-color);
+  line-height: 1.6;
+  padding-top: var(--navbar-height);
+  overflow: hidden;
+}
+
+/* Quarto header off (custom navbar) */
+.quarto-header{ display: none !important; }
+
+/* Remove breadcrumb */
+.quarto-title-breadcrumbs,
+.quarto-breadcrumbs,
+.breadcrumb{ display:none !important; }
+
+/* Remove seam under navbar (this is the line you see) */
+.navbar{
+  box-shadow: none !important;
+  border-bottom: none !important;
+}
+body::before{ display:none !important; }
+#quarto-content{ border-top: none !important; }
+
+/* Centered navbar title */
+.navbar .navbar-brand,
+.navbar .navbar-title-center{
+  color:#fff !important;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  white-space:nowrap;
+  font-weight:600;
+}
+
+/* Toggle */
+#theme-toggle{
+  color:#fff !important;
+  background:transparent;
+  border:none;
+  font-size:1.05rem;
+  line-height:1;
+  padding:.25rem .5rem;
+}
+
+/* ===== Sidebar (fixed) ===== */
+#quarto-sidebar{
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--navbar-height));
+  overflow-y: auto;
+
+  background-color: var(--surface-bg) !important;
+  color: var(--text-color) !important;
+  border-right: 1px solid var(--border-color) !important;
+
+  z-index: 1030;
+  padding: 0 !important; /* IMPORTANT: avoid pushing items down */
+}
+
+/* IMPORTANT: remove Quarto sidebar header/search padding if present */
+#quarto-sidebar .sidebar-header,
+#quarto-sidebar .sidebar-tools,
+#quarto-sidebar .sidebar-search{
+  display:none !important;
+}
+
+/* Ensure first item (Home) is visible */
+#quarto-sidebar .sidebar-content{
+  padding: 10px 12px 12px 12px !important;
+  margin: 0 !important;
+}
+
+/* Sidebar items */
+#quarto-sidebar .sidebar-item{
+  margin-bottom: .35rem;
+}
+
+#quarto-sidebar .sidebar-item-text,
+#quarto-sidebar .sidebar-item a{
+  font-size: .82rem;
+  color: var(--text-color) !important;
+  opacity: 1 !important;
+}
+#quarto-content{
+  font-size: 0.9rem;   /* smaller body text */
+  margin-bottom: 2px;
+}
+
+#quarto-sidebar .sidebar-item a:hover{
+  color: var(--accent-blue) !important;
+}
+
+#quarto-sidebar .sidebar-item.active > a,
+#quarto-sidebar .sidebar-item a.active{
+  color: var(--accent-blue) !important;
+  font-weight: 700;
+}
+
+#quarto-sidebar .sidebar-item.active > a{
+  border-left: 3px solid var(--accent-blue);
+  padding-left: .75rem;
+}
+
+/* ===== Content pane (fixed + scroll) ===== */
+#quarto-content{
+  position: fixed;
+  top: var(--navbar-height);
+  left: 4rem;
+  right: 4rem;
+
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background-color: var(--surface-bg) !important;
+  color: var(--text-color) !important;
+
+  padding: 10px 0px;
+  border-left: 0 !important;
+}
+
+/* Remove Quarto gutters + internal divider lines (the “gap/line” source) */
+#quarto-content .page-columns,
+#quarto-content .content,
+#quarto-content .container,
+#quarto-content .container-fluid,
+main.content{
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Title */
+#quarto-content h1.title{
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: .25rem;
+  letter-spacing: -0.02em;
+  color: var(--text-color) !important;
+}
+html[data-bs-theme="dark"] #quarto-content h1.title{
+  color:#fff !important;
+}
+
+/* Links */
+a{ color: var(--accent-blue); }
+a:hover{ text-decoration:none; }
+
+/* ===== Page navigation (Prev/Next) ===== */
+.quarto-page-navigation{
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Force prev left / next right */
+.quarto-page-navigation .page-navigation{
+  display:flex;
+  justify-content: space-between;
+  width:100%;
+}
+
+/* Correct colors + size */
+.quarto-page-navigation a{
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--text-color) !important;
+  opacity: 1 !important;
+  text-decoration: none;
+}
+html[data-bs-theme="dark"] .quarto-page-navigation a{
+  color: #ffffff !important;
+}
+.quarto-page-navigation a:hover{
+  color: var(--accent-blue) !important;
+}
+
+/* ===== HARD OVERRIDES (Quarto version-proof) ===== */
+
+/* 1) Sidebar: remove any built-in top padding/margins and ensure items start at top */
+#quarto-sidebar,
+#quarto-sidebar * {
+  margin-top: 0 !important;
+}
+
+#quarto-sidebar nav,
+#quarto-sidebar .sidebar,
+#quarto-sidebar .sidebar-navigation,
+#quarto-sidebar .sidebar-content,
+#quarto-sidebar .sidebar-items,
+#quarto-sidebar .sidebar-menu-container {
+  padding-top: 10px !important;  /* your desired top spacing */
+  margin-top: 0 !important;
+}
+
+/* 2) Make sure sidebar itself starts exactly below navbar */
+#quarto-sidebar {
+  top: var(--navbar-height) !important;
+  height: calc(100vh - var(--navbar-height)) !important;
+}
+
+/* 3) Kill any Quarto layout offset that is creating the “huge gap” */
+main.content,
+.quarto-container,
+#quarto-document-content,
+.page-columns,
+.content {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* 4) Ensure the content pane starts right after sidebar */
+#quarto-content {
+  left: 4rem !important;
+ /* margin-top: 1rem !important;
+  right: 4rem !important; */
+}
+
+/* 5) Remove the line between navbar and content */
+#quarto-content {
+  border-top: none !important;
+}
+
+/* ===== Sidebar spacing + left margin (final overrides) ===== */
+
+/* Left padding inside the sidebar (your “margin on the left”) */
+#quarto-sidebar .sidebar-content,
+#quarto-sidebar nav,
+#quarto-sidebar .sidebar-navigation,
+#quarto-sidebar .sidebar-items,
+#quarto-sidebar .sidebar-menu-container{
+  padding-left: 14px !important;   /* adjust: 10–18px */
+  padding-right: 12px !important;
+  padding-top: 12px !important;
+}
+
+/* Space between each clickable item */
+#quarto-sidebar .sidebar-item{
+  margin-bottom: 0.55rem !important;  /* adjust: 0.35–0.7rem */
+}
+
+/* Increase the clickable height a bit (feels less cramped) */
+#quarto-sidebar .sidebar-item a{
+  display: block;
+  padding-top: 0.15rem;
+  padding-bottom: 0.15rem;
+}
+
+/* Optional: extra separation before each section header */
+#quarto-sidebar .sidebar-section{
+  margin-top: 0.8rem !important;
+}
+
+/* ===== No footer rendered -> use full height ===== */
+:root{ --footer-height: 0px !important; }
+
+/* Extend sidebar to bottom */
+#quarto-sidebar{
+  height: calc(100vh - var(--navbar-height)) !important;
+}
+
+/* Extend content to bottom */
+#quarto-content{
+  bottom: 0 !important;
+}
+
+/* Make sure page navigation is visible */
+.quarto-page-navigation{
+  display: block !important;
+  padding-bottom: 24px; /* breathing room at bottom */
+  visibility: visible !important;
+  opacity: 1 !important;
+}
