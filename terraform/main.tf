@@ -14,7 +14,7 @@ provider "azurerm" {
 }
 
 data "azurerm_resource_group" "example" {
-  name     = "demo"
+  name     = "mlops"
 }
 
 # Create a virtual network within the resource group
