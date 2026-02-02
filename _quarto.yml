@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: _site
+  output-dir: docs
 
 website:
   title: ""
@@ -14,55 +14,55 @@ website:
     collapse-level: 3
     contents:
       - text: Home
-        href: index.qmd
+        href: qmd_dir/index.qmd
 
       - text: Need for MLOps
-        href: MLOps.qmd
+        href: qmd_dir/MLOps.qmd
 
       - text: Python resources
-        href: Python.qmd
+        href: qmd_dir/Python.qmd
 
       - section: ML Foundations
         contents:
           - text: Understanding dataset
-            href: dataset.qmd
+            href: qmd_dir/dataset.qmd
           - text: Data Processing
-            href: data_processing.qmd
+            href: qmd_dir/data_processing.qmd
           - section: Algorithms
             contents:
               - text: Supervised Learning
-                href: supervised.qmd
+                href: qmd_dir/supervised.qmd
               - text: Unsupervised Learning
-                href: unsupervised.qmd
+                href: qmd_dir/unsupervised.qmd
 
       - text: Version Control
-        href: vc.qmd
+        href: qmd_dir/vc.qmd
 
       - text: Azure Cloud
-        href: azure.qmd
+        href: qmd_dir/azure.qmd
 
       - text: Containerization
-        href: containers.qmd
+        href: qmd_dir/containers.qmd
 
       - text: Data Engineering
-        href: DE.qmd
+        href: qmd_dir/DE.qmd
 
       - text: Model Registry
-        href: Registry.qmd
+        href: qmd_dir/Registry.qmd
 
       - text: Testing & Deployment
-        href: Testing_deploying.qmd
+        href: qmd_dir/Testing_deploying.qmd
 
       - text: Monitoring & Maintainance
-        href: monitoring_maintainance.qmd
+        href: qmd_dir/monitoring_maintainance.qmd
 
       - text: Security & Best Practices
-        href: security_best_practices.qmd
+        href: qmd_dir/security_best_practices.qmd
 
 format:
   html:
     theme: zephyr
-    css: ../styles.css
+    css: styles.css
     toc: false
-    include-before-body: ../_includes/navbar.html
-    include-after-body: ../scripts/theme-toggle.js
+    include-before-body: _includes/navbar.html
+    include-after-body: scripts/theme-toggle.js
