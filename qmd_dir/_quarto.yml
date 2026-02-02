@@ -16,7 +16,7 @@ website:
       - text: Home
         href: index.qmd
 
-      - text: Need for MLOps
+      - text: Need for MLOps (try)
         href: MLOps.qmd
 
       - text: Python resources
