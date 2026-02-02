@@ -14,7 +14,7 @@ website:
     collapse-level: 3
     contents:
       - text: Home
-        href: home.qmd
+        href: index.qmd
 
       - text: Need for MLOps
         href: MLOps.qmd
