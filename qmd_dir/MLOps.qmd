@@ -2,50 +2,6 @@
 title: "Need for MLOps"
 ---
 
-A Simple Real-World Example: NYC Taxi Fare & Trip Time Prediction
-
-Imagine you are building a system that predicts:
-
-- trip duration
-- fare amount
-
-for NYC taxi rides.
-
-------------------------------------------------------------------------------------------------------
-
-You train a machine learning model using historical NYC taxi data:
-
-- pickup and drop-off locations
-- time of day
-- day of week
-- distance
-- past traffic patterns
-
-In a notebook, the model performs well and predicts trip time accurately. So far, everything looks great.
-
-------------------------------------------------------------------------------------------------------
-
-What Goes Wrong in the Real World?
-
-Once the model is deployed:
-
-- traffic patterns change
-- road construction begins
-- weather impacts commute times
-- ride demand shifts across neighborhoods
-
-After a few weeks, predictions slowly become inaccurate.
-
-` The model didn’t fail. The environment changed. `
-
-Without noticing, users start seeing:
-
-- incorrect ETAs
-- inconsistent fares
-- unreliable estimates during peak hours
-
-This is a real production problem.
-
 ------------------------------------------------------------------------------------------------------
 
 What Is Machine Learning (ML)?
@@ -125,6 +81,51 @@ MLOps answers the question:
 “How do we keep ML systems reliable in the real world?”
 
 ------------------------------------------------------------------------------------------------------
+
+A Simple Real-World Example: NYC Taxi Fare & Trip Time Prediction
+
+Imagine you are building a system that predicts:
+
+- trip duration
+- fare amount
+
+for NYC taxi rides.
+
+------------------------------------------------------------------------------------------------------
+
+You train a machine learning model using historical NYC taxi data:
+
+- pickup and drop-off locations
+- time of day
+- day of week
+- distance
+- past traffic patterns
+
+In a notebook, the model performs well and predicts trip time accurately. So far, everything looks great.
+
+------------------------------------------------------------------------------------------------------
+
+What Goes Wrong in the Real World?
+
+Once the model is deployed:
+
+- traffic patterns change
+- road construction begins
+- weather impacts commute times
+- ride demand shifts across neighborhoods
+
+After a few weeks, predictions slowly become inaccurate.
+
+` The model didn’t fail. The environment changed. `
+
+Without noticing, users start seeing:
+
+- incorrect ETAs
+- inconsistent fares
+- unreliable estimates during peak hours
+
+This is a real production problem.
+
 
 How MLOps Works for the NYC Taxi Example
 

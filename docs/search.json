@@ -362,5 +362,248 @@
     "crumbs": [
       "Need for MLOps"
     ]
+  },
+  {
+    "objectID": "qmd_dir/index.html",
+    "href": "qmd_dir/index.html",
+    "title": "About This Lab",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\nWe are a group of four graduate students from the University of Washington, Information Management Class of 2026, and this lab is designed to guide you through the core concepts and practical applications of MLOps.\nUW Team:\n\nShakshi Gandhi\nVinod Kamat\nArohi narang\nSneha Reddy\n\nThis lab is developed in collaboration with Boeing, working closely with Jared, Uzma, and Geetha, and supported by the Women in Cloud (WIC) team.\nOur goal is to provide a hands-on, structured learning experience that bridges academic foundations with real-world MLOps used in industry.\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "qmd_dir/home.html",
+    "href": "qmd_dir/home.html",
+    "title": "About This Lab",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\nWe are a group of four graduate students from the University of Washington, Information Management Class of 2026, and this lab is designed to guide you through the core concepts and practical applications of MLOps.\nUW Team:\n\nShakshi Gandhi\nVinod Kamat\nArohi narang\nSneha Reddy\n\nThis lab is developed in collaboration with Boeing, working closely with Jared, Uzma, and Geetha, and supported by the Women in Cloud (WIC) team.\nOur goal is to provide a hands-on, structured learning experience that bridges academic foundations with real-world MLOps used in industry.\n\n\n\n Back to top",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/MLOps.html",
+    "href": "qmd_dir/MLOps.html",
+    "title": "Need for MLOps",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\nWhat Is Machine Learning (ML)?\nMachine Learning focuses on:\n\nlearning patterns from historical data\nbuilding models that predict outcomes\noptimizing accuracy of these models\n\n\nIn this example:\nML learns how trip features affect duration and cost\nML answers the question: “How do we build a predictive model?”\n\nWhat Is Operations (Ops)?\nOperations focuses on:\n\ndeploying systems reliably\nkeeping services running\nmonitoring performance\nhandling failures and updates\n\n\nIn this example:\n\nOps ensures predictions are fast\nthe service is always available\nfailures don’t impact users\n\nOps answers the question: “How do we run this system every day?”\n\nWhy ML Alone Is Not Enough\nA trained model is only useful if:\n\nit runs reliably in production\nit stays accurate over time\nfailures are detected quickly\nupdates can be made safely\n\nWithout MLOps:\n\naccuracy drops silently\nno one knows when data changes\nretraining is manual and risky\nresults are hard to reproduce\n\nThis is where ML systems break in practice.\n\nWhat Is MLOps?\n\n\nMLOps = ML + Ops\n\n\nMLOps ensures that:\n\nmodels can be deployed as production services\ndata and models are versioned\nmodel performance is monitored\ndata drift and model drift are detected\nretraining and redeployment are automated\n\nMLOps answers the question: “How do we keep ML systems reliable in the real world?”\n\nA Simple Real-World Example: NYC Taxi Fare & Trip Time Prediction\nImagine you are building a system that predicts:\n\ntrip duration\nfare amount\n\nfor NYC taxi rides.\n\nYou train a machine learning model using historical NYC taxi data:\n\npickup and drop-off locations\ntime of day\nday of week\ndistance\npast traffic patterns\n\nIn a notebook, the model performs well and predicts trip time accurately. So far, everything looks great.\n\nWhat Goes Wrong in the Real World?\nOnce the model is deployed:\n\ntraffic patterns change\nroad construction begins\nweather impacts commute times\nride demand shifts across neighborhoods\n\nAfter a few weeks, predictions slowly become inaccurate.\nThe model didn’t fail. The environment changed.\nWithout noticing, users start seeing:\n\nincorrect ETAs\ninconsistent fares\nunreliable estimates during peak hours\n\nThis is a real production problem.\nHow MLOps Works for the NYC Taxi Example\n\nData Ingestion\nContinuously collect new taxi trip data\nValidate schema and data quality\nTraining Pipelines\nRetrain models as traffic patterns change\nTrack experiments and parameters\nVersioning\nVersion datasets, features, and models\nEnable rollback to previous versions\nDeployment\nServe the model via an API\nUse containers to ensure consistency\nMonitoring\nTrack prediction accuracy\nDetect data drift (new routes, new traffic behavior)\nMonitor latency and failures\nAutomation\nTrigger retraining when performance drops\n\n\nWhy We Are Doing This?\nIn real companies, success is not about building one good model. It is about building systems that continue to work when data changes, usage scales, business needs evolve\nThis lab focuses on: production-grade ML workflows, real-world failure, end-to-end MLOps thinking\nBy the end, you will understand how ML systems are built, deployed, monitored, and maintained in production—using the NYC Taxi problem as an example.\n\n\n\n Back to top",
+    "crumbs": [
+      "Need for MLOps"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Python.html",
+    "href": "qmd_dir/Python.html",
+    "title": "Python learning resources",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\nHow to use these resources?\n\nStart with Python documentation for concepts and correct terminology\nUse GeeksforGeeks and TutorialsPoint for examples and quick practice\nFocus on writing small scripts and understanding errors\n\nRecommended topics:\n\nVariables and data types\nInput and output\nLoops and conditionals\nFunctions\nLists, tuples, sets, dictionaries\nFile handling\nPandas\nNumPy\nSeaborn\nScikit-learn\n\n\nOfficial Python documentation: https://docs.python.org/3/tutorial/index.html\n\nIntroduction to Programming (e-book): https://infx511.github.io/\n\nGeeksforGeeks: https://www.geeksforgeeks.org/python-programming-language/\n\nTutorialsPoint: https://www.tutorialspoint.com/python/index.htm\n\nPractice:  Leetcode, Neetcode\n\n\n\n Back to top",
+    "crumbs": [
+      "Python resources"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/dataset.html",
+    "href": "qmd_dir/dataset.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "ML Foundations",
+      "Understanding dataset"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/data_processing.html",
+    "href": "qmd_dir/data_processing.html",
+    "title": "About",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\nAbout this site\n\n\n\n Back to top",
+    "crumbs": [
+      "ML Foundations",
+      "Data Processing"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/monitoring_maintainance.html",
+    "href": "qmd_dir/monitoring_maintainance.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Monitoring & Maintainance"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/containers.html",
+    "href": "qmd_dir/containers.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Containerization"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/azure.html",
+    "href": "qmd_dir/azure.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Azure Cloud"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Testing_deploying.html",
+    "href": "qmd_dir/Testing_deploying.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Testing & Deployment"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/unsupervised.html",
+    "href": "qmd_dir/unsupervised.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "ML Foundations",
+      "Algorithms",
+      "Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/supervised.html",
+    "href": "qmd_dir/supervised.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "ML Foundations",
+      "Algorithms",
+      "Supervised Learning"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/vc.html",
+    "href": "qmd_dir/vc.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Version Control"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/security_best_practices.html",
+    "href": "qmd_dir/security_best_practices.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/DE.html",
+    "href": "qmd_dir/DE.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Data Engineering"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Python.html#how-to-use-these-resources",
+    "href": "qmd_dir/Python.html#how-to-use-these-resources",
+    "title": "Python learning resources",
+    "section": "How to use these resources",
+    "text": "How to use these resources\n\nStart with Python documentation for concepts and correct terminology\nUse GeeksforGeeks and TutorialsPoint for examples and quick practice\nFocus on writing small scripts and understanding errors",
+    "crumbs": [
+      "Python resources"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Python.html#python-basics",
+    "href": "qmd_dir/Python.html#python-basics",
+    "title": "Python learning resources",
+    "section": "Python basics",
+    "text": "Python basics\n\nOfficial Python documentation\n\n\n\nGeeksforGeeks – Python basics\n\nPython programming language\n\nBeginner-friendly explanations with lots of short examples\nUseful for practicing syntax and common patterns\n\n\nRecommended topics - Variables and data types - Input and output - Loops and conditionals - Functions - Lists, dictionaries, sets, tuples - File handling in Python\n\n\n\nTutorialsPoint – Python basics\n\nPython tutorial\n\nConcise explanations and quick reference-style learning\nGood for revision before labs\n\n\nRecommended topics - Python overview - Basic syntax - Control flow - Functions - Modules - File handling",
+    "crumbs": [
+      "Python resources"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Python.html#working-with-files-and-data",
+    "href": "qmd_dir/Python.html#working-with-files-and-data",
+    "title": "Python learning resources",
+    "section": "Working with files and data",
+    "text": "Working with files and data\n\nPython documentation\n\nReading and writing files\nhttps://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files\nargparse (command-line arguments)\nhttps://docs.python.org/3/library/argparse.html\npathlib (file paths)\nhttps://docs.python.org/3/library/pathlib.html\n\n\n\n\nGeeksfo",
+    "crumbs": [
+      "Python resources"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Python.html#python-for-data-processing",
+    "href": "qmd_dir/Python.html#python-for-data-processing",
+    "title": "Python learning resources",
+    "section": "Python for data processing",
+    "text": "Python for data processing\n\nPython documentation\n\nStandard library overview\n\nUnderstanding what Python provides out of the box\n\ncsv module\n\nBasic CSV processing (conceptual understanding)\n\n\n\n\n\nGeeksforGeeks – Data handling\n\nPython data analysis\n\nIntroductory pandas concepts\n\nPandas DataFrame basics\n\nCreating, filtering, and transforming DataFrames\n\n\n\n\n\nTutorialsPoint – Pandas\n\nPandas tutorial\n\nStep-by-step introduction to DataFrames\nUseful for data preprocessing labs",
+    "crumbs": [
+      "Python resources"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Python.html#python-for-machine-learning-basics",
+    "href": "qmd_dir/Python.html#python-for-machine-learning-basics",
+    "title": "Python learning resources",
+    "section": "Python for machine learning (basics)",
+    "text": "Python for machine learning (basics)\n\nGeeksforGeeks – Machine learning with Python\n\nMachine learning with Python\n\nHigh-level overview of supervised and unsupervised learning\nIntro to scikit-learn workflows\n\n\n\n\n\nTutorialsPoint – Machine learning\n\nMachine learning with Python\n\nSimple explanations of ML concepts and algorithms\nGood for conceptual understanding before labs",
+    "crumbs": [
+      "Python resources"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Python.html#python-environments-and-version-control-basics",
+    "href": "qmd_dir/Python.html#python-environments-and-version-control-basics",
+    "title": "Python learning resources",
+    "section": "Python environments and version control basics",
+    "text": "Python environments and version control basics\n\nPython documentation\n\nVirtual environments and packages\n\nCreating and activating virtual environments\nInstalling packages with pip\n\n\n\n\n\nGeeksforGeeks – Virtual environments and Git\n\nPython virtual environment\n\nWhy virtual environments are important\n\nGit and GitHub with Python\n\nBasic version control workflows for Python projects\n\n\n\n\n\nTutorialsPoint – Environment setup\n\nPython environment setup\n\nInstalling Python\nSetting up pip and virtual environments",
+    "crumbs": [
+      "Python resources"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Python.html#what-you-should-be-comfortable-with-before-starting-the-labs",
+    "href": "qmd_dir/Python.html#what-you-should-be-comfortable-with-before-starting-the-labs",
+    "title": "Python learning resources",
+    "section": "What you should be comfortable with before starting the labs",
+    "text": "What you should be comfortable with before starting the labs\n\nWriting and running a Python script\nUsing loops, functions, and conditionals\nReading and writing files from disk\nWorking with pandas DataFrames\nPassing arguments to scripts using argparse\nCreating and using virtual environments\nUsing Git to commit and push Python code",
+    "crumbs": [
+      "Python resources"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Python.html#httpsdocs.python.org3tutorialindex.html",
+    "href": "qmd_dir/Python.html#httpsdocs.python.org3tutorialindex.html",
+    "title": "Python learning resources",
+    "section": "https://docs.python.org/3/tutorial/index.html",
+    "text": "https://docs.python.org/3/tutorial/index.html\n\nGeeksforGeeks\n\n\n\nTutorialsPoint – Python basics\n\nPython tutorial\n\nConcise explanations and quick reference-style learning\nGood for revision before labs\n\n\nRecommended topics - Python overview - Basic syntax - Control flow - Functions - Modules - File handling",
+    "crumbs": [
+      "Python resources"
+    ]
+  },
+  {
+    "objectID": "qmd_dir/Python.html#core-python-required",
+    "href": "qmd_dir/Python.html#core-python-required",
+    "title": "Python learning resources",
+    "section": "Core Python (required)",
+    "text": "Core Python (required)\n\nOfficial Python documentation\n\nPython tutorial\nhttps://docs.python.org/3/tutorial/index.html\n\nRecommended sections - An informal introduction to Python\n- Control flow tools\n- Functions\n- Modules\n- Errors and exceptions\n\n\n\nGeeksforGeeks – Python basics\n\nPython programming language\nhttps://www.geeksforgeeks.org/python-programming-language/\n\nRecommended topics - Variables and data types\n- Input and output\n- Loops and conditionals\n- Functions\n- Lists, tuples, sets, dictionaries\n- File handling\n\n\n\nTutorialsPoint – Python basics\n\nPython tutorial\nhttps://www.tutorialspoint.com/python/index.htm\n\nRecommended topics - Python overview\n- Basic syntax\n- Control flow\n- Functions\n- Modules",
+    "crumbs": [
+      "Python resources"
+    ]
   }
 ]
