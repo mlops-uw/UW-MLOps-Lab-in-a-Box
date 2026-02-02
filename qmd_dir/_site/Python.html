@@ -89,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./MLOps.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Need for MLOps (try)</span></a>
+ <span class="menu-text">Need for MLOps</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -200,17 +200,37 @@ ul.task-list li input[type="checkbox"] {
     
 <!-- main -->
 <main class="content" id="quarto-document-content">
-<nav class="navbar navbar-dark bg-primary fixed-top">
-  <div class="container-fluid d-flex justify-content-between align-items-center">
-    <span class="navbar-brand mb-0" style="font-weight:600;">
-      MLOps Lab: Boeing x WIC x UW
-    </span>
-
-    <button id="theme-toggle" class="btn btn-sm" aria-label="Toggle dark/light mode" type="button">
-      ◐
+<!-- navbar.html -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary app-navbar">
+  <div class="container-fluid">
+    <!-- Mobile: hamburger to open sidebar (offcanvas) -->
+    <button class="btn btn-sm btn-outline-light d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas" aria-label="Open menu">
+      ☰
     </button>
+
+    <a class="navbar-brand fw-semibold m-0" href="#">
+      MLOps Lab: Boeing x WIC x UW
+    </a>
+
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <button id="theme-toggle" class="btn btn-sm btn-outline-light" aria-label="Toggle dark/light mode" type="button" title="Toggle theme">
+        ◐
+      </button>
+    </div>
   </div>
 </nav>
+
+<!-- Mobile offcanvas sidebar -->
+<div class="offcanvas offcanvas-start app-offcanvas d-lg-none" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title anchored" id="sidebarOffcanvasLabel">Menu</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <!-- We'll copy Quarto sidebar nav into here via JS -->
+    <div id="mobile-sidebar-slot"></div>
+  </div>
+</div>
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -265,27 +285,59 @@ ul.task-list li input[type="checkbox"] {
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script>
-(function () {
-  const html = document.documentElement;
+  (function () {
+    // ---------- Theme toggle ----------
+    const btn = document.getElementById("theme-toggle");
+    const root = document.documentElement;
 
-  // Bootstrap theme via attribute
-  const storedTheme = localStorage.getItem("theme") || "light";
-  html.setAttribute("data-bs-theme", storedTheme);
+    // Load saved theme
+    const saved = localStorage.getItem("bs-theme");
+    if (saved === "dark" || saved === "light") {
+      root.setAttribute("data-bs-theme", saved);
+    }
 
-  const toggle = document.getElementById("theme-toggle");
-  if (!toggle) return;
+    btn?.addEventListener("click", () => {
+      const current = root.getAttribute("data-bs-theme") || "light";
+      const next = current === "dark" ? "light" : "dark";
+      root.setAttribute("data-bs-theme", next);
+      localStorage.setItem("bs-theme", next);
+    });
 
-  toggle.textContent = storedTheme === "dark" ? "◑" : "◐";
+    // ---------- Mobile sidebar (offcanvas) ----------
+    // Clone Quarto sidebar navigation into offcanvas slot for mobile use
+    function mountMobileSidebar() {
+      const desktopSidebar = document.querySelector("#quarto-sidebar");
+      const slot = document.querySelector("#mobile-sidebar-slot");
+      if (!desktopSidebar || !slot) return;
 
-  toggle.addEventListener("click", () => {
-    const current = html.getAttribute("data-bs-theme") || "light";
-    const next = current === "dark" ? "light" : "dark";
+      // Clone only the nav area to keep it clean
+      const nav = desktopSidebar.querySelector("nav, .sidebar-navigation, .sidebar-content") || desktopSidebar;
+      const clone = nav.cloneNode(true);
 
-    html.setAttribute("data-bs-theme", next);
-    localStorage.setItem("theme", next);
-    toggle.textContent = next === "dark" ? "◑" : "◐";
-  });
-})()
+      // Remove any ids to avoid duplicates
+      clone.querySelectorAll("[id]").forEach(el => el.removeAttribute("id"));
+
+      slot.innerHTML = "";
+      slot.appendChild(clone);
+
+      // Close offcanvas when a link is clicked (nice UX)
+      slot.querySelectorAll("a").forEach(a => {
+        a.addEventListener("click", () => {
+          const ocEl = document.getElementById("sidebarOffcanvas");
+          if (!ocEl) return;
+          const oc = bootstrap.Offcanvas.getInstance(ocEl);
+          oc?.hide();
+        });
+      });
+    }
+
+    // Run after DOM ready
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", mountMobileSidebar);
+    } else {
+      mountMobileSidebar();
+    }
+  })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -689,8 +741,8 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./MLOps.html" class="pagination-link" aria-label="Need for MLOps (try)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Need for MLOps (try)</span>
+      <a href="./MLOps.html" class="pagination-link" aria-label="Need for MLOps">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Need for MLOps</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
