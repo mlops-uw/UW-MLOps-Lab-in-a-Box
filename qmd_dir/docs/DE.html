@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Need for MLOps</title>
+<title>de</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,8 +25,8 @@ ul.task-list li input[type="checkbox"] {
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./Python.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./Registry.html" rel="next">
+<link href="./containers.html" rel="prev">
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -68,7 +68,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./MLOps.html">Need for MLOps</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./DE.html">Data Engineering</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -88,8 +88,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./MLOps.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Need for MLOps</span></a>
+  <a href="./MLOps.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Need for MLOps (try)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -164,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./DE.html" class="sidebar-item-text sidebar-link">
+  <a href="./DE.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Data Engineering</span></a>
   </div>
 </li>
@@ -199,7 +199,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 <nav class="navbar navbar-dark bg-primary fixed-top">
   <div class="container-fluid d-flex justify-content-between align-items-center">
     <span class="navbar-brand mb-0" style="font-weight:600;">
@@ -212,149 +212,9 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </nav>
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Need for MLOps</h1>
-</div>
 
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<hr>
-<p>What Is Machine Learning (ML)?</p>
-<p>Machine Learning focuses on:</p>
-<ul>
-<li>learning patterns from historical data</li>
-<li>building models that predict outcomes</li>
-<li>optimizing accuracy of these models</li>
-</ul>
-<hr>
-<p>In this example:</p>
-<p>ML learns how trip features affect duration and cost</p>
-<p>ML answers the question: “How do we build a predictive model?”</p>
-<hr>
-<p>What Is Operations (Ops)?</p>
-<p>Operations focuses on:</p>
-<ul>
-<li>deploying systems reliably</li>
-<li>keeping services running</li>
-<li>monitoring performance</li>
-<li>handling failures and updates</li>
-</ul>
-<hr>
-<p>In this example:</p>
-<ul>
-<li>Ops ensures predictions are fast</li>
-<li>the service is always available</li>
-<li>failures don’t impact users</li>
-</ul>
-<p>Ops answers the question: “How do we run this system every day?”</p>
-<hr>
-<p>Why ML Alone Is Not Enough</p>
-<p>A trained model is only useful if:</p>
-<ul>
-<li>it runs reliably in production</li>
-<li>it stays accurate over time</li>
-<li>failures are detected quickly</li>
-<li>updates can be made safely</li>
-</ul>
-<p>Without MLOps:</p>
-<ul>
-<li>accuracy drops silently</li>
-<li>no one knows when data changes</li>
-<li>retraining is manual and risky</li>
-<li>results are hard to reproduce</li>
-</ul>
-<p>This is where ML systems break in practice.</p>
-<hr>
-<p>What Is MLOps?</p>
-<blockquote class="blockquote">
-<blockquote class="blockquote">
-<p>MLOps = ML + Ops</p>
-</blockquote>
-</blockquote>
-<p>MLOps ensures that:</p>
-<ul>
-<li>models can be deployed as production services</li>
-<li>data and models are versioned</li>
-<li>model performance is monitored</li>
-<li>data drift and model drift are detected</li>
-<li>retraining and redeployment are automated</li>
-</ul>
-<p>MLOps answers the question: “How do we keep ML systems reliable in the real world?”</p>
-<hr>
-<p>A Simple Real-World Example: NYC Taxi Fare &amp; Trip Time Prediction</p>
-<p>Imagine you are building a system that predicts:</p>
-<ul>
-<li>trip duration</li>
-<li>fare amount</li>
-</ul>
-<p>for NYC taxi rides.</p>
-<hr>
-<p>You train a machine learning model using historical NYC taxi data:</p>
-<ul>
-<li>pickup and drop-off locations</li>
-<li>time of day</li>
-<li>day of week</li>
-<li>distance</li>
-<li>past traffic patterns</li>
-</ul>
-<p>In a notebook, the model performs well and predicts trip time accurately. So far, everything looks great.</p>
-<hr>
-<p>What Goes Wrong in the Real World?</p>
-<p>Once the model is deployed:</p>
-<ul>
-<li>traffic patterns change</li>
-<li>road construction begins</li>
-<li>weather impacts commute times</li>
-<li>ride demand shifts across neighborhoods</li>
-</ul>
-<p>After a few weeks, predictions slowly become inaccurate.</p>
-<p><code>The model didn’t fail. The environment changed.</code></p>
-<p>Without noticing, users start seeing:</p>
-<ul>
-<li>incorrect ETAs</li>
-<li>inconsistent fares</li>
-<li>unreliable estimates during peak hours</li>
-</ul>
-<p>This is a real production problem.</p>
-<p>How MLOps Works for the NYC Taxi Example</p>
-<ul>
-<li>Data Ingestion</li>
-<li>Continuously collect new taxi trip data</li>
-<li>Validate schema and data quality</li>
-<li>Training Pipelines</li>
-<li>Retrain models as traffic patterns change</li>
-<li>Track experiments and parameters</li>
-<li>Versioning</li>
-<li>Version datasets, features, and models</li>
-<li>Enable rollback to previous versions</li>
-<li>Deployment</li>
-<li>Serve the model via an API</li>
-<li>Use containers to ensure consistency</li>
-<li>Monitoring</li>
-<li>Track prediction accuracy</li>
-<li>Detect data drift (new routes, new traffic behavior)</li>
-<li>Monitor latency and failures</li>
-<li>Automation</li>
-<li>Trigger retraining when performance drops</li>
-</ul>
-<hr>
-<p>Why We Are Doing This?</p>
-<p>In real companies, success is not about building one good model. It is about building systems that continue to work when data changes, usage scales, business needs evolve</p>
-<p>This lab focuses on: production-grade ML workflows, real-world failure, end-to-end MLOps thinking</p>
-<p>By the end, you will understand how ML systems are built, deployed, monitored, and maintained in production—using the NYC Taxi problem as an example.</p>
 
 
 
@@ -784,13 +644,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Home">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Home</span>
+      <a href="./containers.html" class="pagination-link" aria-label="Containerization">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Containerization</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Python.html" class="pagination-link" aria-label="Python resources">
-        <span class="nav-page-text">Python resources</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./Registry.html" class="pagination-link" aria-label="Model Registry">
+        <span class="nav-page-text">Model Registry</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
