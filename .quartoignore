@@ -1,0 +1,6 @@
+mlops_labs_venv
+_site
+docs
+venv
+.venv
+**/*.ipynb

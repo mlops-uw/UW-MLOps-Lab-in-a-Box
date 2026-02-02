@@ -16,50 +16,52 @@ website:
       - text: 
 
       - text: Home
-        href: index.qmd
+        href: qmd_dir/home.qmd
 
       - text: Need for MLOps
-        href: need_for_mloqs.qmd
+        href: qmd_dir/MLOps.qmd
 
       - text: Python resources
-        href: python_fundamentals.qmd
+        href: qmd_dir/Python.qmd
 
       - section: ML Foundations
         contents:
           - text: Understanding dataset
-            href: dataset.qmd
+            href: qmd_dir/dataset.qmd
 
           - text: Data Processing
-            href: data_processing.qmd
-
+            href: qmd_dir/data_processing.qmd
           - section: Algorithms
             contents:
-            - text: Supervised Learning
-              href: supervised.qmd
+              - text: Supervised Learning
+                href: qmd_dir/supervised.qmd
 
-            - text: Unsupervised Learning
-              href: unsupervised.qmd
-
+              - text: Unsupervised Learning
+                href: qmd_dir/unsupervised.qmd
+    
       - text: Version Control
-        href: vc.qmd
+        href: qmd_dir/vc.qmd
 
       - text: Azure Cloud
-        href: azure.qmd
+        href: qmd_dir/azure.qmd
 
       - text: Containerization
-        href: containers.qmd
+        href: qmd_dir/containers.qmd
 
       - text: Data Engineering
-        href: DE.qmd
+        href: qmd_dir/DE.qmd
+
+      - text: Model Registry
+        href: qmd_dir/Registry.qmd
 
       - text: Testing & Deployment
-        href: Testing_deploying.qmd
+        href: qmd_dir/Testing_deploying.qmd
 
       - text: Monitoring & Maintainance
-        href: monitoring_maintainance.qmd
+        href: qmd_dir/monitoring_maintainance.qmd
 
       - text: Security & Best Practices
-        href: security_best_practices.qmd
+        href: qmd_dir/security_best_practices.qmd
 
 
 
