@@ -56,7 +56,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar docked fullcontent quarto-light">
@@ -200,37 +200,17 @@ ul.task-list li input[type="checkbox"] {
     
 <!-- main -->
 <main class="content" id="quarto-document-content">
-<!-- navbar.html -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary app-navbar">
-  <div class="container-fluid">
-    <!-- Mobile: hamburger to open sidebar (offcanvas) -->
-    <button class="btn btn-sm btn-outline-light d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas" aria-label="Open menu">
-      ☰
-    </button>
-
-    <a class="navbar-brand fw-semibold m-0" href="#">
+<nav class="navbar navbar-dark bg-primary fixed-top">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <span class="navbar-brand mb-0" style="font-weight:600;">
       MLOps Lab: Boeing x WIC x UW
-    </a>
+    </span>
 
-    <div class="ms-auto d-flex align-items-center gap-2">
-      <button id="theme-toggle" class="btn btn-sm btn-outline-light" aria-label="Toggle dark/light mode" type="button" title="Toggle theme">
-        ◐
-      </button>
-    </div>
+    <button id="theme-toggle" class="btn btn-sm" aria-label="Toggle dark/light mode" type="button">
+      ◐
+    </button>
   </div>
 </nav>
-
-<!-- Mobile offcanvas sidebar -->
-<div class="offcanvas offcanvas-start app-offcanvas d-lg-none" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title anchored" id="sidebarOffcanvasLabel">Menu</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    <!-- We'll copy Quarto sidebar nav into here via JS -->
-    <div id="mobile-sidebar-slot"></div>
-  </div>
-</div>
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -380,59 +360,27 @@ ul.task-list li input[type="checkbox"] {
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script>
-  (function () {
-    // ---------- Theme toggle ----------
-    const btn = document.getElementById("theme-toggle");
-    const root = document.documentElement;
+(function () {
+  const html = document.documentElement;
 
-    // Load saved theme
-    const saved = localStorage.getItem("bs-theme");
-    if (saved === "dark" || saved === "light") {
-      root.setAttribute("data-bs-theme", saved);
-    }
+  // Bootstrap theme via attribute
+  const storedTheme = localStorage.getItem("theme") || "light";
+  html.setAttribute("data-bs-theme", storedTheme);
 
-    btn?.addEventListener("click", () => {
-      const current = root.getAttribute("data-bs-theme") || "light";
-      const next = current === "dark" ? "light" : "dark";
-      root.setAttribute("data-bs-theme", next);
-      localStorage.setItem("bs-theme", next);
-    });
+  const toggle = document.getElementById("theme-toggle");
+  if (!toggle) return;
 
-    // ---------- Mobile sidebar (offcanvas) ----------
-    // Clone Quarto sidebar navigation into offcanvas slot for mobile use
-    function mountMobileSidebar() {
-      const desktopSidebar = document.querySelector("#quarto-sidebar");
-      const slot = document.querySelector("#mobile-sidebar-slot");
-      if (!desktopSidebar || !slot) return;
+  toggle.textContent = storedTheme === "dark" ? "◑" : "◐";
 
-      // Clone only the nav area to keep it clean
-      const nav = desktopSidebar.querySelector("nav, .sidebar-navigation, .sidebar-content") || desktopSidebar;
-      const clone = nav.cloneNode(true);
+  toggle.addEventListener("click", () => {
+    const current = html.getAttribute("data-bs-theme") || "light";
+    const next = current === "dark" ? "light" : "dark";
 
-      // Remove any ids to avoid duplicates
-      clone.querySelectorAll("[id]").forEach(el => el.removeAttribute("id"));
-
-      slot.innerHTML = "";
-      slot.appendChild(clone);
-
-      // Close offcanvas when a link is clicked (nice UX)
-      slot.querySelectorAll("a").forEach(a => {
-        a.addEventListener("click", () => {
-          const ocEl = document.getElementById("sidebarOffcanvas");
-          if (!ocEl) return;
-          const oc = bootstrap.Offcanvas.getInstance(ocEl);
-          oc?.hide();
-        });
-      });
-    }
-
-    // Run after DOM ready
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", mountMobileSidebar);
-    } else {
-      mountMobileSidebar();
-    }
-  })();
+    html.setAttribute("data-bs-theme", next);
+    localStorage.setItem("theme", next);
+    toggle.textContent = next === "dark" ? "◑" : "◐";
+  });
+})()
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

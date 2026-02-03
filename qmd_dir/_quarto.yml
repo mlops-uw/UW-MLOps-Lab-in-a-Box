@@ -62,7 +62,7 @@ website:
 format:
   html:
     theme: zephyr
-    css: ../styles.css
+    css: styles.css
     toc: false
-    include-before-body: ../_includes/navbar.html
-    include-after-body: ../scripts/theme-toggle.js
+    include-before-body: _includes/navbar.html
+    include-after-body: scripts/theme-toggle.js
