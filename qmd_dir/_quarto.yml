@@ -26,6 +26,8 @@ website:
         contents:
           - text: Understanding dataset
             href: dataset.qmd
+          - text: Data Ingestion
+            href: data_ingestion.qmd
           - text: Data Processing
             href: data_processing.qmd
           - section: Algorithms

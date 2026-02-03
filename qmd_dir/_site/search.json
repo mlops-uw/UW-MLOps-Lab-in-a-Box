@@ -72,6 +72,18 @@
     ]
   },
   {
+    "objectID": "unsupervised.html",
+    "href": "unsupervised.html",
+    "title": "",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "ML Foundations",
+      "Algorithms",
+      "Unsupervised Learning"
+    ]
+  },
+  {
     "objectID": "Registry.html",
     "href": "Registry.html",
     "title": "",
@@ -82,15 +94,14 @@
     ]
   },
   {
-    "objectID": "unsupervised.html",
-    "href": "unsupervised.html",
-    "title": "",
+    "objectID": "data_ingestion.html",
+    "href": "data_ingestion.html",
+    "title": "Data Ingestion",
     "section": "",
-    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n Back to top",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\nObjective\nIn this lab, we focus on data ingestion. By the end of this, you will be able to:\n\n[Part A] Ingest real-world data into Azure\n\nThis section intentionally stops before processing & model training. The processed output will later be used for:\n\nSupervised learning (Linear Regression)\nUnsupervised learning (K-Means clustering)\n\n\nWhat you need:\n\nAn Azure student account\n\n\n\n\n\n\n\nWarning\n\n\n\nAlways stop your Azure ML compute instance when not in use to avoid Azure credits consumption.\n\n\n\n\nPart A - Getting data into Azure (Ingestion)\nBelow are 2 clear ingestion pathways:\n\nPath 1: Use Azure Open Datasets (no manual file downloads)\nPath 2: Manual download from TLC + upload to Blob (if you want to understand externally ingesting)\n\n\nPath 1 - Ingestion using Azure Open Datasets\n Add photos to explain how to create, use compute, get to ML Studio\n# verify environment -- anything between 3.8-3.12 is good\nimport sys\n\nprint(sys.executable)\nprint(sys.version)\n\n!{sys.executable} -m pip install -q --upgrade pip\n!{sys.executable} -m pip install -q azureml-opendatasets\n\n# restart kernel\n\n!pip install -q azureml-opendatasets pandas pyarrow\n\nfrom azureml.opendatasets import NycTlcYellow\nprint(\"OK: NycTlcYellow imported\")\n\n# pyarrow handles parquet files\n\nfrom dateutil import parser\n\nstart_date = parser.parse('2018-05-01')\nend_date = parser.parse('2018-06-01')\n\nnyc_tlc = NycTlcYellow(start_date=start_date, end_date=end_date)\nnyc_tlc_df = nyc_tlc.to_pandas_dataframe()\n\nnyc_tlc_df.head()\n\n\n\nPath 2 – Ingestion using Azure Blob Storage (manual upload)\nThis ingestion path demonstrates how data typically enters Azure from an external source, such as a public data portal or a partner system. Unlike Azure Open Datasets, this approach requires explicit storage management, which is common in real production pipelines.\nDownload data from https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page\nFile name: yellow_tripdata_2025-07.parquet\nSearch for Storage Account in Azure\nIn the Azure Portal:\n\nSearch for Storage accounts\nClick Create\nChoose:\n\nSubscription: Azure Student\nResource group: create a new one (example: rg-mlops-lab)\nStorage account name: unique name (example: mlopslabstorage)\n\n\nClick Review + Create → Create\nCreate a Blob container\nOnce the storage account is created:\n\nOpen the Storage Account\nGo to Containers\nClick + Container\nName: nyc-tlc-blob\nPublic access level: Private\n\nThis container will hold raw data.\nUpload the raw Parquet file\n\nOpen the nyc-tlc-blob container\nClick Upload\nSelect yellow_tripdata_2025-07.parquet\nClick Upload\n\nRead data from Blob Storage\nOnce uploaded, you can read the file directly for processing in Azure ML Studio.\n!pip -q install azure-storage-blob pandas pyarrow\n\nfrom azure.storage.blob import BlobServiceClient\nfrom pathlib import Path\nimport pandas as pd\n\n# copy paste from Azure Portal\nCONNECTION_STRING = \"Enter connection string from Security + networking -&gt; Access keys\"\n\n# Blob details\nCONTAINER_NAME = \"nyc-tlc-blob\"\nBLOB_NAME = \"yellow_tripdata_2025-07.parquet\"\n\n# Local destination inside notebook VM\nLOCAL_DIR = Path(\"data_raw\")\nLOCAL_DIR.mkdir(exist_ok=True)\n\nLOCAL_PATH = LOCAL_DIR / \"yellow_tripdata_2025-07.parquet\"\n\nblob_service = BlobServiceClient.from_connection_string(CONNECTION_STRING)\nblob_client = blob_service.get_blob_client(\n    container=CONTAINER_NAME,\n    blob=BLOB_NAME\n)\n\nwith open(LOCAL_PATH, \"wb\") as f:\n    f.write(blob_client.download_blob().readall())\n\nprint(\"Downloaded to:\", LOCAL_PATH)\n\ndf = pd.read_parquet(LOCAL_PATH)\n\ndf.shape\n\ndf.head()\n\n\n\n\n\n Back to top",
     "crumbs": [
       "ML Foundations",
-      "Algorithms",
-      "Unsupervised Learning"
+      "Data Ingestion"
     ]
   },
   {
@@ -117,9 +128,9 @@
   {
     "objectID": "data_processing.html",
     "href": "data_processing.html",
-    "title": "About",
+    "title": "Data Processing",
     "section": "",
-    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\nAbout this site\n\n\n\n Back to top",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\nObjective\nIn this lab, we focus on data processing, which is the foundation of any MLOps workflow.\nBy the end of this lab, you will be able to:\n\n[Part B] Perform EDA and produce a model-ready dataset that can be reused for machine learning tasks\n\nThis section intentionally stops before model training. The processed output will later be used for:\n\nSupervised learning (Linear Regression)\nUnsupervised learning (K-Means clustering)\n\n\n\nPart B - EDA\n\n\n\n\n Back to top",
     "crumbs": [
       "ML Foundations",
       "Data Processing"
@@ -153,17 +164,6 @@
     "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "Monitoring & Maintainance"
-    ]
-  },
-  {
-    "objectID": "dataset.html#overly-complex-joins",
-    "href": "dataset.html#overly-complex-joins",
-    "title": "Dataset choice and source",
-    "section": "Overly complex joins",
-    "text": "Overly complex joins",
-    "crumbs": [
-      "ML Foundations",
-      "Understanding dataset"
     ]
   }
 ]
