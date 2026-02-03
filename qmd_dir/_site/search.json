@@ -96,9 +96,9 @@
   {
     "objectID": "dataset.html",
     "href": "dataset.html",
-    "title": "",
+    "title": "Dataset choice and source",
     "section": "",
-    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n Back to top",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\nWhat dataset will we use?\nNYC Taxi & Limousine Commission (TLC) Trip Record Data\nWe’ll use Yellow taxi trips for a few recent months (example: 3 months) to keep compute/storage on Azure manageable. This is a real-world, large-scale data with timestamps, locations, distance, passenger count, and fare components\nThis dataset represents actual taxi trips in New York City and contains rich information such as:\n\nTrip start and end timestamps\nPickup and drop-off locations\nTrip distance\nPassenger count\nFare and payment details\n\nBecause of this, the dataset is well-suited for both:\n\nSupervised learning (predicting trip duration or fare)\nUnsupervised learning (identifying taxi demand hotspots)\n\n\nOfficial source:\nNYC TLC Trip Record Data portal\nData dictionary for Yellow Taxi trip record\n\nUnderstanding the columns:\nThe Yellow Taxi dataset contains many fields. For this lab, we focus on the most relevant columns needed for EDA, ETL, and modeling.\nTime-related columns:\n\ntpep_pickup_datetime: Timestamp when the passenger was picked up\ntpep_dropoff_datetime: Timestamp when the passenger was dropped off\n\nLocation columns:\n\nPULocationID: Taxi Zone ID where the trip started\nDOLocationID: Taxi Zone ID where the trip ended\n\nTrip characteristics:\n\ntrip_distance: Distance traveled during the trip (in miles)\npassenger_count: Number of passengers in the taxi\n\nFare-related columns:\n\nfare_amount: Base fare charged for the trip (excluding taxes, tips, tolls)\ntotal_amount: Total amount charged, including fare, taxes, tolls, tips, and surcharges\n\n\n\n\n\n Back to top",
     "crumbs": [
       "ML Foundations",
       "Understanding dataset"
@@ -153,6 +153,17 @@
     "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      ◐\n    \n  \n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "Monitoring & Maintainance"
+    ]
+  },
+  {
+    "objectID": "dataset.html#overly-complex-joins",
+    "href": "dataset.html#overly-complex-joins",
+    "title": "Dataset choice and source",
+    "section": "Overly complex joins",
+    "text": "Overly complex joins",
+    "crumbs": [
+      "ML Foundations",
+      "Understanding dataset"
     ]
   }
 ]
