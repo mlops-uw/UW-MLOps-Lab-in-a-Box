@@ -63,7 +63,7 @@ website:
 
 format:
   html:
-    theme: zephyr
+    theme: litera
     css: styles.css
     toc: false
     include-before-body: _includes/navbar.html

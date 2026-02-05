@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>security_best_practices</title>
+<title>Security and best practices for MLOps on Azure</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -37,7 +37,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-3750c54518e0d805f385e0b1591401ab.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-1e7bb819180e912c320fa6abd0ecabc9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -204,7 +204,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
 <nav class="navbar navbar-dark bg-primary fixed-top">
   <div class="container-fluid d-flex justify-content-between align-items-center">
     <span class="navbar-brand mb-0" style="font-weight:600;">
@@ -217,9 +217,158 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </nav>
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Security and best practices for MLOps on Azure</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Principles</p>
+<ul>
+<li>Least privilege everywhere</li>
+<li>Prefer identity-based (RBAC) access</li>
+<li>Separate dev, staging, and prod</li>
+<li>Make pipelines reproducible and auditable</li>
+<li>Log enough to detect issues without leaking sensitive data</li>
+</ul>
+<hr>
+<p>Identity and access (RBAC - Role Based Access Control)</p>
+<ul>
+<li>Assign roles at the smallest scope possible (resource group, workspace, storage container)</li>
+<li>Separate duties
+<ul>
+<li>Data owners manage data access</li>
+<li>ML engineers run training jobs</li>
+<li>Release owners deploy to production</li>
+</ul></li>
+</ul>
+<hr>
+<p>Secrets management</p>
+<ul>
+<li>Store secrets in Azure Key Vault</li>
+<li>Access Key Vault using Managed Identity (avoid connection strings in code)</li>
+<li>Do not put secrets in
+<ul>
+<li>Git repos</li>
+<li>notebooks</li>
+<li>environment variables committed to YAML files</li>
+</ul></li>
+<li>Rotate secrets regularly if any must exist</li>
+</ul>
+<hr>
+<p>Data protection</p>
+<ul>
+<li>Store data in Azure Storage (Blob or ADLS Gen2)</li>
+<li>Disable public blob access</li>
+<li>Use RBAC for data access instead of storage account keys when possible</li>
+<li>Keep clear data zones
+<ul>
+<li>raw</li>
+<li>processed</li>
+<li>features</li>
+<li>evaluation</li>
+</ul></li>
+<li>Track dataset versions (Azure ML Data assets) and record which version trained each model</li>
+</ul>
+<hr>
+<p>Network protection</p>
+<ul>
+<li>Prefer private access when data is sensitive</li>
+</ul>
+<hr>
+<p>Reproducible pipelines</p>
+<ul>
+<li>Run preprocessing and training as Azure ML Jobs (not only notebooks)</li>
+<li>Pin dependencies (requirements or conda environment)</li>
+<li>Version everything in git
+<ul>
+<li>code</li>
+<li>environment files</li>
+<li>pipeline definitions</li>
+<li>deployment configs</li>
+</ul></li>
+<li>Capture metadata in every run
+<ul>
+<li>data version</li>
+<li>git commit SHA</li>
+<li>metrics</li>
+<li>environment version</li>
+</ul></li>
+</ul>
+<hr>
+<p>Model registry and promotion</p>
+<ul>
+<li>Register models in Azure ML Model Registry</li>
+<li>Require minimum metadata tags
+<ul>
+<li>data_version</li>
+<li>git_sha</li>
+<li>metric_summary</li>
+<li>owner</li>
+</ul></li>
+<li>Use promotion stages
+<ul>
+<li>candidate</li>
+<li>validated</li>
+<li>production</li>
+</ul></li>
+<li>Avoid “latest” for prod deployments (deploy specific versions only)</li>
+</ul>
+<hr>
+<p>Deployment hardening</p>
+<ul>
+<li>Enable authentication</li>
+<li>Validate inputs (types, ranges, schema) before scoring</li>
+<li>Do not log raw sensitive payloads
+<ul>
+<li>log request IDs, latency, error codes, and summary stats instead</li>
+</ul></li>
+</ul>
+<hr>
+<p>Monitoring and alerts</p>
+<ul>
+<li>Use Application Insights + Log Analytics for endpoint telemetry</li>
+<li>Monitor service health
+<ul>
+<li>latency</li>
+<li>error rate</li>
+<li>throughput</li>
+</ul></li>
+<li>Monitor model signals
+<ul>
+<li>feature drift (compare to training stats)</li>
+<li>prediction drift</li>
+</ul></li>
+<li>Set alerts to notify owners when thresholds are exceeded</li>
+</ul>
+<hr>
+<p>Code Safety</p>
+<ul>
+<li>Require PR reviews and CI checks before merge</li>
+<li>Pin dependencies and avoid installing random packages at runtime</li>
+<li>Store images in Azure Container Registry (ACR)</li>
+</ul>
+<hr>
+<p>Compute hygiene and cost guardrails</p>
+<ul>
+<li>Prefer autoscaling compute clusters for jobs and scale down to zero</li>
+<li>Stop/delete unused compute instances</li>
+<li>Set budgets and alerts per resource group</li>
+<li>Tag resources with owner and environment</li>
+</ul>
 
 
 
