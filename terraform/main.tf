@@ -8,9 +8,13 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
-  resource_provider_registrations = "none"
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = true
+    }
+  }
 
+  resource_provider_registrations = "none"
 }
 
 data "azurerm_client_config" "current" {
@@ -51,7 +55,7 @@ resource "azurerm_application_insights" "example" {
 }
 
 resource "azurerm_key_vault" "example" {
-  name                = "mlops-keyvault"
+  name                = "mlops_keyvault"
   location            = data.azurerm_resource_group.example.location
   resource_group_name = data.azurerm_resource_group.example.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
