@@ -3,7 +3,7 @@ name: Demo Capstone
 on:
   push:
     branches:
-      - "main"
+      - "azure_infra"
 
 jobs:
   Terraform-Deploy:

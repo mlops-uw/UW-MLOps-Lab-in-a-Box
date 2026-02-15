@@ -18,7 +18,7 @@ data "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_storage_account" "example" {
-  name                     = "examplestoracc"
+  name                     = "Taxi Zone Lookup"
   resource_group_name      = data.azurerm_resource_group.example.name
   location                 = azurerm_resource_group.example.location
   account_tier             = "Standard"
