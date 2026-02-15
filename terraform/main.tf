@@ -20,7 +20,7 @@ data "azurerm_resource_group" "example" {
 resource "azurerm_storage_account" "example" {
   name                     = "Taxi Zone Lookup"
   resource_group_name      = data.azurerm_resource_group.example.name
-  location                 = azurerm_resource_group.example.location
+  location                 = data.azurerm_resource_group.example.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 }
@@ -41,26 +41,26 @@ resource "azurerm_storage_blob" "example" {
 
 # resource "azurerm_application_insights" "example" {
 #   name                = "workspace-mlops"
-#   location            = azurerm_resource_group.example.location
-#   resource_group_name = azurerm_resource_group.example.name
+#   location            = data.azurerm_resource_group.example.location
+#   resource_group_name = data.azurerm_resource_group.example.name
 #   application_type    = "web"
 # }
 
 # resource "azurerm_key_vault" "example" {
 #   name                = "workspace-mlops-keyvault"
-#   location            = azurerm_resource_group.example.location
-#   resource_group_name = azurerm_resource_group.example.name
+#   location            = data.azurerm_resource_group.example.location
+#   resource_group_name = data.azurerm_resource_group.example.name
 #   tenant_id           = data.azurerm_client_config.current.tenant_id
 #   sku_name            = "premium"
 # }
 
 # resource "azurerm_machine_learning_workspace" "example" {
 #   name                    = "mlops-workspace"
-#   location                = azurerm_resource_group.example.location
-#   resource_group_name     = azurerm_resource_group.example.name
+#   location                = data.azurerm_resource_group.example.location
+#   resource_group_name     = data.azurerm_resource_group.example.name
 #   application_insights_id = azurerm_application_insights.example.id
 #   key_vault_id            = azurerm_key_vault.example.id
-#   storage_account_id      = azurerm_storage_account.example.id
+#   storage_account_name      = azurerm_storage_account.example.name
 
 #   identity {
 #     type = "SystemAssigned"
