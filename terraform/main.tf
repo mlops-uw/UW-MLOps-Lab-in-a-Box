@@ -14,7 +14,7 @@ provider "azurerm" {
 }
 
 data "azurerm_client_config" "current" {
-    
+
 }
 
 data "azurerm_resource_group" "example" {
@@ -64,7 +64,7 @@ resource "azurerm_machine_learning_workspace" "example" {
   resource_group_name     = data.azurerm_resource_group.example.name
   application_insights_id = azurerm_application_insights.example.id
   key_vault_id            = azurerm_key_vault.example.id
-  storage_account_name      = azurerm_storage_account.example.name
+  storage_account_id      = azurerm_storage_account.example.id
 
   identity {
     type = "SystemAssigned"
