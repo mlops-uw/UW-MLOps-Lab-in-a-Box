@@ -36,7 +36,7 @@ resource "azurerm_storage_blob" "example" {
   storage_account_name   = azurerm_storage_account.example.name
   storage_container_name = azurerm_storage_container.example.name
   type                   = "Block"
-  source                 = "./taxi_zone_lookup.csv"
+  source                 = "../taxi_zone_lookup.csv"
 }
 
 # resource "azurerm_application_insights" "example" {
