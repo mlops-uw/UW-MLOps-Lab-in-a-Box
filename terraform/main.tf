@@ -55,7 +55,7 @@ resource "azurerm_application_insights" "example" {
 }
 
 resource "azurerm_key_vault" "example" {
-  name                = "keyvaultcapstone"
+  name                = "capstonevault"
   location            = data.azurerm_resource_group.example.location
   resource_group_name = data.azurerm_resource_group.example.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
@@ -63,7 +63,7 @@ resource "azurerm_key_vault" "example" {
 }
 
 resource "azurerm_machine_learning_workspace" "example" {
-  name                    = "mlopsworkspace"
+  name                    = "mlopsworkspacecapstone"
   location                = data.azurerm_resource_group.example.location
   resource_group_name     = data.azurerm_resource_group.example.name
   application_insights_id = azurerm_application_insights.example.id
@@ -77,7 +77,7 @@ resource "azurerm_machine_learning_workspace" "example" {
 
 
 resource "azurerm_machine_learning_datastore_blobstorage" "example" {
- name                 = "mlops-datastore"
+ name                 = "mlops_datastore"
  workspace_id         = azurerm_machine_learning_workspace.example.id
  storage_container_id = "${azurerm_storage_account.example.id}/blobServices/default/containers/${azurerm_storage_container.example.name}"
  account_key          = azurerm_storage_account.example.primary_access_key
