@@ -55,7 +55,7 @@ resource "azurerm_application_insights" "example" {
 }
 
 resource "azurerm_key_vault" "example" {
-  name                = "mlopskey"
+  name                = "mlopskeyvault"
   location            = data.azurerm_resource_group.example.location
   resource_group_name = data.azurerm_resource_group.example.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
@@ -63,7 +63,7 @@ resource "azurerm_key_vault" "example" {
 }
 
 resource "azurerm_machine_learning_workspace" "example" {
-  name                    = "mlops-workspace"
+  name                    = "mlopsworkspace"
   location                = data.azurerm_resource_group.example.location
   resource_group_name     = data.azurerm_resource_group.example.name
   application_insights_id = azurerm_application_insights.example.id
