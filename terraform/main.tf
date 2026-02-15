@@ -1,27 +1,40 @@
-# terraform {
-#   required_providers {
-#     azurerm = {
-#       source  = "hashicorp/azurerm"
-#       version = "=4.1.0"
-#     }
-#   }
-# }
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=4.1.0"
+    }
+  }
+}
 
-# provider "azurerm" {
-#   features {}
-#   resource_provider_registrations = "none"
+provider "azurerm" {
+  features {}
+  resource_provider_registrations = "none"
 
-# }
+}
 
-# data "azurerm_resource_group" "example" {
-#   name     = "mlops"
-# }
+data "azurerm_resource_group" "example" {
+  name     = "mlops"
+}
 
-# # Create a virtual network within the resource group
-# resource "azurerm_virtual_network" "example" {
-#   name                = "example-network"
-#   resource_group_name = data.azurerm_resource_group.example.name
-#   location            = data.azurerm_resource_group.example.location
-#   address_space       = ["10.0.0.0/16"]
-# }
+resource "azurerm_storage_account" "example" {
+  name                     = "examplestoracc"
+  resource_group_name      = data.azurerm_resource_group.example.name
+  location                 = azurerm_resource_group.example.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
 
+resource "azurerm_storage_container" "example" {
+  name                  = "Taxi Data"
+  storage_account_id    = azurerm_storage_account.example.id
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_blob" "example" {
+  name                   = "taxi_zone_lookup.csv"
+  storage_account_name   = azurerm_storage_account.example.name
+  storage_container_name = azurerm_storage_container.example.name
+  type                   = "Block"
+  source                 = "./taxi_zone_lookup.csv"
+}
