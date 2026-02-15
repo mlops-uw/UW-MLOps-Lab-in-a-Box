@@ -2,3 +2,4 @@
 **/*.quarto_ipynb
 mlops_labs_venv/
 *.csv
+*.parquet
