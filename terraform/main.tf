@@ -27,7 +27,7 @@ resource "azurerm_storage_account" "example" {
 
 resource "azurerm_storage_container" "example" {
   name                  = "Taxi Data"
-  storage_account_id    = azurerm_storage_account.example.id
+  storage_account_name    = azurerm_storage_account.example.name
   container_access_type = "private"
 }
 
