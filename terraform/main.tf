@@ -55,7 +55,7 @@ resource "azurerm_application_insights" "example" {
 }
 
 resource "azurerm_key_vault" "example" {
-  name                = "capstonevaultnew"
+  name                = "new_capstonevault"
   location            = data.azurerm_resource_group.example.location
   resource_group_name = data.azurerm_resource_group.example.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
@@ -63,7 +63,7 @@ resource "azurerm_key_vault" "example" {
 }
 
 resource "azurerm_machine_learning_workspace" "example" {
-  name                    = "workspacecapstonenew"
+  name                    = "new_workspacecapstone"
   location                = data.azurerm_resource_group.example.location
   resource_group_name     = data.azurerm_resource_group.example.name
   application_insights_id = azurerm_application_insights.example.id
@@ -101,10 +101,14 @@ resource "azurerm_machine_learning_compute_instance" "example" {
   name                          = "example"
   machine_learning_workspace_id = azurerm_machine_learning_workspace.example.id
   virtual_machine_size          = "STANDARD_DS2_V2"
-  authorization_type            = "personal"
+  authorization_type            = "shared"
   ssh {
     public_key = var.ssh_public_key
   }
+#   assign_to_user {
+#     object_id = var.user_object_id
+#     tenant_id = var.tenant_id
+# }
   subnet_resource_id = azurerm_subnet.example.id
   description        = "The Jupyter Notebook VM for MLOps Capstone project"
   tags = {
