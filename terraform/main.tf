@@ -101,3 +101,6 @@ variable "ssh_public_key" {
   description = "Public SSH key"
 }
 
+locals {
+  key_length = length(var.ssh_public_key)
+}
