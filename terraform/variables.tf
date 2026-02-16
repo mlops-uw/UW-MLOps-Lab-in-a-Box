@@ -1,7 +1,7 @@
-variable "ssh_public_key" {
-  type        = string
-  description = "Public SSH key"
-}
+# variable "ssh_public_key" {
+#   type        = string
+#   description = "Public SSH key"
+# }
 
 variable "user_object_id" {
   type        = string
