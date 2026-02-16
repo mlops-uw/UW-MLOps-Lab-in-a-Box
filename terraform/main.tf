@@ -25,19 +25,19 @@ data "azurerm_resource_group" "example" {
   name     = "mlops"
 }
 
-# resource "azurerm_storage_account" "example" {
-#   name                     = "taxizonelookup"
-#   resource_group_name      = data.azurerm_resource_group.example.name
-#   location                 = data.azurerm_resource_group.example.location
-#   account_tier             = "Standard"
-#   account_replication_type = "LRS"
-# }
+resource "azurerm_storage_account" "example" {
+  name                     = "taxizonelookup"
+  resource_group_name      = data.azurerm_resource_group.example.name
+  location                 = data.azurerm_resource_group.example.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
 
-# resource "azurerm_storage_container" "example" {
-#   name                  = "taxidata"
-#   storage_account_name    = azurerm_storage_account.example.name
-#   container_access_type = "private"
-# }
+resource "azurerm_storage_container" "example" {
+  name                  = "taxidata"
+  storage_account_name    = azurerm_storage_account.example.name
+  container_access_type = "private"
+}
 // since file is so big upload manually
 # resource "azurerm_storage_blob" "example" {
 #   name                   = "taxi_zone_lookup.csv"
@@ -75,12 +75,12 @@ resource "azurerm_machine_learning_workspace" "example" {
   }
 }
 
-# resource "azurerm_machine_learning_datastore_blobstorage" "example" {
-#  name                 = "mlops_datastore"
-#  workspace_id         = azurerm_machine_learning_workspace.example.id
-#  storage_container_id = "${azurerm_storage_account.example.id}/blobServices/default/containers/${azurerm_storage_container.example.name}"
-#  account_key          = azurerm_storage_account.example.primary_access_key
-# }
+resource "azurerm_machine_learning_datastore_blobstorage" "example" {
+ name                 = "mlops_datastore"
+ workspace_id         = azurerm_machine_learning_workspace.example.id
+ storage_container_id = "${azurerm_storage_account.example.id}/blobServices/default/containers/${azurerm_storage_container.example.name}"
+ account_key          = azurerm_storage_account.example.primary_access_key
+}
 
 resource "azurerm_virtual_network" "example" {
   name                = "mlops-vnet"
