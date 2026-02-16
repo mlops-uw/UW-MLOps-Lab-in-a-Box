@@ -103,7 +103,7 @@ resource "azurerm_machine_learning_compute_instance" "example" {
   virtual_machine_size          = "STANDARD_DS2_V2"
   authorization_type            = "personal"
   ssh {
-    public_key = var.ssh_key
+    public_key = var.ssh_public_key
   }
   subnet_resource_id = azurerm_subnet.example.id
   description        = "The Jupyter Notebook VM for MLOps Capstone project"
