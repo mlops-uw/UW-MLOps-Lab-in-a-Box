@@ -101,14 +101,14 @@ resource "azurerm_machine_learning_compute_instance" "example" {
   name                          = "example"
   machine_learning_workspace_id = azurerm_machine_learning_workspace.example.id
   virtual_machine_size          = "STANDARD_DS2_V2"
-  authorization_type            = "shared"
+  authorization_type            = "personal"
   ssh {
     public_key = var.ssh_public_key
   }
-#   assign_to_user {
-#     object_id = var.user_object_id
-#     tenant_id = var.tenant_id
-# }
+  assign_to_user {
+    object_id = var.user_object_id
+    tenant_id = var.tenant_id
+}
   subnet_resource_id = azurerm_subnet.example.id
   description        = "The Jupyter Notebook VM for MLOps Capstone project"
   tags = {
