@@ -4,17 +4,16 @@ format: html
 toc: false
 ---
 
-Principles
-
+::: {.callout-important}
+## Core Security Principles
 - Least privilege everywhere
 - Prefer identity-based (RBAC) access
 - Separate dev, staging, and prod
 - Make pipelines reproducible and auditable
 - Log enough to detect issues without leaking sensitive data
+:::
 
-------------------------------------------------------------------------------------------------------
-
-Identity and access (RBAC - Role Based Access Control)
+## {{< fa user-shield >}} Identity and access (RBAC - Role Based Access Control)
 
 - Assign roles at the smallest scope possible (resource group, workspace, storage container)
 - Separate duties
@@ -22,9 +21,12 @@ Identity and access (RBAC - Role Based Access Control)
   - ML engineers run training jobs
   - Release owners deploy to production
 
-------------------------------------------------------------------------------------------------------
+::: {.callout-tip}
+## Best Practice
+Use Azure's built-in roles (Contributor, Reader, Data Scientist) when possible. Create custom roles only when necessary.
+:::
 
-Secrets management
+## {{< fa key >}} Secrets management
 
 - Store secrets in Azure Key Vault
 - Access Key Vault using Managed Identity (avoid connection strings in code)
@@ -34,9 +36,12 @@ Secrets management
   - environment variables committed to YAML files
 - Rotate secrets regularly if any must exist
 
-------------------------------------------------------------------------------------------------------
+::: {.callout-warning}
+## Common Mistake
+Never hardcode connection strings or API keys in notebooks or code. Always use Key Vault with Managed Identity.
+:::
 
-Data protection
+## {{< fa database >}} Data protection
 
 - Store data in Azure Storage (Blob or ADLS Gen2)
 - Disable public blob access
@@ -48,15 +53,21 @@ Data protection
   - evaluation
 - Track dataset versions (Azure ML Data assets) and record which version trained each model
 
-------------------------------------------------------------------------------------------------------
+::: {.callout-note}
+## Data Versioning
+Tracking which dataset version trained each model is critical for reproducibility and debugging production issues.
+:::
 
-Network protection
+## {{< fa network-wired >}} Network protection
 
 - Prefer private access when data is sensitive
 
-------------------------------------------------------------------------------------------------------
+::: {.callout-tip}
+## Production Recommendation
+For production workloads with sensitive data, use Azure Private Link to keep traffic within the Azure network.
+:::
 
-Reproducible pipelines
+## {{< fa rotate >}} Reproducible pipelines
 
 - Run preprocessing and training as Azure ML Jobs (not only notebooks)
 - Pin dependencies (requirements or conda environment)
@@ -71,9 +82,12 @@ Reproducible pipelines
   - metrics
   - environment version
 
-------------------------------------------------------------------------------------------------------
+::: {.callout-important}
+## Reproducibility Checklist
+Every training run should be fully reproducible. If you can't recreate a model from its metadata, your pipeline needs improvement.
+:::
 
-Model registry and promotion
+## {{< fa folder-open >}} Model registry and promotion
 
 - Register models in Azure ML Model Registry
 - Require minimum metadata tags
@@ -87,18 +101,24 @@ Model registry and promotion
   - production
 - Avoid "latest" for prod deployments (deploy specific versions only)
 
-------------------------------------------------------------------------------------------------------
+::: {.callout-warning}
+## Deployment Safety
+Never deploy "latest" to production. Always deploy specific, validated model versions with known performance characteristics.
+:::
 
-Deployment hardening
+## {{< fa rocket >}} Deployment hardening
 
 - Enable authentication
 - Validate inputs (types, ranges, schema) before scoring
 - Do not log raw sensitive payloads
   - log request IDs, latency, error codes, and summary stats instead
 
-------------------------------------------------------------------------------------------------------
+::: {.callout-tip}
+## Input Validation
+Always validate input data before scoring. Invalid inputs can cause errors, security issues, or incorrect predictions.
+:::
 
-Monitoring and alerts
+## {{< fa chart-line >}} Monitoring and alerts
 
 - Use Application Insights + Log Analytics for endpoint telemetry
 - Monitor service health
@@ -110,19 +130,30 @@ Monitoring and alerts
   - prediction drift
 - Set alerts to notify owners when thresholds are exceeded
 
-------------------------------------------------------------------------------------------------------
+::: {.callout-note}
+## Drift Detection
+Model drift and data drift are inevitable in production. Set up monitoring to detect them early before they impact users.
+:::
 
-Code Safety
+## {{< fa code >}} Code Safety
 
 - Require PR reviews and CI checks before merge
 - Pin dependencies and avoid installing random packages at runtime
 - Store images in Azure Container Registry (ACR)
 
-------------------------------------------------------------------------------------------------------
+::: {.callout-tip}
+## Dependency Management
+Pin exact versions in requirements.txt (e.g., `pandas==2.0.3` not `pandas>=2.0`). This prevents unexpected breaking changes.
+:::
 
-Compute hygiene and cost guardrails
+## {{< fa server >}} Compute hygiene and cost guardrails
 
 - Prefer autoscaling compute clusters for jobs and scale down to zero
 - Stop/delete unused compute instances
 - Set budgets and alerts per resource group
 - Tag resources with owner and environment
+
+::: {.callout-warning}
+## Cost Management
+Unused compute instances can drain your Azure credits quickly. Always stop or delete them when not in use, and set up budget alerts.
+:::

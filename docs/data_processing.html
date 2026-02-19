@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data Processing</title>
+<title>Data Processing – MLOps Lab: Boeing x WIC x UW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,13 +20,47 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./supervised.html" rel="next">
-<link href="./data_ingestion.html" rel="prev">
+<link href="./favicon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -35,10 +69,16 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c33dd253dcdfc3590fb104760caadba1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-42d8adea04f871e47f371a7e09319f5c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c33dd253dcdfc3590fb104760caadba1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1e7bb819180e912c320fa6abd0ecabc9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f1eb6b9f76bc15b4e07bd136c068b7cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-51758fc4e875b3bc7577c55555db3d9b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-f1eb6b9f76bc15b4e07bd136c068b7cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -59,7 +99,169 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked fullcontent quarto-light">
+<body class="nav-sidebar docked fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -68,7 +270,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">ML Foundations</a></li><li class="breadcrumb-item"><a href="./data_processing.html">Data Processing</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">{{&lt; fa brain &gt;}} ML Foundations</a></li><li class="breadcrumb-item"><a href="./data_processing.html">{{&lt; fa gears &gt;}} Data Processing</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -78,30 +280,38 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">MLOps Lab: Boeing x WIC x UW</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Home</span></a>
+ <span class="menu-text"> Home</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./MLOps.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Need for MLOps</span></a>
+ <span class="menu-text"> Need for MLOps</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Python.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Python resources</span></a>
+ <span class="menu-text"> Python resources</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">ML Foundations</span></a>
+ <span class="menu-text"><i class="fa-solid fa-brain" aria-label="brain"></i> ML Foundations</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -110,25 +320,25 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./dataset.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Understanding dataset</span></a>
+ <span class="menu-text"> Understanding dataset</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data_ingestion.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Data Ingestion</span></a>
+ <span class="menu-text"> Data Ingestion</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data_processing.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Data Processing</span></a>
+ <span class="menu-text"> Data Processing</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Algorithms</span></a>
+ <span class="menu-text"><i class="fa-solid fa-chart-line" aria-label="chart-line"></i> Algorithms</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -137,13 +347,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./supervised.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Supervised Learning</span></a>
+ <span class="menu-text"> Supervised Learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./unsupervised.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unsupervised Learning</span></a>
+ <span class="menu-text"> Unsupervised Learning</span></a>
   </div>
 </li>
       </ul>
@@ -153,49 +363,49 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Version Control</span></a>
+ <span class="menu-text"> Version Control</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./azure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Azure Cloud</span></a>
+ <span class="menu-text"> Azure Cloud</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./containers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Containerization</span></a>
+ <span class="menu-text"> Containerization</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./DE.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Data Engineering</span></a>
+ <span class="menu-text"> Data Engineering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Registry.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Model Registry</span></a>
+ <span class="menu-text"> Model Registry</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Testing_deploying.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Testing &amp; Deployment</span></a>
+ <span class="menu-text"> Testing &amp; Deployment</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./monitoring_maintainance.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Monitoring &amp; Maintainance</span></a>
+ <span class="menu-text"> Monitoring &amp; Maintainance</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./security_best_practices.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Security &amp; Best Practices</span></a>
+ <span class="menu-text"> Security &amp; Best Practices</span></a>
   </div>
 </li>
     </ul>
@@ -206,19 +416,29 @@ ul.task-list li input[type="checkbox"] {
     
 <!-- main -->
 <main class="content" id="quarto-document-content">
-<nav class="navbar navbar-dark bg-primary fixed-top">
+
+<nav class="navbar fixed-top">
   <div class="container-fluid d-flex justify-content-between align-items-center">
-    <span class="navbar-brand mb-0" style="font-weight:600;">
+    <span class="navbar-brand mb-0">
       MLOps Lab: Boeing x WIC x UW
     </span>
 
-    <button id="theme-toggle" class="btn btn-sm" aria-label="Toggle dark/light mode" type="button">
-      ◐
-    </button>
+    <div class="d-flex align-items-center gap-3">
+      <a href="https://github.com/yourusername/MLOps-Boeing-x-WIC" target="_blank" rel="noopener" class="github-link" style="color: var(--text-secondary); font-size: 1.25rem; text-decoration: none;" aria-label="View on GitHub" title="View on GitHub">
+        <i class="fa-brands fa-github"></i>
+      </a>
+      
+      <button id="theme-toggle" class="btn btn-sm" aria-label="Toggle dark/light mode" type="button">
+        🌙
+      </button>
+    </div>
   </div>
 </nav>
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">ML Foundations</a></li><li class="breadcrumb-item"><a href="./data_processing.html">Data Processing</a></li></ol></nav>
+<!-- Load Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">{{&lt; fa brain &gt;}} ML Foundations</a></li><li class="breadcrumb-item"><a href="./data_processing.html">{{&lt; fa gears &gt;}} Data Processing</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Data Processing</h1>
 <p class="subtitle lead">cleaning, validation, and transformation</p>
@@ -238,50 +458,693 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Objective</p>
+<section id="objective" class="level2">
+<h2 class="anchored" data-anchor-id="objective"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Objective</h2>
 <p>In this lab, we focus on data processing, which is the foundation of any MLOps workflow.</p>
 <p>By the end of this lab, you will be able to:</p>
 <ul>
-<li>[Part B] Perform EDA and produce a model-ready dataset that can be reused for machine learning tasks</li>
+<li>[Part B] Perform data cleaning and transformation to produce a model-ready dataset</li>
+<li>[Part C] Perform EDA to understand data distributions and relationships</li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Scope
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>This section intentionally stops before model training. The processed output will later be used for:</p>
 <ul>
 <li>Supervised learning (Linear Regression)</li>
 <li>Unsupervised learning (K-Means clustering)</li>
 </ul>
+</div>
+</div>
 <hr>
-<section id="part-b---eda" class="level5">
-<h5 class="anchored" data-anchor-id="part-b---eda">Part B - EDA</h5>
+</section>
+<section id="part-b---data-transformation" class="level2">
+<h2 class="anchored" data-anchor-id="part-b---data-transformation"><i class="fa-solid fa-broom" aria-label="broom"></i> Part B - Data Transformation</h2>
+<section id="what-you-need" class="level3">
+<h3 class="anchored" data-anchor-id="what-you-need">What you need</h3>
+<ul>
+<li>An Azure ML workspace with a running compute instance</li>
+<li>Data ingested into Azure Blob Storage (from Part A)</li>
+<li>Connection string stored securely in Azure Key Vault</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Azure Credits
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Always stop your Azure ML compute instance when not in use to avoid unnecessary credit consumption.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="step-1-install-dependencies" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-install-dependencies">Step 1 — Install Dependencies</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!/</span>anaconda<span class="op">/</span>envs<span class="op">/</span>azureml_py310_sdkv2<span class="op">/</span><span class="bu">bin</span><span class="op">/</span>pip install azure<span class="op">-</span>keyvault<span class="op">-</span>secrets azure<span class="op">-</span>identity azure<span class="op">-</span>storage<span class="op">-</span>blob pandas pyarrow seaborn</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Kernel Restart
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>After installing new packages, restart the Jupyter kernel before proceeding. Some packages (like <code>azure-keyvault-secrets</code>) won’t be available until the kernel is restarted.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="step-2-securely-retrieve-connection-string-from-key-vault" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-securely-retrieve-connection-string-from-key-vault">Step 2 — Securely Retrieve Connection String from Key Vault</h3>
+<p>Instead of hardcoding credentials, we retrieve the Blob Storage connection string from Azure Key Vault. This keeps secrets out of your codebase and safe for version control.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> azure.identity <span class="im">import</span> DefaultAzureCredential</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> azure.keyvault.secrets <span class="im">import</span> SecretClient</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> azure.storage.blob <span class="im">import</span> BlobServiceClient</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve connection string securely from Key Vault</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>credential <span class="op">=</span> DefaultAzureCredential()</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>vault_url <span class="op">=</span> <span class="st">"https://&lt;your-keyvault-name&gt;.vault.azure.net/"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>secret_client <span class="op">=</span> SecretClient(vault_url<span class="op">=</span>vault_url, credential<span class="op">=</span>credential)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>CONNECTION_STRING <span class="op">=</span> secret_client.get_secret(<span class="st">"blob-connection-string"</span>).value</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Connection string retrieved securely from Key Vault!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Key Vault Access
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Make sure your user has <strong>Get</strong>, <strong>List</strong>, and <strong>Set</strong> permissions under the Key Vault’s Access Policies. Without this, the notebook will throw a <code>Forbidden</code> error.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="step-3-download-raw-data-from-blob-storage" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-download-raw-data-from-blob-storage">Step 3 — Download Raw Data from Blob Storage</h3>
+<p>We pull the raw parquet files from the <code>nyc-tlc-raw</code> Blob container into the compute instance.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>CONTAINER_NAME <span class="op">=</span> <span class="st">"nyc-tlc-raw"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>LOCAL_DIR <span class="op">=</span> Path(<span class="st">"data_raw"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>LOCAL_DIR.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the monthly files to download</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> [</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"yellow_tripdata_2025-09.parquet"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"yellow_tripdata_2025-10.parquet"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"yellow_tripdata_2025-11.parquet"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>blob_service <span class="op">=</span> BlobServiceClient.from_connection_string(CONNECTION_STRING)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> files:</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    blob_client <span class="op">=</span> blob_service.get_blob_client(container<span class="op">=</span>CONTAINER_NAME, blob<span class="op">=</span>f)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    local_path <span class="op">=</span> LOCAL_DIR <span class="op">/</span> f</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(local_path, <span class="st">"wb"</span>) <span class="im">as</span> fh:</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        fh.write(blob_client.download_blob().readall())</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Downloaded: </span><span class="sc">{</span>f<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"All files downloaded!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="step-4-load-and-combine-data" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-load-and-combine-data">Step 4 — Load and Combine Data</h3>
+<p>We load all three monthly files and combine them into a single DataFrame for unified processing.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load all parquet files and combine into one DataFrame</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    [pd.read_parquet(LOCAL_DIR <span class="op">/</span> f) <span class="cf">for</span> f <span class="kw">in</span> files],</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    ignore_index<span class="op">=</span><span class="va">True</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape:"</span>, df.shape)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Columns:"</span>, df.columns.tolist())</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Expected output:</strong> 12,861,158 rows × 20 columns</p>
+<hr>
+</section>
+<section id="step-5-initial-exploration" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-initial-exploration">Step 5 — Initial Exploration</h3>
+<p>Before cleaning, we inspect the data to understand what we’re working with.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore data types, null counts, duplicates, and summary stats</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Data types:</span><span class="ch">\n</span><span class="st">"</span>, df.dtypes)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Null counts:</span><span class="ch">\n</span><span class="st">"</span>, df.isnull().<span class="bu">sum</span>())</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Duplicates:"</span>, df.duplicated().<span class="bu">sum</span>())</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key Findings
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>From the initial exploration:</p>
+<ul>
+<li><strong>~3 million nulls</strong> in <code>passenger_count</code>, <code>RatecodeID</code>, <code>store_and_fwd_flag</code>, <code>congestion_surcharge</code>, and <code>Airport_fee</code></li>
+<li>Datetime columns are properly typed as <code>datetime64</code></li>
+<li>Some numeric columns have suspicious min/max values (negative fares, zero distances)</li>
+</ul>
+</div>
+</div>
+<hr>
+</section>
+<section id="step-6-drop-unnecessary-columns" class="level3">
+<h3 class="anchored" data-anchor-id="step-6-drop-unnecessary-columns">Step 6 — Drop Unnecessary Columns</h3>
+<p>We remove columns that aren’t needed for downstream analysis or modeling.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop columns not needed for analysis</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>columns_to_drop <span class="op">=</span> [<span class="st">'store_and_fwd_flag'</span>, <span class="st">'RatecodeID'</span>, <span class="st">'congestion_surcharge'</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                   <span class="st">'Airport_fee'</span>, <span class="st">'improvement_surcharge'</span>, <span class="st">'mta_tax'</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                   <span class="st">'extra'</span>, <span class="st">'tolls_amount'</span>, <span class="st">'cbd_congestion_fee'</span>]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop(columns<span class="op">=</span>columns_to_drop)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Remaining columns:"</span>, df.columns.tolist())</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape after drop:"</span>, df.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Result:</strong> 20 columns → 11 columns</p>
+<hr>
+</section>
+<section id="step-7-handle-null-values" class="level3">
+<h3 class="anchored" data-anchor-id="step-7-handle-null-values">Step 7 — Handle Null Values</h3>
+<p>Rather than dropping ~3 million rows with null <code>passenger_count</code>, we fill with the median value to preserve data volume.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill null passenger_count with median instead of dropping rows</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nulls before fill:"</span>, df[<span class="st">'passenger_count'</span>].isnull().<span class="bu">sum</span>())</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'passenger_count'</span>] <span class="op">=</span> df[<span class="st">'passenger_count'</span>].fillna(df[<span class="st">'passenger_count'</span>].median())</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nulls after fill:"</span>, df[<span class="st">'passenger_count'</span>].isnull().<span class="bu">sum</span>())</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape:"</span>, df.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Why Median?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We use the <strong>median</strong> instead of the mean because passenger count is a discrete value and the median (1.0) better represents a typical taxi ride. Dropping 3M rows would unnecessarily reduce our dataset by ~24%.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="step-8-remove-invalid-and-outlier-rows" class="level3">
+<h3 class="anchored" data-anchor-id="step-8-remove-invalid-and-outlier-rows">Step 8 — Remove Invalid and Outlier Rows</h3>
+<p>We filter out rows that are clearly erroneous or represent extreme outliers.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with zero/negative values and extreme outliers</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df[<span class="st">'fare_amount'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df[<span class="st">'trip_distance'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df[<span class="st">'passenger_count'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df[<span class="st">'fare_amount'</span>] <span class="op">&lt;</span> <span class="dv">500</span>]</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df[<span class="st">'trip_distance'</span>] <span class="op">&lt;</span> <span class="dv">100</span>]</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df[<span class="st">'passenger_count'</span>] <span class="op">&lt;=</span> <span class="dv">6</span>]</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df[<span class="st">'total_amount'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape after removing outliers:"</span>, df.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 42%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Filter</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>fare_amount &gt; 0</code></td>
+<td>Negative/zero fares are data entry errors</td>
+</tr>
+<tr class="even">
+<td><code>trip_distance &gt; 0</code></td>
+<td>Zero distance means the trip didn’t happen</td>
+</tr>
+<tr class="odd">
+<td><code>passenger_count &gt; 0</code></td>
+<td>A trip with 0 passengers is invalid</td>
+</tr>
+<tr class="even">
+<td><code>fare_amount &lt; 500</code></td>
+<td>Fares above $500 are almost certainly errors</td>
+</tr>
+<tr class="odd">
+<td><code>trip_distance &lt; 100</code></td>
+<td>Trips over 100 miles are extreme outliers</td>
+</tr>
+<tr class="even">
+<td><code>passenger_count &lt;= 6</code></td>
+<td>Standard taxis seat a maximum of 6 passengers</td>
+</tr>
+<tr class="odd">
+<td><code>total_amount &gt; 0</code></td>
+<td>Negative totals indicate refunds or errors</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="step-9-feature-engineering" class="level3">
+<h3 class="anchored" data-anchor-id="step-9-feature-engineering">Step 9 — Feature Engineering</h3>
+<p>We create new columns derived from existing data to enrich the dataset for modeling.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create trip duration and time-based features</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'trip_duration_min'</span>] <span class="op">=</span> (</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">'tpep_dropoff_datetime'</span>] <span class="op">-</span> df[<span class="st">'tpep_pickup_datetime'</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>).dt.total_seconds() <span class="op">/</span> <span class="dv">60</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove nonsensical durations (less than 1 min or more than 3 hours)</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[(df[<span class="st">'trip_duration_min'</span>] <span class="op">&gt;</span> <span class="dv">1</span>) <span class="op">&amp;</span> (df[<span class="st">'trip_duration_min'</span>] <span class="op">&lt;</span> <span class="dv">180</span>)]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract time-based features</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'pickup_hour'</span>] <span class="op">=</span> df[<span class="st">'tpep_pickup_datetime'</span>].dt.hour</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'pickup_dayofweek'</span>] <span class="op">=</span> df[<span class="st">'tpep_pickup_datetime'</span>].dt.dayofweek</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape after feature engineering:"</span>, df.shape)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 48%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>New Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>trip_duration_min</code></td>
+<td>Trip length in minutes, computed from pickup and dropoff timestamps</td>
+</tr>
+<tr class="even">
+<td><code>pickup_hour</code></td>
+<td>Hour of the day (0–23) when the trip started</td>
+</tr>
+<tr class="odd">
+<td><code>pickup_dayofweek</code></td>
+<td>Day of the week (0 = Monday, 6 = Sunday)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="step-10-verify-cleaned-data" class="level3">
+<h3 class="anchored" data-anchor-id="step-10-verify-cleaned-data">Step 10 — Verify Cleaned Data</h3>
+<p>A final sanity check to confirm the dataset is clean and ready.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Final check on cleaned dataset</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Final shape:"</span>, df.shape)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Null counts:</span><span class="ch">\n</span><span class="st">"</span>, df.isnull().<span class="bu">sum</span>())</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Expected output:</strong> 11,320,592 rows × 14 columns, zero nulls</p>
+<hr>
+</section>
+<section id="step-11-save-cleaned-data" class="level3">
+<h3 class="anchored" data-anchor-id="step-11-save-cleaned-data">Step 11 — Save Cleaned Data</h3>
+<p>We save the processed dataset as a parquet file for reuse in future modeling labs.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save cleaned data as parquet for future use</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>output_path <span class="op">=</span> Path(<span class="st">"data_cleaned"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>output_path.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>df.to_parquet(output_path <span class="op">/</span> <span class="st">"yellow_tripdata_cleaned.parquet"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Saved cleaned data to:"</span>, output_path <span class="op">/</span> <span class="st">"yellow_tripdata_cleaned.parquet"</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"File size: </span><span class="sc">{:.2f}</span><span class="st"> MB"</span>.<span class="bu">format</span>(</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    (output_path <span class="op">/</span> <span class="st">"yellow_tripdata_cleaned.parquet"</span>).stat().st_size <span class="op">/</span> <span class="fl">1e6</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="transformation-summary" class="level3">
+<h3 class="anchored" data-anchor-id="transformation-summary"><i class="fa-solid fa-check-circle" aria-label="check-circle"></i> Transformation Summary</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 20%">
+<col style="width: 30%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Stage</th>
+<th>Rows</th>
+<th>Columns</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Raw data loaded</td>
+<td>12,861,158</td>
+<td>20</td>
+<td>Combined 3 monthly parquet files</td>
+</tr>
+<tr class="even">
+<td>Drop columns</td>
+<td>12,861,158</td>
+<td>11</td>
+<td>Removed 9 unused columns</td>
+</tr>
+<tr class="odd">
+<td>Fill nulls</td>
+<td>12,861,158</td>
+<td>11</td>
+<td>Filled <code>passenger_count</code> nulls with median</td>
+</tr>
+<tr class="even">
+<td>Remove outliers</td>
+<td>11,546,705</td>
+<td>11</td>
+<td>Filtered invalid/extreme rows</td>
+</tr>
+<tr class="odd">
+<td>Feature engineering</td>
+<td>11,320,592</td>
+<td>14</td>
+<td>Added duration, hour, day of week</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="part-c---exploratory-data-analysis-eda" class="level2">
+<h2 class="anchored" data-anchor-id="part-c---exploratory-data-analysis-eda"><i class="fa-solid fa-chart-bar" aria-label="chart-bar"></i> Part C - Exploratory Data Analysis (EDA)</h2>
+<p>Now that the data is clean, we perform EDA to understand patterns and distributions before modeling.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">"whitegrid"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+<section id="fare-amount-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="fare-amount-distribution">Fare Amount Distribution</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distribution of fare amounts</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'fare_amount'</span>].clip(upper<span class="op">=</span><span class="dv">100</span>).hist(bins<span class="op">=</span><span class="dv">50</span>, ax<span class="op">=</span>ax, edgecolor<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Distribution of Fare Amount (capped at $100)'</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Fare Amount ($)'</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Observation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The distribution is right-skewed with most fares concentrated between $5–$20. There is a noticeable spike around $70, which corresponds to the JFK airport flat-rate fare.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="trip-distance-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="trip-distance-distribution">Trip Distance Distribution</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distribution of trip distances</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'trip_distance'</span>].clip(upper<span class="op">=</span><span class="dv">30</span>).hist(bins<span class="op">=</span><span class="dv">50</span>, ax<span class="op">=</span>ax, edgecolor<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Distribution of Trip Distance (capped at 30 miles)'</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Trip Distance (miles)'</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Observation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The majority of trips are under 5 miles, typical of short urban rides. A small bump around 17–20 miles corresponds to airport trips (JFK/EWR).</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="trips-by-hour-of-day" class="level3">
+<h3 class="anchored" data-anchor-id="trips-by-hour-of-day">Trips by Hour of Day</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of trips by hour of day</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'pickup_hour'</span>].value_counts().sort_index().plot(kind<span class="op">=</span><span class="st">'bar'</span>, ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">'steelblue'</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Number of Trips by Hour of Day'</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Hour'</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Trip Count'</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Observation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Trip volume peaks at 6 PM (evening rush hour) and is lowest between 4–5 AM. Demand rises steadily from 7 AM through the afternoon.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="correlation-heatmap" class="level3">
+<h3 class="anchored" data-anchor-id="correlation-heatmap">Correlation Heatmap</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation heatmap of numeric columns</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>numeric_cols <span class="op">=</span> [<span class="st">'trip_distance'</span>, <span class="st">'fare_amount'</span>, <span class="st">'tip_amount'</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">'total_amount'</span>, <span class="st">'trip_duration_min'</span>, <span class="st">'passenger_count'</span>]</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>sns.heatmap(df[numeric_cols].corr(), annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>            fmt<span class="op">=</span><span class="st">'.2f'</span>, ax<span class="op">=</span>ax, vmin<span class="op">=-</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Correlation Heatmap'</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key Correlations
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>trip_distance ↔︎ fare_amount</strong>: 0.90 — very strong positive correlation, as expected</li>
+<li><strong>trip_duration_min ↔︎ fare_amount</strong>: 0.79 — longer trips cost more</li>
+<li><strong>fare_amount ↔︎ total_amount</strong>: 0.97 — fare is the dominant component of total</li>
+<li><strong>passenger_count</strong>: Near-zero correlation with all other features — does not meaningfully affect fare</li>
+</ul>
+</div>
+</div>
+<hr>
+</section>
+<section id="fare-vs-trip-distance" class="level3">
+<h3 class="anchored" data-anchor-id="fare-vs-trip-distance">Fare vs Trip Distance</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot of fare vs distance (sampled for performance)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> df.sample(n<span class="op">=</span><span class="dv">10000</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ax.scatter(sample[<span class="st">'trip_distance'</span>], sample[<span class="st">'fare_amount'</span>], alpha<span class="op">=</span><span class="fl">0.3</span>, s<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Fare Amount vs Trip Distance (10K sample)'</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Trip Distance (miles)'</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Fare Amount ($)'</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">0</span>, <span class="dv">40</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="dv">150</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Observation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A clear linear relationship between distance and fare is visible. The horizontal band at ~$70 for trips between 15–20 miles represents the JFK airport flat-rate fare. We sample 10,000 points for visualization performance.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="average-fare-by-hour-of-day" class="level3">
+<h3 class="anchored" data-anchor-id="average-fare-by-hour-of-day">Average Fare by Hour of Day</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average fare by hour of day</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">'pickup_hour'</span>)[<span class="st">'fare_amount'</span>].mean().plot(kind<span class="op">=</span><span class="st">'line'</span>, ax<span class="op">=</span>ax,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                                                       marker<span class="op">=</span><span class="st">'o'</span>, color<span class="op">=</span><span class="st">'green'</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Average Fare by Hour of Day'</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Hour'</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Average Fare ($)'</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Observation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The highest average fares occur at 5 AM (~$25), likely driven by longer early-morning airport trips. Fares dip to their lowest around 2–3 AM, then remain relatively stable during daytime hours ($19–$22).</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="eda-summary" class="level3">
+<h3 class="anchored" data-anchor-id="eda-summary"><i class="fa-solid fa-check-circle" aria-label="check-circle"></i> EDA Summary</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Insight</th>
+<th>Finding</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fare distribution</td>
+<td>Right-skewed, most fares between $5–$20, spike at $70 (airport flat rate)</td>
+</tr>
+<tr class="even">
+<td>Trip distance</td>
+<td>Majority under 5 miles, bump at 17–20 miles (airport trips)</td>
+</tr>
+<tr class="odd">
+<td>Peak hours</td>
+<td>Highest volume at 6 PM, lowest at 4–5 AM</td>
+</tr>
+<tr class="even">
+<td>Highest avg fare</td>
+<td>5 AM (~$25) — early morning airport trips</td>
+</tr>
+<tr class="odd">
+<td>Strongest predictor</td>
+<td>Trip distance (0.90 correlation with fare)</td>
+</tr>
+<tr class="even">
+<td>Passenger count</td>
+<td>Near-zero correlation — minimal impact on fare</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Next Steps
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The cleaned and explored dataset is now ready for:</p>
+<ul>
+<li><strong>Supervised learning</strong> — Predicting fare amount using Linear Regression</li>
+<li><strong>Unsupervised learning</strong> — Identifying taxi demand clusters using K-Means</li>
+</ul>
+</div>
+</div>
 
 
 </section>
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<footer class="footer">
+  <div class="footer-content">
+    <div>
+      <strong>MLOps Lab: Boeing x WIC x UW</strong>
+    </div>
+    <div style="margin-top: 0.5rem;">
+      University of Washington | Information Management Class of 2026
+    </div>
+    <div style="margin-top: 0.5rem; font-size: 0.8125rem;">
+      In collaboration with Boeing and Women in Cloud
+    </div>
+    <div class="footer-links">
+      <span>© 2026 MLOps Lab</span>
+    </div>
+  </div>
+</footer>
 <script>
-(function () {
+(function() {
+  // Theme toggle functionality
+  const toggle = document.getElementById('theme-toggle');
   const html = document.documentElement;
-
-  // Bootstrap theme via attribute
-  const storedTheme = localStorage.getItem("theme") || "light";
-  html.setAttribute("data-bs-theme", storedTheme);
-
-  const toggle = document.getElementById("theme-toggle");
-  if (!toggle) return;
-
-  toggle.textContent = storedTheme === "dark" ? "◑" : "◐";
-
-  toggle.addEventListener("click", () => {
-    const current = html.getAttribute("data-bs-theme") || "light";
-    const next = current === "dark" ? "light" : "dark";
-
-    html.setAttribute("data-bs-theme", next);
-    localStorage.setItem("theme", next);
-    toggle.textContent = next === "dark" ? "◑" : "◐";
-  });
-})()
+  
+  // Icons for light and dark mode
+  const sunIcon = '☀️';
+  const moonIcon = '🌙';
+  
+  // Get saved theme or default to dark
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  html.setAttribute('data-bs-theme', savedTheme);
+  
+  // Update button icon
+  function updateIcon() {
+    const currentTheme = html.getAttribute('data-bs-theme');
+    if (toggle) {
+      toggle.textContent = currentTheme === 'dark' ? sunIcon : moonIcon;
+      toggle.setAttribute('aria-label', `Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} mode`);
+    }
+  }
+  
+  updateIcon();
+  
+  // Toggle theme on button click
+  if (toggle) {
+    toggle.addEventListener('click', function() {
+      const currentTheme = html.getAttribute('data-bs-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-bs-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateIcon();
+    });
+  }
+})();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -367,6 +1230,13 @@ ul.task-list li input[type="checkbox"] {
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -680,18 +1550,6 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="./data_ingestion.html" class="pagination-link" aria-label="Data Ingestion">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Data Ingestion</span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="./supervised.html" class="pagination-link" aria-label="Supervised Learning">
-        <span class="nav-page-text">Supervised Learning</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 
 

@@ -1,16 +1,135 @@
 ---
-title: "About This Lab"
+title: "MLOps Lab: Boeing x WIC x UW"
 ---
+
+::: {.hero-section}
+## Welcome to the MLOps Lab
 
 We are a group of four graduate students from the University of Washington, Information Management Class of 2026, and this lab is designed to guide you through the core concepts and practical applications of MLOps.
 
-UW Team:
+This lab is developed in collaboration with **Boeing**, working closely with Jared, Uzma, and Geetha, and supported by the **Women in Cloud (WIC)** team.
+
+Our goal is to provide a hands-on, structured learning experience that bridges academic foundations with real-world MLOps practices used in industry.
+:::
+
+---
+
+## {{< fa map >}} Learning Path
+
+Explore the topics below to build your MLOps expertise from foundations to production deployment.
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-body}
+### {{< fa brain >}} ML Foundations
+
+Learn the fundamentals of machine learning, datasets, and algorithms.
+
+- [Understanding Dataset](dataset.qmd)
+- [Data Ingestion](data_ingestion.qmd)
+- [Data Processing](data_processing.qmd)
+- [Supervised Learning](supervised.qmd)
+- [Unsupervised Learning](unsupervised.qmd)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-body}
+### {{< fa diagram-project >}} MLOps Pipeline
+
+Build production-ready ML workflows with versioning, testing, and deployment.
+
+- [Need for MLOps](MLOps.qmd)
+- [Version Control](vc.qmd)
+- [Model Registry](Registry.qmd)
+- [Testing & Deployment](Testing_deploying.qmd)
+- [Monitoring & Maintenance](monitoring_maintainance.qmd)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-body}
+### {{< fa cloud >}} Cloud & Infrastructure
+
+Deploy and scale ML systems on Azure with containers and data engineering.
+
+- [Azure Cloud](azure.qmd)
+- [Containerization](containers.qmd)
+- [Data Engineering](DE.qmd)
+- [Security & Best Practices](security_best_practices.qmd)
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-body}
+### {{< fa python >}} Python Resources
+
+Essential Python learning resources for data science and ML.
+
+- [Python Learning Resources](Python.qmd)
+
+Master Python fundamentals, Pandas, NumPy, and Scikit-learn for MLOps workflows.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-body}
+### {{< fa rocket >}} Getting Started
+
+New to MLOps? Start here to understand why it matters.
+
+- [Need for MLOps](MLOps.qmd)
+
+Learn why production ML systems need more than just accurate models.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-body}
+### {{< fa shield-halved >}} Best Practices
+
+Security, reproducibility, and production-grade workflows.
+
+- [Security & Best Practices](security_best_practices.qmd)
+
+Learn RBAC, secrets management, monitoring, and cost optimization on Azure.
+:::
+:::
+:::
+
+:::
+
+---
+
+## {{< fa users >}} Our Team
+
+**UW Team:**
 
 - [Shakshi Gandhi](https://www.linkedin.com/in/shakshigandhi/)
 - [Vinod Kamat](https://www.linkedin.com/in/vinodkamat2607/)
-- [Arohi narang](https://www.linkedin.com/in/arohi-narang-77b90519a/)
+- [Arohi Narang](https://www.linkedin.com/in/arohi-narang-77b90519a/)
 - [Sneha Reddy](https://www.linkedin.com/in/sneha8/)
 
-This lab is developed in collaboration with Boeing, working closely with Jared, Uzma, and Geetha, and supported by the Women in Cloud (WIC) team.
+**Boeing Mentors:** Jared, Uzma, Geetha
 
-Our goal is to provide a hands-on, structured learning experience that bridges academic foundations with real-world MLOps used in industry.
+**Supported by:** Women in Cloud (WIC)
+
+---
+
+::: {.callout-note}
+## About This Lab
+
+This lab uses the **NYC Taxi dataset** as a real-world example throughout all modules. You'll learn how to build, deploy, monitor, and maintain ML systems that predict trip duration and fare amounts—just like production systems at scale.
+:::

@@ -1,26 +1,8 @@
+/* Legacy layout overrides - works with custom.scss */
 :root{
-  --sidebar-width: 250px;
-  --navbar-height: 56px;
-  --footer-height: 0px;
+  --sidebar-width: 280px;
+  --navbar-height: 64px;
   --content-gap: 8px;
-
-  --app-bg: #f9f9f9;
-  --surface-bg: #f9f9f9;
-  --text-color: #323435;
-  --border-color: #bbbbbbc0;
-  --accent-blue: #0d6efd;
-}
-
-html[data-bs-theme="dark"]{
-  --app-bg: #1f1f1f;
-  --surface-bg: #1f1f1f;
-  --text-color: #e5dfdf;
-  --border-color: #bbbbbbc0;
-  --accent-blue: #4da3ff;
-}
-
-*{
-  transition: background-color .05s ease, color .05s ease, border-color .05s ease;
 }
 
 html, body{ 
@@ -29,9 +11,6 @@ html, body{
 }
 
 body{
-  background-color: var(--app-bg);
-  color: var(--text-color);
-  line-height: 1.6;
   padding-top: var(--navbar-height);
   overflow: hidden;
 }
@@ -45,26 +24,6 @@ body{
 /* ===== Navbar styling ===== */
 .navbar{
   box-shadow: none !important;
-  border-bottom: none !important;
-}
-
-.navbar .navbar-brand,
-.navbar .navbar-title-center{
-  color:#fff !important;
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  white-space:nowrap;
-  font-weight:600;
-}
-
-#theme-toggle{
-  color:#fff !important;
-  background:transparent;
-  border:none;
-  font-size:1.05rem;
-  line-height:1;
-  padding:.25rem .5rem;
 }
 
 /* ===== Sidebar (fixed) ===== */
@@ -76,13 +35,8 @@ body{
   height: calc(100vh - var(--navbar-height)) !important;
   overflow-y: auto;
   overflow-x: hidden;
-
-  background-color: var(--surface-bg) !important;
-  color: var(--text-color) !important;
-  border-right: 1px solid var(--border-color) !important;
-
   z-index: 1030;
-  padding: 0 !important;
+  padding: 1rem 0 !important;
   margin: 0 !important;
 }
 
@@ -99,53 +53,20 @@ body{
 #quarto-sidebar .sidebar-navigation,
 #quarto-sidebar .sidebar-items,
 #quarto-sidebar .sidebar-menu-container{
-  padding: 5px 5px 5px 5px !important;
+  padding: 0 0.75rem !important;
   margin: 0 !important;
-}
-
-/* Sidebar items */
-#quarto-sidebar .sidebar-item{
-  margin-bottom: 0.55rem !important;
-}
-
-#quarto-sidebar .sidebar-item a{
-  display: block;
-  font-size: .82rem;
-  color: var(--text-color) !important;
-  opacity: 1 !important;
-  padding-top: 0.15rem;
-  padding-bottom: 0.15rem;
-  text-decoration: none;
-}
-
-#quarto-sidebar .sidebar-item a:hover{
-  color: var(--accent-blue) !important;
-}
-
-#quarto-sidebar .sidebar-item.active > a,
-#quarto-sidebar .sidebar-item a.active{
-  color: var(--accent-blue) !important;
-  font-weight: 700;
-  border-left: 1px solid var(--accent-blue);
-  padding-left: .5rem;
 }
 
 /* ===== Content pane (fixed + scroll) ===== */
 #quarto-content{
   position: fixed !important;
   top: var(--navbar-height) !important;
-  /*left: var(--sidebar-width) !important;*/
-  left: 4rem;
-  right: 2rem !important;
+  left: var(--sidebar-width) !important;
+  right: 0 !important;
   bottom: 0 !important;
-
   overflow-y: auto !important;
   overflow-x: hidden !important;
-
-  background-color: var(--surface-bg) !important;
-  color: var(--text-color) !important;
-
-  padding: 30px 30px !important;
+  padding: 2rem 3rem !important;
   margin: 0 !important;
   border: none !important;
 }
@@ -155,89 +76,51 @@ body{
 #quarto-content main,
 #quarto-content main.content,
 #quarto-content .content{
-  max-width: 100% !important;
+  max-width: 1200px !important;
   width: 100% !important;
   padding: 0 !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
 }
 
 /* Typography */
-#quarto-content{
-  font-size: 0.84rem;
-}
-
 #quarto-content h1.title{
-  font-size: 1.3rem;
-  font-weight: 500;
-  margin-bottom: .5rem;
+  font-size: 2.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
-  color: var(--text-color) !important;
 }
 
-html[data-bs-theme="dark"] #quarto-content h1.title{
-  color:#fff !important;
-}
-
-/* Links */
-a{ 
-  color: var(--accent-blue); 
-  text-decoration: none;
-}
-a:hover{ 
-  text-decoration: underline;
-}
-
-/* ===== Page navigation (Prev/Next) ===== */
-.page-navigation,
-nav.page-navigation,
-.quarto-page-navigation{
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  margin-top: 0.5rem !important;
-  padding-top: 0.5rem !important;
-  padding-bottom: 2rem !important;
-  /*border-top: 1px solid var(--border-color) !important;*/
-  visibility: visible !important;
-  opacity: 1 !important;
-  width: 100% !important;
-  position: sticky !important;
-}
-
-.page-navigation a,
-nav.page-navigation a,
-.quarto-page-navigation a{
-  font-size: .75rem !important;
-  font-weight: 700 !important;
-  color: var(--text-color) !important;
-  text-decoration: none !important;
-  display: inline-block !important;
-}
-
-html[data-bs-theme="dark"] .page-navigation a,
-html[data-bs-theme="dark"] .quarto-page-navigation a{
-  color: #ffffff !important;
-}
-
-.page-navigation a:hover,
-.quarto-page-navigation a:hover{
-  color: var(--accent-blue) !important;
-}
-
-/* Ensure content has room for page navigation */
-#quarto-content main,
-#quarto-content article{
-  padding-bottom: 20px !important;
-}
-
+/* Back to top button */
 #back-to-top{
-  color: #fff !important;
-  border: 1px solid rgba(255,255,255,0.55);
-  background: transparent;
-  border-radius: 8px;
-  padding: 0.2rem 1rem;
+  border: 1px solid var(--border-color);
+  background: var(--surface-secondary);
+  color: var(--text-primary) !important;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
   margin-left: 8px;
+  transition: all 0.2s ease;
 }
+
 #back-to-top:hover{
-  border-color: #fff;
+  background: var(--boeing-blue);
+  border-color: var(--boeing-blue);
+  color: white !important;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 991px) {
+  #quarto-content {
+    left: 0 !important;
+    padding: 1.5rem 1rem !important;
+  }
+  
+  #quarto-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  #quarto-sidebar.show {
+    transform: translateX(0);
+  }
+}
+

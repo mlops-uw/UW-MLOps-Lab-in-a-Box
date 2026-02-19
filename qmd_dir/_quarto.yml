@@ -3,68 +3,80 @@ project:
   output-dir: _site
 
 website:
-  title: ""
+  title: "MLOps Lab: Boeing x WIC x UW"
+  favicon: favicon.svg
   search: false
   back-to-top-navigation: true
   navbar: false
-  page-navigation: true
+  page-navigation: false
 
   sidebar:
     style: docked
     collapse-level: 3
     contents:
-      - text: Home
+      - text: "{{< fa house >}} Home"
         href: index.qmd
 
-      - text: Need for MLOps
+      - text: "{{< fa rocket >}} Need for MLOps"
         href: MLOps.qmd
 
-      - text: Python resources
+      - text: "{{< fa python >}} Python resources"
         href: Python.qmd
 
-      - section: ML Foundations
+      - section: "{{< fa brain >}} ML Foundations"
         contents:
-          - text: Understanding dataset
+          - text: "{{< fa database >}} Understanding dataset"
             href: dataset.qmd
-          - text: Data Ingestion
+          - text: "{{< fa download >}} Data Ingestion"
             href: data_ingestion.qmd
-          - text: Data Processing
+          - text: "{{< fa gears >}} Data Processing"
             href: data_processing.qmd
-          - section: Algorithms
+          - section: "{{< fa chart-line >}} Algorithms"
             contents:
-              - text: Supervised Learning
+              - text: "{{< fa graduation-cap >}} Supervised Learning"
                 href: supervised.qmd
-              - text: Unsupervised Learning
+              - text: "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
                 href: unsupervised.qmd
 
-      - text: Version Control
+      - text: "{{< fa code-branch >}} Version Control"
         href: vc.qmd
 
-      - text: Azure Cloud
+      - text: "{{< fa cloud >}} Azure Cloud"
         href: azure.qmd
 
-      - text: Containerization
+      - text: "{{< fa box >}} Containerization"
         href: containers.qmd
 
-      - text: Data Engineering
+      - text: "{{< fa diagram-project >}} Data Engineering"
         href: DE.qmd
 
-      - text: Model Registry
+      - text: "{{< fa folder-open >}} Model Registry"
         href: Registry.qmd
 
-      - text: Testing & Deployment
+      - text: "{{< fa flask >}} Testing & Deployment"
         href: Testing_deploying.qmd
 
-      - text: Monitoring & Maintainance
+      - text: "{{< fa chart-simple >}} Monitoring & Maintainance"
         href: monitoring_maintainance.qmd
 
-      - text: Security & Best Practices
+      - text: "{{< fa shield-halved >}} Security & Best Practices"
         href: security_best_practices.qmd
 
 format:
   html:
-    theme: litera
+    theme: 
+      light: [flatly, custom.scss]
+      dark: [darkly, custom.scss]
     css: styles.css
     toc: false
+    code-copy: true
+    code-overflow: scroll
+    highlight-style: 
+      light: github
+      dark: github-dark
     include-before-body: _includes/navbar.html
-    include-after-body: scripts/theme-toggle.js
+    include-after-body: 
+      - _includes/footer.html
+      - _includes/theme-toggle.js
+    link-external-newwindow: true
+    link-external-icon: true

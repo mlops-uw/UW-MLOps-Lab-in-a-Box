@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Security and best practices for MLOps on Azure</title>
+<title>Security and best practices for MLOps on Azure – MLOps Lab: Boeing x WIC x UW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./monitoring_maintainance.html" rel="prev">
+<link href="./favicon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -34,10 +34,16 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c33dd253dcdfc3590fb104760caadba1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-42d8adea04f871e47f371a7e09319f5c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c33dd253dcdfc3590fb104760caadba1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1e7bb819180e912c320fa6abd0ecabc9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f1eb6b9f76bc15b4e07bd136c068b7cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-51758fc4e875b3bc7577c55555db3d9b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-f1eb6b9f76bc15b4e07bd136c068b7cb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -58,7 +64,169 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked fullcontent quarto-light">
+<body class="nav-sidebar docked fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -67,7 +235,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./security_best_practices.html">Security &amp; Best Practices</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./security_best_practices.html">{{&lt; fa shield-halved &gt;}} Security &amp; Best Practices</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -77,30 +245,38 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">MLOps Lab: Boeing x WIC x UW</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Home</span></a>
+ <span class="menu-text"> Home</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./MLOps.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Need for MLOps</span></a>
+ <span class="menu-text"> Need for MLOps</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Python.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Python resources</span></a>
+ <span class="menu-text"> Python resources</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">ML Foundations</span></a>
+ <span class="menu-text"><i class="fa-solid fa-brain" aria-label="brain"></i> ML Foundations</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -109,25 +285,25 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./dataset.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Understanding dataset</span></a>
+ <span class="menu-text"> Understanding dataset</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data_ingestion.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Data Ingestion</span></a>
+ <span class="menu-text"> Data Ingestion</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data_processing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Data Processing</span></a>
+ <span class="menu-text"> Data Processing</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Algorithms</span></a>
+ <span class="menu-text"><i class="fa-solid fa-chart-line" aria-label="chart-line"></i> Algorithms</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -136,13 +312,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./supervised.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Supervised Learning</span></a>
+ <span class="menu-text"> Supervised Learning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./unsupervised.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unsupervised Learning</span></a>
+ <span class="menu-text"> Unsupervised Learning</span></a>
   </div>
 </li>
       </ul>
@@ -152,49 +328,49 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Version Control</span></a>
+ <span class="menu-text"> Version Control</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./azure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Azure Cloud</span></a>
+ <span class="menu-text"> Azure Cloud</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./containers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Containerization</span></a>
+ <span class="menu-text"> Containerization</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./DE.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Data Engineering</span></a>
+ <span class="menu-text"> Data Engineering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Registry.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Model Registry</span></a>
+ <span class="menu-text"> Model Registry</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Testing_deploying.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Testing &amp; Deployment</span></a>
+ <span class="menu-text"> Testing &amp; Deployment</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./monitoring_maintainance.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Monitoring &amp; Maintainance</span></a>
+ <span class="menu-text"> Monitoring &amp; Maintainance</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./security_best_practices.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Security &amp; Best Practices</span></a>
+ <span class="menu-text"> Security &amp; Best Practices</span></a>
   </div>
 </li>
     </ul>
@@ -205,17 +381,27 @@ ul.task-list li input[type="checkbox"] {
     
 <!-- main -->
 <main class="content" id="quarto-document-content">
-<nav class="navbar navbar-dark bg-primary fixed-top">
+
+<nav class="navbar fixed-top">
   <div class="container-fluid d-flex justify-content-between align-items-center">
-    <span class="navbar-brand mb-0" style="font-weight:600;">
+    <span class="navbar-brand mb-0">
       MLOps Lab: Boeing x WIC x UW
     </span>
 
-    <button id="theme-toggle" class="btn btn-sm" aria-label="Toggle dark/light mode" type="button">
-      ◐
-    </button>
+    <div class="d-flex align-items-center gap-3">
+      <a href="https://github.com/yourusername/MLOps-Boeing-x-WIC" target="_blank" rel="noopener" class="github-link" style="color: var(--text-secondary); font-size: 1.25rem; text-decoration: none;" aria-label="View on GitHub" title="View on GitHub">
+        <i class="fa-brands fa-github"></i>
+      </a>
+      
+      <button id="theme-toggle" class="btn btn-sm" aria-label="Toggle dark/light mode" type="button">
+        🌙
+      </button>
+    </div>
   </div>
 </nav>
+
+<!-- Load Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -236,7 +422,16 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Principles</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Core Security Principles
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
 <li>Least privilege everywhere</li>
 <li>Prefer identity-based (RBAC) access</li>
@@ -244,8 +439,10 @@ ul.task-list li input[type="checkbox"] {
 <li>Make pipelines reproducible and auditable</li>
 <li>Log enough to detect issues without leaking sensitive data</li>
 </ul>
-<hr>
-<p>Identity and access (RBAC - Role Based Access Control)</p>
+</div>
+</div>
+<section id="identity-and-access-rbac---role-based-access-control" class="level2">
+<h2 class="anchored" data-anchor-id="identity-and-access-rbac---role-based-access-control"><i class="fa-solid fa-user-shield" aria-label="user-shield"></i> Identity and access (RBAC - Role Based Access Control)</h2>
 <ul>
 <li>Assign roles at the smallest scope possible (resource group, workspace, storage container)</li>
 <li>Separate duties
@@ -255,8 +452,22 @@ ul.task-list li input[type="checkbox"] {
 <li>Release owners deploy to production</li>
 </ul></li>
 </ul>
-<hr>
-<p>Secrets management</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Best Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use Azure’s built-in roles (Contributor, Reader, Data Scientist) when possible. Create custom roles only when necessary.</p>
+</div>
+</div>
+</section>
+<section id="secrets-management" class="level2">
+<h2 class="anchored" data-anchor-id="secrets-management"><i class="fa-solid fa-key" aria-label="key"></i> Secrets management</h2>
 <ul>
 <li>Store secrets in Azure Key Vault</li>
 <li>Access Key Vault using Managed Identity (avoid connection strings in code)</li>
@@ -268,8 +479,22 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 <li>Rotate secrets regularly if any must exist</li>
 </ul>
-<hr>
-<p>Data protection</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Common Mistake
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Never hardcode connection strings or API keys in notebooks or code. Always use Key Vault with Managed Identity.</p>
+</div>
+</div>
+</section>
+<section id="data-protection" class="level2">
+<h2 class="anchored" data-anchor-id="data-protection"><i class="fa-solid fa-database" aria-label="database"></i> Data protection</h2>
 <ul>
 <li>Store data in Azure Storage (Blob or ADLS Gen2)</li>
 <li>Disable public blob access</li>
@@ -283,13 +508,41 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 <li>Track dataset versions (Azure ML Data assets) and record which version trained each model</li>
 </ul>
-<hr>
-<p>Network protection</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Data Versioning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Tracking which dataset version trained each model is critical for reproducibility and debugging production issues.</p>
+</div>
+</div>
+</section>
+<section id="network-protection" class="level2">
+<h2 class="anchored" data-anchor-id="network-protection"><i class="fa-solid fa-network-wired" aria-label="network-wired"></i> Network protection</h2>
 <ul>
 <li>Prefer private access when data is sensitive</li>
 </ul>
-<hr>
-<p>Reproducible pipelines</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Production Recommendation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For production workloads with sensitive data, use Azure Private Link to keep traffic within the Azure network.</p>
+</div>
+</div>
+</section>
+<section id="reproducible-pipelines" class="level2">
+<h2 class="anchored" data-anchor-id="reproducible-pipelines"><i class="fa-solid fa-rotate" aria-label="rotate"></i> Reproducible pipelines</h2>
 <ul>
 <li>Run preprocessing and training as Azure ML Jobs (not only notebooks)</li>
 <li>Pin dependencies (requirements or conda environment)</li>
@@ -308,8 +561,22 @@ ul.task-list li input[type="checkbox"] {
 <li>environment version</li>
 </ul></li>
 </ul>
-<hr>
-<p>Model registry and promotion</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Reproducibility Checklist
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Every training run should be fully reproducible. If you can’t recreate a model from its metadata, your pipeline needs improvement.</p>
+</div>
+</div>
+</section>
+<section id="model-registry-and-promotion" class="level2">
+<h2 class="anchored" data-anchor-id="model-registry-and-promotion"><i class="fa-solid fa-folder-open" aria-label="folder-open"></i> Model registry and promotion</h2>
 <ul>
 <li>Register models in Azure ML Model Registry</li>
 <li>Require minimum metadata tags
@@ -327,8 +594,22 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 <li>Avoid “latest” for prod deployments (deploy specific versions only)</li>
 </ul>
-<hr>
-<p>Deployment hardening</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Deployment Safety
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Never deploy “latest” to production. Always deploy specific, validated model versions with known performance characteristics.</p>
+</div>
+</div>
+</section>
+<section id="deployment-hardening" class="level2">
+<h2 class="anchored" data-anchor-id="deployment-hardening"><i class="fa-solid fa-rocket" aria-label="rocket"></i> Deployment hardening</h2>
 <ul>
 <li>Enable authentication</li>
 <li>Validate inputs (types, ranges, schema) before scoring</li>
@@ -337,8 +618,22 @@ ul.task-list li input[type="checkbox"] {
 <li>log request IDs, latency, error codes, and summary stats instead</li>
 </ul></li>
 </ul>
-<hr>
-<p>Monitoring and alerts</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Input Validation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Always validate input data before scoring. Invalid inputs can cause errors, security issues, or incorrect predictions.</p>
+</div>
+</div>
+</section>
+<section id="monitoring-and-alerts" class="level2">
+<h2 class="anchored" data-anchor-id="monitoring-and-alerts"><i class="fa-solid fa-chart-line" aria-label="chart-line"></i> Monitoring and alerts</h2>
 <ul>
 <li>Use Application Insights + Log Analytics for endpoint telemetry</li>
 <li>Monitor service health
@@ -354,50 +649,136 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 <li>Set alerts to notify owners when thresholds are exceeded</li>
 </ul>
-<hr>
-<p>Code Safety</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Drift Detection
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Model drift and data drift are inevitable in production. Set up monitoring to detect them early before they impact users.</p>
+</div>
+</div>
+</section>
+<section id="code-safety" class="level2">
+<h2 class="anchored" data-anchor-id="code-safety"><i class="fa-solid fa-code" aria-label="code"></i> Code Safety</h2>
 <ul>
 <li>Require PR reviews and CI checks before merge</li>
 <li>Pin dependencies and avoid installing random packages at runtime</li>
 <li>Store images in Azure Container Registry (ACR)</li>
 </ul>
-<hr>
-<p>Compute hygiene and cost guardrails</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Dependency Management
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pin exact versions in requirements.txt (e.g., <code>pandas==2.0.3</code> not <code>pandas&gt;=2.0</code>). This prevents unexpected breaking changes.</p>
+</div>
+</div>
+</section>
+<section id="compute-hygiene-and-cost-guardrails" class="level2">
+<h2 class="anchored" data-anchor-id="compute-hygiene-and-cost-guardrails"><i class="fa-solid fa-server" aria-label="server"></i> Compute hygiene and cost guardrails</h2>
 <ul>
 <li>Prefer autoscaling compute clusters for jobs and scale down to zero</li>
 <li>Stop/delete unused compute instances</li>
 <li>Set budgets and alerts per resource group</li>
 <li>Tag resources with owner and environment</li>
 </ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Cost Management
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Unused compute instances can drain your Azure credits quickly. Always stop or delete them when not in use, and set up budget alerts.</p>
+</div>
+</div>
 
 
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<footer class="footer">
+  <div class="footer-content">
+    <div>
+      <strong>MLOps Lab: Boeing x WIC x UW</strong>
+    </div>
+    <div style="margin-top: 0.5rem;">
+      University of Washington | Information Management Class of 2026
+    </div>
+    <div style="margin-top: 0.5rem; font-size: 0.8125rem;">
+      In collaboration with Boeing and Women in Cloud
+    </div>
+    <div class="footer-links">
+      <span>© 2026 MLOps Lab</span>
+    </div>
+  </div>
+</footer>
 <script>
-(function () {
+(function() {
+  // Theme toggle functionality
+  const toggle = document.getElementById('theme-toggle');
   const html = document.documentElement;
-
-  // Bootstrap theme via attribute
-  const storedTheme = localStorage.getItem("theme") || "light";
-  html.setAttribute("data-bs-theme", storedTheme);
-
-  const toggle = document.getElementById("theme-toggle");
-  if (!toggle) return;
-
-  toggle.textContent = storedTheme === "dark" ? "◑" : "◐";
-
-  toggle.addEventListener("click", () => {
-    const current = html.getAttribute("data-bs-theme") || "light";
-    const next = current === "dark" ? "light" : "dark";
-
-    html.setAttribute("data-bs-theme", next);
-    localStorage.setItem("theme", next);
-    toggle.textContent = next === "dark" ? "◑" : "◐";
-  });
-})()
+  
+  // Icons for light and dark mode
+  const sunIcon = '☀️';
+  const moonIcon = '🌙';
+  
+  // Get saved theme or default to dark
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  html.setAttribute('data-bs-theme', savedTheme);
+  
+  // Update button icon
+  function updateIcon() {
+    const currentTheme = html.getAttribute('data-bs-theme');
+    if (toggle) {
+      toggle.textContent = currentTheme === 'dark' ? sunIcon : moonIcon;
+      toggle.setAttribute('aria-label', `Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} mode`);
+    }
+  }
+  
+  updateIcon();
+  
+  // Toggle theme on button click
+  if (toggle) {
+    toggle.addEventListener('click', function() {
+      const currentTheme = html.getAttribute('data-bs-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-bs-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateIcon();
+    });
+  }
+})();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -483,6 +864,13 @@ ul.task-list li input[type="checkbox"] {
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -796,15 +1184,6 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="./monitoring_maintainance.html" class="pagination-link" aria-label="Monitoring &amp; Maintainance">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Monitoring &amp; Maintainance</span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-  </div>
-</nav>
 </div> <!-- /content -->
 
 
