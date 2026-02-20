@@ -1,1 +1,1 @@
-{"entries":[],"headings":["objective","what-you-need","part-a---getting-data-into-azure-ingestion","path-1---ingestion-using-azure-open-datasets","path-2-ingestion-using-azure-blob-storage-manual-upload"]}
+{"entries":[],"headings":["objective","what-you-need","part-a---getting-data-into-azure-ingestion","path-1---ingestion-using-azure-open-datasets","path-2-ingestion-using-azure-blob-storage-manual-upload","path-3-ingestion-using-azure-blob-storage-terraform-automated-infrastructure","infrastructure-setup-automated","data-upload-manual-step","pipeline-flow"]}

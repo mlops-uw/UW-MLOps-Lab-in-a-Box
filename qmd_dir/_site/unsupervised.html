@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>unsupervised – MLOps Lab: Boeing x WIC x UW</title>
+<title>Unsupervised Learning – MLOps Lab: Boeing x WIC x UW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -380,7 +415,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">{{&lt; fa brain &gt;}} ML Foundations</a></li><li class="breadcrumb-item"><a href="./supervised.html">{{&lt; fa chart-line &gt;}} Algorithms</a></li><li class="breadcrumb-item"><a href="./unsupervised.html">{{&lt; fa magnifying-glass-chart &gt;}} Unsupervised Learning</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content">
 
 <nav class="navbar fixed-top">
   <div class="container-fluid d-flex justify-content-between align-items-center">
@@ -389,7 +424,7 @@ ul.task-list li input[type="checkbox"] {
     </span>
 
     <div class="d-flex align-items-center gap-3">
-      <a href="https://github.com/yourusername/MLOps-Boeing-x-WIC" target="_blank" rel="noopener" class="github-link" style="color: var(--text-secondary); font-size: 1.25rem; text-decoration: none;" aria-label="View on GitHub" title="View on GitHub">
+      <a href="https://github.com/shakshi-gandhi/UW-MLOps-Boeing-x-WIC" target="_blank" rel="noopener" class="github-link" style="color: var(--text-secondary); font-size: 1.25rem; text-decoration: none;" aria-label="View on GitHub" title="View on GitHub">
         <i class="fa-brands fa-github"></i>
       </a>
       
@@ -403,11 +438,370 @@ ul.task-list li input[type="checkbox"] {
 <!-- Load Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">{{&lt; fa brain &gt;}} ML Foundations</a></li><li class="breadcrumb-item"><a href="./supervised.html">{{&lt; fa chart-line &gt;}} Algorithms</a></li><li class="breadcrumb-item"><a href="./unsupervised.html">{{&lt; fa magnifying-glass-chart &gt;}} Unsupervised Learning</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Unsupervised Learning</h1>
+<p class="subtitle lead">K-Means clustering for taxi demand patterns</p>
+</div>
 
 
 
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
 
 
+</header>
+
+
+<section id="objective" class="level2">
+<h2 class="anchored" data-anchor-id="objective"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Objective</h2>
+<p>In this lab, we apply unsupervised learning to the cleaned NYC taxi dataset. By the end, you will be able to:</p>
+<ul>
+<li>Use K-Means clustering to identify distinct taxi trip patterns</li>
+<li>Apply the Elbow Method to determine the optimal number of clusters</li>
+<li>Interpret and visualize cluster characteristics</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Prerequisites
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This lab requires the cleaned dataset from the Data Processing lab. Make sure you have <code>yellow_tripdata_cleaned.parquet</code> saved from Part B.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="load-cleaned-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-cleaned-data"><i class="fa-solid fa-database" aria-label="database"></i> Load Cleaned Data</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">"whitegrid"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(<span class="st">"data_cleaned/yellow_tripdata_cleaned.parquet"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape:"</span>, df.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="feature-selection-and-scaling" class="level2">
+<h2 class="anchored" data-anchor-id="feature-selection-and-scaling"><i class="fa-solid fa-cogs" aria-label="cogs"></i> Feature Selection and Scaling</h2>
+<p>We select features that capture trip behavior: where, when, how far, and how much. We sample 100,000 rows for performance and standardize features since K-Means is distance-based.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> MiniBatchKMeans</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select features for clustering</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>cluster_features <span class="op">=</span> [<span class="st">'PULocationID'</span>, <span class="st">'pickup_hour'</span>, <span class="st">'trip_distance'</span>, <span class="st">'fare_amount'</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample for performance</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df_sample <span class="op">=</span> df[cluster_features].sample(n<span class="op">=</span><span class="dv">100000</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize features</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>X_scaled <span class="op">=</span> scaler.fit_transform(df_sample)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sample shape:"</span>, df_sample.shape)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Scaled data ready for clustering"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Why Standardize?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>K-Means uses Euclidean distance to assign points to clusters. Without scaling, features with large ranges (like <code>PULocationID: 1–265</code>) would dominate over features with small ranges (like <code>pickup_hour: 0–23</code>). StandardScaler ensures all features contribute equally.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Why Sample?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Running K-Means on 11M+ rows is computationally expensive. A random sample of 100,000 rows captures the same patterns while keeping runtime manageable. We use <code>MiniBatchKMeans</code> for additional speed.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="elbow-method-finding-optimal-k" class="level2">
+<h2 class="anchored" data-anchor-id="elbow-method-finding-optimal-k"><i class="fa-solid fa-search" aria-label="search"></i> Elbow Method — Finding Optimal K</h2>
+<p>The Elbow Method plots inertia (within-cluster sum of squares) against the number of clusters. The “elbow” — where the curve starts flattening — indicates the optimal K.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Elbow Method to find optimal K</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>inertias <span class="op">=</span> []</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>K_range <span class="op">=</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">11</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> K_range:</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    kmeans <span class="op">=</span> MiniBatchKMeans(n_clusters<span class="op">=</span>k, random_state<span class="op">=</span><span class="dv">42</span>, batch_size<span class="op">=</span><span class="dv">10000</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    kmeans.fit(X_scaled)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    inertias.append(kmeans.inertia_)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"K=</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">, Inertia=</span><span class="sc">{</span>kmeans<span class="sc">.</span>inertia_<span class="sc">:.0f}</span><span class="ss">"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>ax.plot(K_range, inertias, marker<span class="op">=</span><span class="st">'o'</span>, color<span class="op">=</span><span class="st">'steelblue'</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Elbow Method - Optimal Number of Clusters'</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Number of Clusters (K)'</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Inertia'</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Observation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The elbow occurs around <strong>K=4</strong>, where the rate of inertia decrease slows significantly. Beyond K=4, adding more clusters yields diminishing returns.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>K</th>
+<th>Inertia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2</td>
+<td>295,310</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>208,845</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>164,797</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>143,856</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>125,351</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<hr>
+</section>
+<section id="fit-k-means-k4" class="level2">
+<h2 class="anchored" data-anchor-id="fit-k-means-k4"><i class="fa-solid fa-play" aria-label="play"></i> Fit K-Means (K=4)</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit K-Means with K=4</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> MiniBatchKMeans(n_clusters<span class="op">=</span><span class="dv">4</span>, random_state<span class="op">=</span><span class="dv">42</span>, batch_size<span class="op">=</span><span class="dv">10000</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df_sample[<span class="st">'cluster'</span>] <span class="op">=</span> kmeans.fit_predict(X_scaled)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Analyze cluster characteristics</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"=== Cluster Summary ===</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_sample.groupby(<span class="st">'cluster'</span>)[cluster_features].mean().<span class="bu">round</span>(<span class="dv">2</span>))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Cluster Sizes ===</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_sample[<span class="st">'cluster'</span>].value_counts().sort_index())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="cluster-profiles" class="level3">
+<h3 class="anchored" data-anchor-id="cluster-profiles">Cluster Profiles</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 18%">
+<col style="width: 19%">
+<col style="width: 15%">
+<col style="width: 11%">
+<col style="width: 6%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cluster</th>
+<th>Avg Location ID</th>
+<th>Avg Pickup Hour</th>
+<th>Avg Distance</th>
+<th>Avg Fare</th>
+<th>Size</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>102</td>
+<td>8:00 AM</td>
+<td>3.00 mi</td>
+<td>$17.36</td>
+<td>21,146</td>
+<td>Morning commuters, mid-distance</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>136</td>
+<td>7:00 PM</td>
+<td>2.37 mi</td>
+<td>$15.78</td>
+<td>33,543</td>
+<td>Evening rush, short urban trips</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>230</td>
+<td>1:00 PM</td>
+<td>2.05 mi</td>
+<td>$14.54</td>
+<td>35,498</td>
+<td>Midday, short trips, outer zones</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>141</td>
+<td>2:00 PM</td>
+<td>14.52 mi</td>
+<td>$61.40</td>
+<td>9,813</td>
+<td>Long-distance / airport trips</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key Insight
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The algorithm clearly separates <strong>airport/long-distance trips</strong> (Cluster 3) from <strong>regular urban trips</strong> (Clusters 0, 1, 2). The urban clusters are further differentiated by time of day — morning commuters (Cluster 0), evening rush (Cluster 1), and midday rides (Cluster 2).</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="visualize-clusters" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-clusters"><i class="fa-solid fa-chart-bar" aria-label="chart-bar"></i> Visualize Clusters</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize clusters</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter: pickup hour vs fare, colored by cluster</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">'#2196F3'</span>, <span class="st">'#FF9800'</span>, <span class="st">'#4CAF50'</span>, <span class="st">'#E91E63'</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>):</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    mask <span class="op">=</span> df_sample[<span class="st">'cluster'</span>] <span class="op">==</span> c</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].scatter(df_sample.loc[mask, <span class="st">'pickup_hour'</span>],</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                    df_sample.loc[mask, <span class="st">'fare_amount'</span>],</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                    alpha<span class="op">=</span><span class="fl">0.3</span>, s<span class="op">=</span><span class="dv">5</span>, c<span class="op">=</span>colors[c], label<span class="op">=</span><span class="ss">f'Cluster </span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Pickup Hour'</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Fare Amount ($)'</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Clusters: Pickup Hour vs Fare'</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend()</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar chart: average fare by cluster</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>cluster_stats <span class="op">=</span> df_sample.groupby(<span class="st">'cluster'</span>).agg(</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    count<span class="op">=</span>(<span class="st">'fare_amount'</span>, <span class="st">'size'</span>),</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    avg_fare<span class="op">=</span>(<span class="st">'fare_amount'</span>, <span class="st">'mean'</span>),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    avg_distance<span class="op">=</span>(<span class="st">'trip_distance'</span>, <span class="st">'mean'</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>cluster_stats[<span class="st">'avg_fare'</span>].plot(kind<span class="op">=</span><span class="st">'bar'</span>, ax<span class="op">=</span>axes[<span class="dv">1</span>], color<span class="op">=</span>colors)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Average Fare by Cluster'</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Cluster'</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Average Fare ($)'</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xticklabels([<span class="ss">f'C</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)], rotation<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Observations
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Left plot</strong>: Cluster 3 (pink) clearly stands out with high fares across all hours — these are the long-distance/airport trips. Clusters 0, 1, 2 overlap in fare range but separate by time of day.</li>
+<li><strong>Right plot</strong>: Cluster 3 has an average fare of ~$61, roughly 4x the average of the other clusters ($14–$17).</li>
+</ul>
+</div>
+</div>
+<hr>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary"><i class="fa-solid fa-check-circle" aria-label="check-circle"></i> Summary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aspect</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Algorithm</td>
+<td>MiniBatchKMeans (scikit-learn)</td>
+</tr>
+<tr class="even">
+<td>Sample size</td>
+<td>100,000 rows</td>
+</tr>
+<tr class="odd">
+<td>Features</td>
+<td>PULocationID, pickup_hour, trip_distance, fare_amount</td>
+</tr>
+<tr class="even">
+<td>Optimal K</td>
+<td>4 (Elbow Method)</td>
+</tr>
+<tr class="odd">
+<td>Key finding</td>
+<td>Clear separation between airport/long-distance trips and urban trips</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Potential Improvements
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Add <code>DOLocationID</code> to capture destination-based patterns</li>
+<li>Use <code>pickup_dayofweek</code> to differentiate weekday vs weekend clusters</li>
+<li>Try DBSCAN for density-based clustering that doesn’t require specifying K</li>
+<li>Apply clustering results as a new feature in the supervised model to improve fare prediction</li>
+</ul>
+</div>
+</div>
+
+
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <footer class="footer">
