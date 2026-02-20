@@ -1,0 +1,200 @@
+---
+title: "Unsupervised Learning"
+subtitle: "K-Means clustering for taxi demand patterns"
+---
+
+## {{< fa bullseye >}} Objective
+
+In this lab, we apply unsupervised learning to the cleaned NYC taxi dataset. By the end, you will be able to:
+
+- Use K-Means clustering to identify distinct taxi trip patterns
+- Apply the Elbow Method to determine the optimal number of clusters
+- Interpret and visualize cluster characteristics
+
+::: {.callout-note}
+## Prerequisites
+This lab requires the cleaned dataset from the Data Processing lab. Make sure you have `yellow_tripdata_cleaned.parquet` saved from Part B.
+:::
+
+---
+
+## {{< fa database >}} Load Cleaned Data
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from pathlib import Path
+
+sns.set_style("whitegrid")
+
+df = pd.read_parquet("data_cleaned/yellow_tripdata_cleaned.parquet")
+print("Shape:", df.shape)
+```
+
+---
+
+## {{< fa cogs >}} Feature Selection and Scaling
+
+We select features that capture trip behavior: where, when, how far, and how much. We sample 100,000 rows for performance and standardize features since K-Means is distance-based.
+
+```python
+from sklearn.cluster import MiniBatchKMeans
+from sklearn.preprocessing import StandardScaler
+
+# Select features for clustering
+cluster_features = ['PULocationID', 'pickup_hour', 'trip_distance', 'fare_amount']
+
+# Sample for performance
+df_sample = df[cluster_features].sample(n=100000, random_state=42)
+
+# Standardize features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(df_sample)
+
+print("Sample shape:", df_sample.shape)
+print("Scaled data ready for clustering")
+```
+
+::: {.callout-tip}
+## Why Standardize?
+K-Means uses Euclidean distance to assign points to clusters. Without scaling, features with large ranges (like `PULocationID: 1–265`) would dominate over features with small ranges (like `pickup_hour: 0–23`). StandardScaler ensures all features contribute equally.
+:::
+
+::: {.callout-tip}
+## Why Sample?
+Running K-Means on 11M+ rows is computationally expensive. A random sample of 100,000 rows captures the same patterns while keeping runtime manageable. We use `MiniBatchKMeans` for additional speed.
+:::
+
+---
+
+## {{< fa search >}} Elbow Method — Finding Optimal K
+
+The Elbow Method plots inertia (within-cluster sum of squares) against the number of clusters. The "elbow" — where the curve starts flattening — indicates the optimal K.
+
+```python
+# Elbow Method to find optimal K
+inertias = []
+K_range = range(2, 11)
+
+for k in K_range:
+    kmeans = MiniBatchKMeans(n_clusters=k, random_state=42, batch_size=10000)
+    kmeans.fit(X_scaled)
+    inertias.append(kmeans.inertia_)
+    print(f"K={k}, Inertia={kmeans.inertia_:.0f}")
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.plot(K_range, inertias, marker='o', color='steelblue')
+ax.set_title('Elbow Method - Optimal Number of Clusters')
+ax.set_xlabel('Number of Clusters (K)')
+ax.set_ylabel('Inertia')
+plt.tight_layout()
+plt.show()
+```
+
+::: {.callout-note}
+## Observation
+The elbow occurs around **K=4**, where the rate of inertia decrease slows significantly. Beyond K=4, adding more clusters yields diminishing returns.
+
+| K | Inertia |
+|---|---------|
+| 2 | 295,310 |
+| 3 | 208,845 |
+| 4 | 164,797 |
+| 5 | 143,856 |
+| 6 | 125,351 |
+:::
+
+---
+
+## {{< fa play >}} Fit K-Means (K=4)
+
+```python
+# Fit K-Means with K=4
+kmeans = MiniBatchKMeans(n_clusters=4, random_state=42, batch_size=10000)
+df_sample['cluster'] = kmeans.fit_predict(X_scaled)
+
+# Analyze cluster characteristics
+print("=== Cluster Summary ===\n")
+print(df_sample.groupby('cluster')[cluster_features].mean().round(2))
+print("\n=== Cluster Sizes ===\n")
+print(df_sample['cluster'].value_counts().sort_index())
+```
+
+### Cluster Profiles
+
+| Cluster | Avg Location ID | Avg Pickup Hour | Avg Distance | Avg Fare | Size | Interpretation |
+|---------|----------------|-----------------|--------------|----------|------|----------------|
+| 0 | 102 | 8:00 AM | 3.00 mi | $17.36 | 21,146 | Morning commuters, mid-distance |
+| 1 | 136 | 7:00 PM | 2.37 mi | $15.78 | 33,543 | Evening rush, short urban trips |
+| 2 | 230 | 1:00 PM | 2.05 mi | $14.54 | 35,498 | Midday, short trips, outer zones |
+| 3 | 141 | 2:00 PM | 14.52 mi | $61.40 | 9,813 | Long-distance / airport trips |
+
+::: {.callout-note}
+## Key Insight
+The algorithm clearly separates **airport/long-distance trips** (Cluster 3) from **regular urban trips** (Clusters 0, 1, 2). The urban clusters are further differentiated by time of day — morning commuters (Cluster 0), evening rush (Cluster 1), and midday rides (Cluster 2).
+:::
+
+---
+
+## {{< fa chart-bar >}} Visualize Clusters
+
+```python
+# Visualize clusters
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+# Scatter: pickup hour vs fare, colored by cluster
+colors = ['#2196F3', '#FF9800', '#4CAF50', '#E91E63']
+for c in range(4):
+    mask = df_sample['cluster'] == c
+    axes[0].scatter(df_sample.loc[mask, 'pickup_hour'],
+                    df_sample.loc[mask, 'fare_amount'],
+                    alpha=0.3, s=5, c=colors[c], label=f'Cluster {c}')
+axes[0].set_xlabel('Pickup Hour')
+axes[0].set_ylabel('Fare Amount ($)')
+axes[0].set_title('Clusters: Pickup Hour vs Fare')
+axes[0].legend()
+
+# Bar chart: average fare by cluster
+cluster_stats = df_sample.groupby('cluster').agg(
+    count=('fare_amount', 'size'),
+    avg_fare=('fare_amount', 'mean'),
+    avg_distance=('trip_distance', 'mean')
+).round(2)
+
+cluster_stats['avg_fare'].plot(kind='bar', ax=axes[1], color=colors)
+axes[1].set_title('Average Fare by Cluster')
+axes[1].set_xlabel('Cluster')
+axes[1].set_ylabel('Average Fare ($)')
+axes[1].set_xticklabels([f'C{i}' for i in range(4)], rotation=0)
+
+plt.tight_layout()
+plt.show()
+```
+
+::: {.callout-note}
+## Observations
+- **Left plot**: Cluster 3 (pink) clearly stands out with high fares across all hours — these are the long-distance/airport trips. Clusters 0, 1, 2 overlap in fare range but separate by time of day.
+- **Right plot**: Cluster 3 has an average fare of ~$61, roughly 4x the average of the other clusters ($14–$17).
+:::
+
+---
+
+## {{< fa check-circle >}} Summary
+
+| Aspect | Detail |
+|--------|--------|
+| Algorithm | MiniBatchKMeans (scikit-learn) |
+| Sample size | 100,000 rows |
+| Features | PULocationID, pickup_hour, trip_distance, fare_amount |
+| Optimal K | 4 (Elbow Method) |
+| Key finding | Clear separation between airport/long-distance trips and urban trips |
+
+::: {.callout-tip}
+## Potential Improvements
+- Add `DOLocationID` to capture destination-based patterns
+- Use `pickup_dayofweek` to differentiate weekday vs weekend clusters
+- Try DBSCAN for density-based clustering that doesn't require specifying K
+- Apply clustering results as a new feature in the supervised model to improve fare prediction
+:::

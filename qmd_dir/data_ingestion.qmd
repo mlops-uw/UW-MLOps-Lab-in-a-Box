@@ -177,3 +177,72 @@ df.head()
 ## Production Best Practice
 In production, use Managed Identity instead of connection strings. Connection strings should never be committed to code or notebooks.
 :::
+
+### {{< fa code >}} Path 3 – Ingestion using Azure Blob Storage (Terraform-Automated Infrastructure)
+
+This path demonstrates a production-grade approach where infrastructure is provisioned automatically using **Infrastructure as Code (IaC)**, while data upload remains a manual step.
+
+::: {.callout-tip}
+## When to Use This Path
+Use this approach when:
+- You need reproducible infrastructure across environments
+- You want to automate resource provisioning
+- You're following DevOps best practices
+- You need consistent configuration management
+:::
+
+#### Infrastructure Setup (Automated)
+
+The Azure Storage infrastructure is provisioned automatically using **Terraform**.
+
+During deployment, the following resources are created:
+
+- **Azure Storage Account** (`taxizonelookup`)
+- **Blob Container** (`taxidata`)
+- Private access configuration for secure data storage
+
+This ensures a consistent, reproducible environment across deployments.
+
+#### Data Upload (Manual Step)
+
+While infrastructure is automated, the dataset itself must be uploaded manually.
+
+**Required Format:**
+
+- File type: **`.parquet`**
+- Uploaded to: `taxizonelookup → taxidata` container
+
+**Steps to Upload:**
+
+1. Go to **Azure Portal**
+2. Open **Storage Accounts**
+3. Select storage account name: `taxizonelookup`
+4. Navigate to **Containers**
+5. Open container name: `taxidata`
+6. Click **Upload**
+7. Select your `.parquet` file
+8. Confirm upload
+
+::: {.callout-note}
+## Why Manual Upload?
+The dataset is approximately **180 MB** in size, which is too large to store in version control. Manual upload:
+
+- Keeps large datasets out of GitHub
+- Maintains clean DevOps practices
+- Separates infrastructure from data
+- Ensures secure handling of production datasets
+:::
+
+#### Pipeline Flow
+
+```
+Terraform → Creates Storage Account + Container
+User → Uploads .parquet file manually
+Azure ML → Reads data via Datastore
+Notebook → Performs EDA/Training
+```
+
+::: {.callout-important}
+## Infrastructure vs Data
+Infrastructure is code (automated). Data is content (manual). This separation is a best practice in production MLOps workflows.
+:::
