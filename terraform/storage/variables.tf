@@ -1,28 +1,17 @@
-# variable "ssh_public_key" {
-#   type        = string
-#   description = "Public SSH key"
-# }
-
-# variable "user_object_id" {
-#   type        = string
-#   description = "Azure AD Object ID of the user to assign the compute instance to"
-# }
-
-# variable "tenant_id" {
-#   type        = string
-#   description = "Azure AD Tenant ID"
-# }
-
-variable "resource_group_name" {
-  type        = string
-  description = "Name of the resource group to create resources in"
-}
-
 variable name {
   type        = string
   description = "the name of the storage account."
 }
 
+variable resource_group_name {
+  type        = string
+  description = "the name of the resource group in which to create the storage account."
+}
+
+variable location {
+  type        = string
+  description = "the Azure region where the storage account will be created."
+}
 
 variable account_tier {
   type        = string
