@@ -78,6 +78,11 @@ variable object_id{
     description = "User's AAD Object Id"
 }
   
+variable object_id_sp{
+    type = string
+    description = "Object Id of the Service Principle"
+}
+
 variable tenant_id{
     type = string
     description = "User's AAD Tenant Id"
