@@ -13,11 +13,15 @@
 #   description = "Azure AD Tenant ID"
 # }
 
+variable "resource_group_name" {
+  type        = string
+  description = "Name of the resource group to create resources in"
+}
+
 variable name {
   type        = string
   description = "the name of the storage account."
 }
-
 
 variable account_tier {
   type        = string
