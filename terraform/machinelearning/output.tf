@@ -1,4 +1,4 @@
 output "key_id"{
-    type = string
+    value = azurerm_key_vault.key.id
     description = "The Key Vault Secret ID."
 }
