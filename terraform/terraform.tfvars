@@ -12,7 +12,6 @@ address_prefixes     = ["10.1.0.0/24"]
 virtual_network_name = "mlops-network"
 subnet_name = "mlops-subnet"
 application_type    = "web"
-identity = {type = "SystemAssigned"}
 application_insights_name = "mlops-insights"
 key_vault_name = "captonevault"
 sku_name = "premium"

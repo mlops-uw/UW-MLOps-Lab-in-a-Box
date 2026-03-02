@@ -148,7 +148,6 @@ module "machinelearning"{
   key_vault_name = var.key_vault_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name =  var.sku_name
-  identity = var.identity
   storage_account_id = module.storage.storage_account_id
   workspace_name = var.workspace_name
   type = var.type

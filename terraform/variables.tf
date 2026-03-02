@@ -63,13 +63,6 @@ variable address_prefixes{
     description = "The address prefixes to use for the subnet"
 }
 
-variable identity{
-    type = object({
-        type = string
-    })
-    description = "An identity block"
-}
-
 variable application_insights_name{
     type = string
     description = "Specifies the name of the Application Insights component"
