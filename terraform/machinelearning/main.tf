@@ -13,7 +13,15 @@ resource "azurerm_key_vault" "key" {
   sku_name            = var.sku_name
 }
 
-resource "azurerm_key_vault_access_policy" "key-policy" {
+resource "azurerm_key_vault_access_policy" "pipeline_sp_policy" {
+  key_vault_id = azurerm_key_vault.key.id
+  tenant_id    = var.tenant_id
+  object_id    = var.object_id_sp
+
+  secret_permissions = ["Get", "List", "Set", "Delete", "Recover", "Backup", "Restore", "Purge"]
+}
+
+resource "azurerm_key_vault_access_policy" "user-key-policy" {
   key_vault_id = azurerm_key_vault.key.id
   tenant_id    = var.tenant_id
   object_id    = var.object_id

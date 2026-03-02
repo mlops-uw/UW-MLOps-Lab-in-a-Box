@@ -159,7 +159,8 @@ module "machinelearning"{
   ml_instance_name = var.ml_instance_name
   machine_size =  var.machine_size
   authorization_type = var.authorization_type
-  object_id = var.object_id
+  object_id = var.object_id = 
+  object_id_sp = data.azurerm_client_config.current.object_id
   tenant_id =  data.azurerm_client_config.current.tenant_id
   description =  var.description
   tags = var.tags
