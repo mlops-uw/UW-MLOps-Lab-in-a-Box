@@ -22,7 +22,7 @@ resource "azurerm_key_vault_access_policy" "key-policy" {
     "Get", "List", "Set"
   ]
    secret_permissions = [
-      "Set",
+      "Create",
       "Get",
       "List",
       "Delete",
