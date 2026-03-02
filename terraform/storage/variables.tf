@@ -32,3 +32,5 @@ variable container_access_type {
   type        = string
   description = "the access level of the storage container. Valid values are 'private', 'blob', and 'container'."
 }
+
+

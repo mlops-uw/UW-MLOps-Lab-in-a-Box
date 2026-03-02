@@ -7,3 +7,24 @@ account_tier = "Standard"
 account_replication_type = "LRS"
 container_name = "taxidata"
 container_access_type = "private"
+address_space       = ["10.1.0.0/16"]
+address_prefixes     = ["10.1.0.0/24"]
+virtual_network_name = "mlops-network"
+subnet_name = "mlops-subnet"
+application_type    = "web"
+identity = {type = "SystemAssigned"}
+application_insights_name = "mlops-insights"
+application_type = "web"
+key_vault_name = "captonevault"
+sku_name = "premium"
+workspace_name = "finalworkspacecapstone"
+datastore_name = "mlops_datastore"
+ml_instance_name = "capstone"
+machine_size = "STANDARD_DS2_V2"
+authorization_type = "personal"
+assign_to_user = {
+    user_object_id = "2e45ddbe-50e2-4849-89c6-152bb08e956f"
+    tenant_id = "f6b6dd5b-f02f-441a-99a0-162ac5060bd2"
+}
+description        = "The Jupyter Notebook VM for MLOps Capstone project"
+tags = {name = "mlops-captone"}
