@@ -13,7 +13,7 @@ variable key_vault_name{
     description = "Specifies the name of the Key Vault"
 }
 
-variable tenant_id{
+variable tenant_id_key{
     type = string
     description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault"
 }
@@ -70,12 +70,12 @@ variable authorization_type{
 
 variable object_id{
     type = string
-    description = "User’s AAD Object Id"
+    description = "User's AAD Object Id"
 }
   
 variable tenant_id{
     type = string
-    description = "User’s AAD Tenant Id"
+    description = "User's AAD Tenant Id"
 }
 
 variable subnet_resource_id{

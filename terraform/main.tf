@@ -146,7 +146,7 @@ module "machinelearning"{
   resource_group_name      = data.azurerm_resource_group.example.name
   location                 = data.azurerm_resource_group.example.location
   key_vault_name = var.key_vault_name
-  tenant_id           = data.azurerm_client_config.current.tenant_id
+  tenant_id_key           = data.azurerm_client_config.current.tenant_id
   sku_name =  var.sku_name
   storage_account_id = module.storage.storage_account_id
   workspace_name = var.workspace_name
