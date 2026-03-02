@@ -12,3 +12,8 @@ output storage_primary_key{
   value = azurerm_storage_account.account.primary_access_key
   description = "The primary access key for the storage account"
 }
+
+output primary_connection_string{
+  value = azurerm_storage_account.account.primary_connection_string
+  description = "The connection string associated with the primary location."
+}

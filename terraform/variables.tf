@@ -1,18 +1,3 @@
-# variable "ssh_public_key" {
-#   type        = string
-#   description = "Public SSH key"
-# }
-
-# variable "user_object_id" {
-#   type        = string
-#   description = "Azure AD Object ID of the user to assign the compute instance to"
-# }
-
-# variable "tenant_id" {
-#   type        = string
-#   description = "Azure AD Tenant ID"
-# }
-
 variable "resource_group_name" {
   type        = string
   description = "Name of the resource group to create resources in"
@@ -78,6 +63,11 @@ variable key_vault_name{
     description = "Specifies the name of the Key Vault"
 }
 
+variable secret_name{
+    type = string
+    description = "Specifies the name of the Key Vault Secret."
+}
+
 variable sku_name{
     type = string
     description = "The Name of the SKU used for this Key Vault"
@@ -118,10 +108,10 @@ variable object_id{
     description = "User's AAD Object Id"
 }
   
-variable tenant_id{
-    type = string
-    description = "User's AAD Tenant Id"
-}
+# variable tenant_id{
+#     type = string
+#     description = "User's AAD Tenant Id"
+# }
 
 variable description{
     type = string

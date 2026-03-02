@@ -13,9 +13,14 @@ variable key_vault_name{
     description = "Specifies the name of the Key Vault"
 }
 
-variable tenant_id_key{
+variable secret_name{
     type = string
-    description = "The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault"
+    description = "Specifies the name of the Key Vault Secret."
+}
+
+variable secret_value{
+    type = string
+    description = "Specifies the value of the Key Vault Secret."
 }
 
 variable sku_name{
