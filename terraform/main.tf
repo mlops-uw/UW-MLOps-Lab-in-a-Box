@@ -170,9 +170,9 @@ resource "azurerm_key_vault_access_policy" "example-principal" {
   tenant_id = "f6b6dd5b-f02f-441a-99a0-162ac5060bd2"
 
   key_permissions = [
-    "Get", "List", "Set"
+    "Get", "List"
   ]
   secret_permissions = [
-    "Get", "List", "Set"
+    "Get", "List"
   ]
 }
