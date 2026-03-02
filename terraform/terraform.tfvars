@@ -14,7 +14,6 @@ subnet_name = "mlops-subnet"
 application_type    = "web"
 identity = {type = "SystemAssigned"}
 application_insights_name = "mlops-insights"
-application_type = "web"
 key_vault_name = "captonevault"
 sku_name = "premium"
 workspace_name = "finalworkspacecapstone"
