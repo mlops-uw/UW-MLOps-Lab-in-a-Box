@@ -141,7 +141,7 @@ module "network" {
 
 module "machinelearning"{
   source = "./machinelearning"
-  application_insights_name =  var.application_insights_id
+  application_insights_name =  var.application_insights_name
   application_type = var.application_type
   resource_group_name      = data.azurerm_resource_group.example.name
   location                 = data.azurerm_resource_group.example.location

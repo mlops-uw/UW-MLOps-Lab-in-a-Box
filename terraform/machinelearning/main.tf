@@ -1,14 +1,14 @@
 resource "azurerm_application_insights" "insights" {
   name                = var.application_insights_name
   location            = var.location
-  resource_group_name = var.azurerm_resource_group
+  resource_group_name = var.resource_group_name
   application_type    = var.application_type
 }
 
 resource "azurerm_key_vault" "key" {
   name                = var.key_vault_name
   location            = var.location
-  resource_group_name = var.azurerm_resource_group
+  resource_group_name = var.resource_group_name
   tenant_id           = var.tenant_id
   sku_name            = var.sku_name
 }
@@ -16,7 +16,7 @@ resource "azurerm_key_vault" "key" {
 resource "azurerm_machine_learning_workspace" "mlworkspace" {
   name                    = var.workspace_name
   location            = var.location
-  resource_group_name = var.azurerm_resource_group
+  resource_group_name = var.resource_group_name
   application_insights_id = azurerm_application_insights.insights.id
   key_vault_id            = azurerm_key_vault.vault.id
   storage_account_id      = var.storage_account_id
