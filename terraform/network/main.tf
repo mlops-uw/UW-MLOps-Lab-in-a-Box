@@ -8,7 +8,7 @@ resource "azurerm_virtual_network" "mlopsnetwork" {
 resource "azurerm_subnet" "mlopssubnet" {
   name                 = var.subnet_name
   resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.example.name
+  virtual_network_name = azurerm_virtual_network.mlopsnetwork.name
   address_prefixes     = var.address_prefixes
 }
 
