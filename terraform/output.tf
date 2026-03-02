@@ -11,6 +11,7 @@ output "storage_container_name" {
 output "storage_primary_key"{
   value = module.storage.storage_primary_key
   description = "The primary access key for the storage account"
+  sensitive = true
 }
 output "subnet_id"{
   value       = module.network.subnet_id
