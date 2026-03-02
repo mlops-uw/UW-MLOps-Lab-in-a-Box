@@ -39,7 +39,10 @@ resource "azurerm_machine_learning_compute_instance" "example" {
   virtual_machine_size          = var.machine_size
   authorization_type            = var.authorization_type
 
-  assign_to_user = var.assign_to_user
+  assign_to_user{
+    object_id = var.object_id
+    tenant_id = var.tenant_id
+  }
   subnet_resource_id = var.subnet_resource_id
   description        = var.description
   tags = var.tags

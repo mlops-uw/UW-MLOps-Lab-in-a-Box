@@ -21,9 +21,7 @@ datastore_name = "mlops_datastore"
 ml_instance_name = "capstone"
 machine_size = "STANDARD_DS2_V2"
 authorization_type = "personal"
-assign_to_user = {
-    object_id = "2e45ddbe-50e2-4849-89c6-152bb08e956f"
-    tenant_id = "f6b6dd5b-f02f-441a-99a0-162ac5060bd2"
-}
+object_id = "2e45ddbe-50e2-4849-89c6-152bb08e956f"
+tenant_id = "f6b6dd5b-f02f-441a-99a0-162ac5060bd2"
 description        = "The Jupyter Notebook VM for MLOps Capstone project"
 tags = {name = "mlops-captone"}

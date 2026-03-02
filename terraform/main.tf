@@ -158,7 +158,8 @@ module "machinelearning"{
   ml_instance_name = var.ml_instance_name
   machine_size =  var.machine_size
   authorization_type = var.authorization_type
-  assign_to_user =  var.assign_to_user
+  object_id = var.object_id
+  tenant_id = var.tenant_id
   description =  var.description
   tags = var.tags
 }

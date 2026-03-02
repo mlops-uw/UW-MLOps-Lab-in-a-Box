@@ -68,14 +68,16 @@ variable authorization_type{
     description = "The Compute Instance Authorization type"
 }
 
-variable assign_to_user{
-    type = object({
-        object_id = string
-        tenant_id = string
-    })
-    description = "A user explicitly assigned to a personal compute instance."
+variable object_id{
+    type = string
+    description = "User’s AAD Object Id"
 }
   
+variable tenant_id{
+    type = string
+    description = "User’s AAD Tenant Id"
+}
+
 variable subnet_resource_id{
     type = string
     description = "Virtual network subnet resource ID the compute nodes belong to"
