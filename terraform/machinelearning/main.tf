@@ -18,7 +18,7 @@ resource "azurerm_machine_learning_workspace" "mlworkspace" {
   location            = var.location
   resource_group_name = var.resource_group_name
   application_insights_id = azurerm_application_insights.insights.id
-  key_vault_id            = azurerm_key_vault.vault.id
+  key_vault_id            = azurerm_key_vault.key.id
   storage_account_id      = var.storage_account_id
 
   identity = var.identity
