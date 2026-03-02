@@ -13,6 +13,16 @@ resource "azurerm_key_vault" "key" {
   sku_name            = var.sku_name
 }
 
+resource "azurerm_key_vault_access_policy" "example-principal" {
+  key_vault_id = azurerm_key_vault.example.id
+  tenant_id    = var.tenant_id
+  object_id    = var.object_id
+
+  key_permissions = [
+    "Get", "List", "Set"
+  ]
+}
+
 resource "azurerm_machine_learning_workspace" "mlworkspace" {
   name                    = var.workspace_name
   location            = var.location

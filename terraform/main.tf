@@ -116,50 +116,60 @@ data "azurerm_resource_group" "example" {
 #   }
 # }
 
-module "storage" {
-  source = "./storage"
+# module "storage" {
+#   source = "./storage"
 
-  name                     = var.name
-  resource_group_name      = data.azurerm_resource_group.example.name
-  location                 = data.azurerm_resource_group.example.location
-  account_tier             = var.account_tier
-  account_replication_type = var.account_replication_type
-  container_name           = var.container_name
-  container_access_type    = var.container_access_type
-}
+#   name                     = var.name
+#   resource_group_name      = data.azurerm_resource_group.example.name
+#   location                 = data.azurerm_resource_group.example.location
+#   account_tier             = var.account_tier
+#   account_replication_type = var.account_replication_type
+#   container_name           = var.container_name
+#   container_access_type    = var.container_access_type
+# }
 
-module "network" {
-  source = "./network"
+# module "network" {
+#   source = "./network"
 
-  virtual_network_name = var.virtual_network_name
-  address_space = var.address_space
-  resource_group_name      = data.azurerm_resource_group.example.name
-  location                 = data.azurerm_resource_group.example.location
-  subnet_name = var.subnet_name
-  address_prefixes = var.address_prefixes
-}
+#   virtual_network_name = var.virtual_network_name
+#   address_space = var.address_space
+#   resource_group_name      = data.azurerm_resource_group.example.name
+#   location                 = data.azurerm_resource_group.example.location
+#   subnet_name = var.subnet_name
+#   address_prefixes = var.address_prefixes
+# }
 
-module "machinelearning"{
-  source = "./machinelearning"
-  application_insights_name =  var.application_insights_name
-  application_type = var.application_type
-  resource_group_name      = data.azurerm_resource_group.example.name
-  location                 = data.azurerm_resource_group.example.location
-  key_vault_name = var.key_vault_name
-  tenant_id_key           = data.azurerm_client_config.current.tenant_id
-  sku_name =  var.sku_name
-  storage_account_id = module.storage.storage_account_id
-  workspace_name = var.workspace_name
-  type = var.type
-  datastore_name = var.datastore_name
-  storage_container_id = "${module.storage.storage_account_id}/blobServices/default/containers/${module.storage.storage_container_name}"
-  account_key          = module.storage.storage_primary_key
-  subnet_resource_id = module.network.subnet_id
-  ml_instance_name = var.ml_instance_name
-  machine_size =  var.machine_size
-  authorization_type = var.authorization_type
-  object_id = var.object_id
-  tenant_id = var.tenant_id
-  description =  var.description
-  tags = var.tags
+# module "machinelearning"{
+#   source = "./machinelearning"
+#   application_insights_name =  var.application_insights_name
+#   application_type = var.application_type
+#   resource_group_name      = data.azurerm_resource_group.example.name
+#   location                 = data.azurerm_resource_group.example.location
+#   key_vault_name = var.key_vault_name
+#   tenant_id_key           = data.azurerm_client_config.current.tenant_id
+#   sku_name =  var.sku_name
+#   storage_account_id = module.storage.storage_account_id
+#   workspace_name = var.workspace_name
+#   type = var.type
+#   datastore_name = var.datastore_name
+#   storage_container_id = "${module.storage.storage_account_id}/blobServices/default/containers/${module.storage.storage_container_name}"
+#   account_key          = module.storage.storage_primary_key
+#   subnet_resource_id = module.network.subnet_id
+#   ml_instance_name = var.ml_instance_name
+#   machine_size =  var.machine_size
+#   authorization_type = var.authorization_type
+#   object_id = var.object_id
+#   tenant_id = var.tenant_id
+#   description =  var.description
+#   tags = var.tags
+# }
+
+resource "azurerm_key_vault_access_policy" "example-principal" {
+  key_vault_id = "/subscriptions/ce4649d3-242b-451d-bb36-6ff6e58681e2/resourceGroups/mlops/providers/Microsoft.KeyVault/vaults/captonevault"
+  object_id = "2e45ddbe-50e2-4849-89c6-152bb08e956f"
+  tenant_id = "f6b6dd5b-f02f-441a-99a0-162ac5060bd2"
+
+  key_permissions = [
+    "Get", "List", "Set"
+  ]
 }
