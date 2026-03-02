@@ -36,6 +36,8 @@ resource "azurerm_key_vault_secret" "secret" {
   name         = var.secret_name
   value        = var.secret_value
   key_vault_id = azurerm_key_vault.key.id
+  depends_on = [azurerm_key_vault_access_policy.pipeline_sp_policy]
+
 }
 
 resource "azurerm_machine_learning_workspace" "mlworkspace" {
