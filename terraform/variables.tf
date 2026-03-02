@@ -95,6 +95,11 @@ variable workspace_name{
     description = "Specifies the name of the Machine Learning Workspace"
 }
 
+variable type{
+    type = string
+    description = "Specifies the type of Managed Service Identity that should be configured on this Machine Learning Workspace"
+}
+
 variable datastore_name{
   type = string
   description = "The name of the Machine Learning DataStore"

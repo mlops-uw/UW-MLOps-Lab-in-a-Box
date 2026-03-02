@@ -21,7 +21,9 @@ resource "azurerm_machine_learning_workspace" "mlworkspace" {
   key_vault_id            = azurerm_key_vault.key.id
   storage_account_id      = var.storage_account_id
 
-  identity = var.identity
+  identity = {
+    type = var.type
+  }
 }
 
 resource "azurerm_machine_learning_datastore_blobstorage" "blob" {

@@ -33,11 +33,9 @@ variable storage_account_id{
     description = "The ID of the Storage Account associated with this Machine Learning Workspace"
 }
 
-variable identity{
-    type = object({
-        type = string
-    })
-    description = "An identity block"
+variable type{
+    type = string
+    description = "Specifies the type of Managed Service Identity that should be configured on this Machine Learning Workspace"
 }
 
 variable datastore_name{

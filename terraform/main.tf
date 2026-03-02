@@ -151,6 +151,7 @@ module "machinelearning"{
   identity = var.identity
   storage_account_id = module.storage.storage_account_id
   workspace_name = var.workspace_name
+  type = var.type
   datastore_name = var.datastore_name
   storage_container_id = "${module.storage.storage_account_id}/blobServices/default/containers/${module.storage.storage_container_name}"
   account_key          = module.storage.storage_primary_key
