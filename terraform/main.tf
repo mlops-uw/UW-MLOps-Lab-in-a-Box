@@ -116,17 +116,17 @@ data "azurerm_resource_group" "example" {
 #   }
 # }
 
-# module "storage" {
-#   source = "./storage"
+module "storage" {
+  source = "./storage"
 
-#   name                     = var.name
-#   resource_group_name      = data.azurerm_resource_group.example.name
-#   location                 = data.azurerm_resource_group.example.location
-#   account_tier             = var.account_tier
-#   account_replication_type = var.account_replication_type
-#   container_name           = var.container_name
-#   container_access_type    = var.container_access_type
-# }
+  name                     = var.name
+  resource_group_name      = data.azurerm_resource_group.example.name
+  location                 = data.azurerm_resource_group.example.location
+  account_tier             = var.account_tier
+  account_replication_type = var.account_replication_type
+  container_name           = var.container_name
+  container_access_type    = var.container_access_type
+}
 
 module "network" {
   source = "./network"
@@ -139,26 +139,26 @@ module "network" {
   address_prefixes = var.address_prefixes
 }
 
-# module "machinelearning"{
-#   source = "./machinelearning"
-#   application_insights_name =  var.application_insights_id
-#   application_type = var.application_type
-#   resource_group_name      = data.azurerm_resource_group.example.name
-#   location                 = data.azurerm_resource_group.example.location
-#   key_vault_name = var.key_vault_name
-#   tenant_id           = data.azurerm_client_config.current.tenant_id
-#   sku_name =  var.sku_name
-#   identity = var.identity
-#   storage_account_id = module.storage.storage_account_id
-#   workspace_name = var.workspace_name
-#   datastore_name = var.datastore_name
-#   storage_container_id = "${module.storage.storage_account_id}/blobServices/default/containers/${module.storage.storage_container_name}"
-#   account_key          = module.storage.storage_primary_key
-#   subnet_resource_id = module.network.subnet_id
-#   ml_instance_name = var.ml_instance_name
-#   machine_size =  var.machine_size
-#   authorization_type = var.authorization_type
-#   assign_to_user =  var.assign_to_user
-#   description =  var.description
-#   tags = var.tags
-# }
+module "machinelearning"{
+  source = "./machinelearning"
+  application_insights_name =  var.application_insights_id
+  application_type = var.application_type
+  resource_group_name      = data.azurerm_resource_group.example.name
+  location                 = data.azurerm_resource_group.example.location
+  key_vault_name = var.key_vault_name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+  sku_name =  var.sku_name
+  identity = var.identity
+  storage_account_id = module.storage.storage_account_id
+  workspace_name = var.workspace_name
+  datastore_name = var.datastore_name
+  storage_container_id = "${module.storage.storage_account_id}/blobServices/default/containers/${module.storage.storage_container_name}"
+  account_key          = module.storage.storage_primary_key
+  subnet_resource_id = module.network.subnet_id
+  ml_instance_name = var.ml_instance_name
+  machine_size =  var.machine_size
+  authorization_type = var.authorization_type
+  assign_to_user =  var.assign_to_user
+  description =  var.description
+  tags = var.tags
+}
