@@ -17,9 +17,20 @@ output storage_primary_key{
 output primary_connection_string{
   value = module.storage.primary_connection_string
   description = "The connection string associated with the primary location."
+  sensitive = true
 }
 
 output subnet_id{
   value       = module.network.subnet_id
   description = "The ID of the subnetwork"
+}
+
+output "key_id"{
+    value = module.keyvault.key_id
+    description = "The Key Vault Secret ID."
+}
+
+output "instance_id"{
+    value = module.machinelearning.instance_id
+    description = "The Machine Learning Compute Instance ID."
 }
