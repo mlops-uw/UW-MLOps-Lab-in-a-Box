@@ -1,4 +1,4 @@
-output "key_id"{
-    value = azurerm_key_vault.key.id
-    description = "The Key Vault Secret ID."
+output "instance_id"{
+    value = azurerm_machine_learning_compute_instance.example.id
+    description = "The Machine Learning Compute Instance ID."
 }

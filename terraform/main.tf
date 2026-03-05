@@ -131,7 +131,7 @@ module "storage" {
 module "network" {
   source = "./network"
 
-  virtual_network_name = var.virtual_network_name
+  virtual_network_name = var.virtual_network_name 
   address_space = var.address_space
   resource_group_name      = data.azurerm_resource_group.example.name
   location                 = data.azurerm_resource_group.example.location
@@ -145,10 +145,7 @@ module "machinelearning"{
   application_type = var.application_type
   resource_group_name      = data.azurerm_resource_group.example.name
   location                 = data.azurerm_resource_group.example.location
-  key_vault_name = var.key_vault_name
-  secret_name = var.secret_name
-  secret_value =  module.storage.primary_connection_string
-  sku_name =  var.sku_name
+  key_vault_id = module.keyvault.key_id
   storage_account_id = module.storage.storage_account_id
   workspace_name = var.workspace_name
   type = var.type
@@ -160,9 +157,21 @@ module "machinelearning"{
   machine_size =  var.machine_size
   authorization_type = var.authorization_type
   object_id = var.object_id  
-  object_id_sp = data.azurerm_client_config.current.object_id
   tenant_id =  data.azurerm_client_config.current.tenant_id
   description =  var.description
   tags = var.tags
 }
 
+module "keyvault" {
+  source = "./keyvault"
+
+  resource_group_name      = data.azurerm_resource_group.example.name
+  location                 = data.azurerm_resource_group.example.location
+  key_vault_name = var.key_vault_name
+  secret_name = var.secret_name
+  secret_value = module.storage.primary_connection_string
+  sku_name = var.sku_name
+  object_id_sp = data.azurerm_client_config.current.object_id
+  object_id = var.object_id  
+  tenant_id =  data.azurerm_client_config.current.tenant_id
+}

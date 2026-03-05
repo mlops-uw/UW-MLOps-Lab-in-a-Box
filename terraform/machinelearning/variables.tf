@@ -8,26 +8,6 @@ variable application_type{
     description = "Specifies the type of Application Insights to create."
 }
 
-variable key_vault_name{
-    type = string
-    description = "Specifies the name of the Key Vault"
-}
-
-variable secret_name{
-    type = string
-    description = "Specifies the name of the Key Vault Secret."
-}
-
-variable secret_value{
-    type = string
-    description = "Specifies the value of the Key Vault Secret."
-}
-
-variable sku_name{
-    type = string
-    description = "The Name of the SKU used for this Key Vault"
-}
-
 variable workspace_name{
     type = string
     description = "Specifies the name of the Machine Learning Workspace"
@@ -36,6 +16,11 @@ variable workspace_name{
 variable storage_account_id{
     type = string
     description = "The ID of the Storage Account associated with this Machine Learning Workspace"
+}
+
+variable key_vault_id{
+    type = string
+    description = "The ID of the Key Vault associated with this Machine Learning Workspace"
 }
 
 variable type{
@@ -78,11 +63,6 @@ variable object_id{
     description = "User's AAD Object Id"
 }
   
-variable object_id_sp{
-    type = string
-    description = "Object Id of the Service Principle"
-}
-
 variable tenant_id{
     type = string
     description = "User's AAD Tenant Id"
