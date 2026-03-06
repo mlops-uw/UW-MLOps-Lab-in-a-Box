@@ -38,6 +38,13 @@ website:
               - text: "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
                 href: unsupervised.qmd
 
+      - section: "{{< fa cube >}} Terraform Infrastructure"
+        contents:
+          - text: "{{< fa folder-tree >}} Module Structure"
+            href: terraform_modules.qmd
+          - text: "{{< fa file-code >}} Root Module"
+            href: terraform_root.qmd
+
       - text: "{{< fa code-branch >}} Version Control"
         href: vc.qmd
 

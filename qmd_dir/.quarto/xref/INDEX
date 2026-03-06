@@ -46,5 +46,11 @@
   },
   "DE.qmd": {
     "DE.html": "d69ff190"
+  },
+  "terraform_modules.qmd": {
+    "terraform_modules.html": "7e8e9abc"
+  },
+  "terraform_root.qmd": {
+    "terraform_root.html": "a6af5c99"
   }
 }
