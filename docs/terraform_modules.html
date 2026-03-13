@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Need for MLOps – MLOps Lab: Boeing x WIC x UW</title>
+<title>Terraform Module Structure – MLOps Lab: Boeing x WIC x UW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -235,7 +235,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./MLOps.html">{{&lt; fa rocket &gt;}} Need for MLOps</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./terraform_modules.html">{{&lt; fa cube &gt;}} Terraform Infrastructure</a></li><li class="breadcrumb-item"><a href="./terraform_modules.html">{{&lt; fa folder-tree &gt;}} Module Structure</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -263,7 +263,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./MLOps.html" class="sidebar-item-text sidebar-link active">
+  <a href="./MLOps.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"> Need for MLOps</span></a>
   </div>
 </li>
@@ -336,7 +336,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./terraform_modules.html" class="sidebar-item-text sidebar-link">
+  <a href="./terraform_modules.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"> Module Structure</span></a>
   </div>
 </li>
@@ -426,9 +426,10 @@ ul.task-list li input[type="checkbox"] {
 <!-- Load Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./terraform_modules.html">{{&lt; fa cube &gt;}} Terraform Infrastructure</a></li><li class="breadcrumb-item"><a href="./terraform_modules.html">{{&lt; fa folder-tree &gt;}} Module Structure</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Need for MLOps</h1>
+<h1 class="title">Terraform Module Structure</h1>
+<p class="subtitle lead">Infrastructure as Code organization</p>
 </div>
 
 
@@ -445,223 +446,385 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What You’ll Learn
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This page explains why MLOps is essential for production ML systems, using NYC taxi prediction as a real-world example.</p>
-</div>
-</div>
-<section id="what-is-machine-learning-ml" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-machine-learning-ml"><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> What Is Machine Learning (ML)?</h2>
-<p>Machine Learning focuses on:</p>
+<section id="objective" class="level2">
+<h2 class="anchored" data-anchor-id="objective"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Objective</h2>
+<p>To maintain a clear and scalable Infrastructure as Code setup, the Terraform configuration is organized into modules. This approach separates infrastructure components into logical units, making the code easier to maintain and reuse.</p>
+<p>Terraform uses two types of modules:</p>
 <ul>
-<li>learning patterns from historical data</li>
-<li>building models that predict outcomes</li>
-<li>optimizing accuracy of these models</li>
+<li><strong>Root Module</strong> – the entry point of the Terraform configuration</li>
+<li><strong>Child Modules</strong> – reusable components that create specific infrastructure resources</li>
 </ul>
-<p>In this example:</p>
-<p>ML learns how trip features affect duration and cost</p>
-<p>ML answers the question: “How do we build a predictive model?”</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Key Insight
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>ML is about building accurate models from historical data, but accuracy alone doesn’t guarantee production success.</p>
-</div>
-</div>
+<p>The child modules are machine learning module, storage, key vault and network modules which provisions all resources required for the Azure Machine Learning environment.</p>
+<hr>
 </section>
-<section id="what-is-operations-ops" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-operations-ops"><i class="fa-solid fa-gears" aria-label="gears"></i> What Is Operations (Ops)?</h2>
-<p>Operations focuses on:</p>
-<ul>
-<li>deploying systems reliably</li>
-<li>keeping services running</li>
-<li>monitoring performance</li>
-<li>handling failures and updates</li>
-</ul>
-<p>In this example:</p>
-<ul>
-<li>Ops ensures predictions are fast</li>
-<li>the service is always available</li>
-<li>failures don’t impact users</li>
-</ul>
-<p>Ops answers the question: “How do we run this system every day?”</p>
+<section id="purpose-of-each-terraform-file" class="level2">
+<h2 class="anchored" data-anchor-id="purpose-of-each-terraform-file"><i class="fa-solid fa-file-code" aria-label="file-code"></i> Purpose of Each Terraform File</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 38%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File Name</th>
+<th>Root Module Purpose</th>
+<th>Child Module Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>main.tf</code></td>
+<td>Acts as the main orchestration file. It calls the child modules such as network, storage, and machine_learning, and passes the required variables to each module.</td>
+<td>Defines the actual Azure resources created by that module. For example: Network module creates VNet and Subnet, Storage module creates Storage Account and Container, Machine Learning module creates ML Workspace, Datastore, and Compute Instance.</td>
+</tr>
+<tr class="even">
+<td><code>variables.tf</code></td>
+<td>Declares input variables that will be used by the root module and passed to child modules. These variables allow infrastructure configuration to remain flexible and reusable.</td>
+<td>Declares variables required specifically by that module to create resources, such as subnet name, storage account name, workspace name, or compute instance configuration.</td>
+</tr>
+<tr class="odd">
+<td><code>outputs.tf</code></td>
+<td>Displays important outputs after Terraform deployment and can expose outputs returned from child modules, such as workspace ID or storage account name.</td>
+<td>Returns key resource attributes (such as subnet ID or storage account ID) so they can be referenced by the root module or other modules.</td>
+</tr>
+<tr class="even">
+<td><code>terraform.tfvars</code></td>
+<td>Provides actual values for variables defined in variables.tf. Terraform automatically reads this file when running terraform plan or terraform apply, allowing configuration values to be separated from infrastructure code.</td>
+<td>Typically not used inside child modules. Child modules receive their variable values from the root module when the module is called.</td>
+</tr>
+</tbody>
+</table>
+<hr>
 </section>
-<section id="why-ml-alone-is-not-enough" class="level2">
-<h2 class="anchored" data-anchor-id="why-ml-alone-is-not-enough"><i class="fa-solid fa-triangle-exclamation" aria-label="triangle-exclamation"></i> Why ML Alone Is Not Enough</h2>
-<p>A trained model is only useful if:</p>
-<ul>
-<li>it runs reliably in production</li>
-<li>it stays accurate over time</li>
-<li>failures are detected quickly</li>
-<li>updates can be made safely</li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Common Pitfalls Without MLOps
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Accuracy drops silently</li>
-<li>No one knows when data changes</li>
-<li>Retraining is manual and risky</li>
-<li>Results are hard to reproduce</li>
-</ul>
-<p>This is where ML systems break in practice.</p>
-</div>
-</div>
+<section id="machine-learning-module" class="level2">
+<h2 class="anchored" data-anchor-id="machine-learning-module"><i class="fa-solid fa-brain" aria-label="brain"></i> Machine Learning Module</h2>
+<p>The <code>machine_learning</code> module is responsible for creating all the core resources required to run machine learning workloads in Azure. This module provisions the Azure Machine Learning workspace, connects it to storage, and creates a compute environment for experimentation.</p>
+<p>The key resources created inside this module are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 52%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Azure Machine Learning Workspace</td>
+<td>Acts as the central environment for managing machine learning experiments, datasets, models, and pipelines.</td>
+</tr>
+<tr class="even">
+<td>Machine Learning Datastore (Blob Storage)</td>
+<td>Connects the ML workspace to a storage container where datasets, experiment outputs, and model artifacts are stored.</td>
+</tr>
+<tr class="odd">
+<td>Machine Learning Compute Instance</td>
+<td>Provides a managed compute environment where users can run Jupyter notebooks, develop models, and execute ML experiments.</td>
+</tr>
+</tbody>
+</table>
+<section id="azure-machine-learning-workspace" class="level3">
+<h3 class="anchored" data-anchor-id="azure-machine-learning-workspace">Azure Machine Learning Workspace</h3>
+<p>The Azure Machine Learning Workspace serves as the central hub for all ML operations.</p>
+<p>It integrates with the following supporting services:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 57%">
+<col style="width: 42%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dependency</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Storage Account</td>
+<td>Stores datasets, models, and experiment artifacts.</td>
+</tr>
+<tr class="even">
+<td>Key Vault</td>
+<td>Securely stores secrets such as connection strings and credentials.</td>
+</tr>
+<tr class="odd">
+<td>Application Insights</td>
+<td>Collects logs and monitoring data from ML experiments.</td>
+</tr>
+</tbody>
+</table>
+<p>These dependencies ensure that the workspace has access to secure storage, secret management, and monitoring capabilities.</p>
 </section>
-<section id="what-is-mlops" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-mlops"><i class="fa-solid fa-rocket" aria-label="rocket"></i> What Is MLOps?</h2>
-<blockquote class="blockquote">
-<p>MLOps = ML + Ops</p>
-</blockquote>
-<p>MLOps ensures that:</p>
+<section id="machine-learning-datastore-blob-storage" class="level3">
+<h3 class="anchored" data-anchor-id="machine-learning-datastore-blob-storage">Machine Learning Datastore (Blob Storage)</h3>
+<p>The Machine Learning Datastore connects the ML workspace to an Azure Blob Storage container.</p>
+<p><strong>Purpose:</strong></p>
 <ul>
-<li>models can be deployed as production services</li>
-<li>data and models are versioned</li>
-<li>model performance is monitored</li>
-<li>data drift and model drift are detected</li>
-<li>retraining and redeployment are automated</li>
-</ul>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Core Question
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>MLOps answers: “How do we keep ML systems reliable in the real world?”</p>
-</div>
-</div>
-</section>
-<section id="a-simple-real-world-example-nyc-taxi-fare-trip-time-prediction" class="level2">
-<h2 class="anchored" data-anchor-id="a-simple-real-world-example-nyc-taxi-fare-trip-time-prediction"><i class="fa-solid fa-taxi" aria-label="taxi"></i> A Simple Real-World Example: NYC Taxi Fare &amp; Trip Time Prediction</h2>
-<p>Imagine you are building a system that predicts:</p>
-<ul>
-<li>trip duration</li>
-<li>fare amount</li>
-</ul>
-<p>for NYC taxi rides.</p>
-<p>You train a machine learning model using historical NYC taxi data:</p>
-<ul>
-<li>pickup and drop-off locations</li>
-<li>time of day</li>
-<li>day of week</li>
-<li>distance</li>
-<li>past traffic patterns</li>
-</ul>
-<p>In a notebook, the model performs well and predicts trip time accurately. So far, everything looks great.</p>
-</section>
-<section id="what-goes-wrong-in-the-real-world" class="level2">
-<h2 class="anchored" data-anchor-id="what-goes-wrong-in-the-real-world"><i class="fa-solid fa-circle-xmark" aria-label="circle-xmark"></i> What Goes Wrong in the Real World?</h2>
-<p>Once the model is deployed:</p>
-<ul>
-<li>traffic patterns change</li>
-<li>road construction begins</li>
-<li>weather impacts commute times</li>
-<li>ride demand shifts across neighborhoods</li>
-</ul>
-<p>After a few weeks, predictions slowly become inaccurate.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>The Real Problem
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The model didn’t fail. The environment changed.</p>
-<p>Without noticing, users start seeing:</p>
-<ul>
-<li>incorrect ETAs</li>
-<li>inconsistent fares</li>
-<li>unreliable estimates during peak hours</li>
-</ul>
-<p>This is a real production problem.</p>
-</div>
-</div>
-</section>
-<section id="how-mlops-works-for-the-nyc-taxi-example" class="level2">
-<h2 class="anchored" data-anchor-id="how-mlops-works-for-the-nyc-taxi-example"><i class="fa-solid fa-diagram-project" aria-label="diagram-project"></i> How MLOps Works for the NYC Taxi Example</h2>
-<p><strong>Data Ingestion</strong></p>
-<ul>
-<li>Continuously collect new taxi trip data</li>
-<li>Validate schema and data quality</li>
-</ul>
-<p><strong>Training Pipelines</strong></p>
-<ul>
-<li>Retrain models as traffic patterns change</li>
-<li>Track experiments and parameters</li>
-</ul>
-<p><strong>Versioning</strong></p>
-<ul>
-<li>Version datasets, features, and models</li>
-<li>Enable rollback to previous versions</li>
-</ul>
-<p><strong>Deployment</strong></p>
-<ul>
-<li>Serve the model via an API</li>
-<li>Use containers to ensure consistency</li>
-</ul>
-<p><strong>Monitoring</strong></p>
-<ul>
-<li>Track prediction accuracy</li>
-<li>Detect data drift (new routes, new traffic behavior)</li>
-<li>Monitor latency and failures</li>
-</ul>
-<p><strong>Automation</strong></p>
-<ul>
-<li>Trigger retraining when performance drops</li>
+<li>Enables the workspace to access datasets stored in blob storage.</li>
+<li>Allows ML experiments to read input data and store model outputs or artifacts.</li>
 </ul>
 </section>
-<section id="why-we-are-doing-this" class="level2">
-<h2 class="anchored" data-anchor-id="why-we-are-doing-this"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Why We Are Doing This?</h2>
-<p>In real companies, success is not about building one good model. It is about building systems that continue to work when data changes, usage scales, and business needs evolve.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Lab Focus
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This lab focuses on:</p>
+<section id="machine-learning-compute-instance" class="level3">
+<h3 class="anchored" data-anchor-id="machine-learning-compute-instance">Machine Learning Compute Instance</h3>
+<p>The Compute Instance provides an interactive development environment for data scientists.</p>
+<p><strong>Purpose:</strong></p>
 <ul>
-<li>Production-grade ML workflows</li>
-<li>Real-world failure scenarios</li>
-<li>End-to-end MLOps thinking</li>
+<li>Runs Jupyter Notebook or Jupyter Lab environments.</li>
+<li>Allows users to train models, explore data, and run ML experiments within the ML workspace.</li>
 </ul>
-<p>By the end, you will understand how ML systems are built, deployed, monitored, and maintained in production—using the NYC Taxi problem as an example.</p>
-</div>
-</div>
+</section>
+<section id="user-assignment" class="level3">
+<h3 class="anchored" data-anchor-id="user-assignment">User Assignment</h3>
+<pre class="hcl"><code>assign_to_user {
+  object_id = var.object_id
+  tenant_id = var.tenant_id
+}</code></pre>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 35%">
+<col style="width: 65%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>object_id</code></td>
+<td>The Azure Active Directory object ID of the user. This ensures that the compute instance is assigned to that specific user who will access it through Jupyter Notebook or Jupyter Lab.</td>
+</tr>
+<tr class="even">
+<td><code>tenant_id</code></td>
+<td>The Azure Active Directory tenant ID representing the organization. It identifies the directory where the user account exists.</td>
+</tr>
+</tbody>
+</table>
+<p>Assigning the compute instance to a specific user ensures secure access and proper user ownership of the development environment.</p>
+<hr>
+</section>
+</section>
+<section id="storage-module" class="level2">
+<h2 class="anchored" data-anchor-id="storage-module"><i class="fa-solid fa-database" aria-label="database"></i> Storage Module</h2>
+<p>The <code>storage</code> module is responsible for creating the storage resources required for the machine learning environment. These resources store datasets, experiment outputs, and model artifacts used during the MLOps workflow.</p>
+<p>The main resources created inside this module are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 52%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Azure Storage Account</td>
+<td>Provides scalable cloud storage for datasets, ML artifacts, and intermediate results used during experiments.</td>
+</tr>
+<tr class="even">
+<td>Storage Container (Blob Container)</td>
+<td>Stores the dataset files that will be accessed by the Azure Machine Learning workspace.</td>
+</tr>
+</tbody>
+</table>
+<section id="azure-storage-account" class="level3">
+<h3 class="anchored" data-anchor-id="azure-storage-account">Azure Storage Account</h3>
+<p>The Azure Storage Account acts as the primary data storage service for the ML environment.</p>
+<p><strong>Purpose:</strong></p>
+<ul>
+<li>Stores machine learning datasets and experiment artifacts.</li>
+<li>Provides secure and scalable blob storage used by the ML workspace.</li>
+</ul>
+<p>This storage account is later connected to the Azure Machine Learning workspace datastore so that the workspace can access the stored data.</p>
+</section>
+<section id="storage-container" class="level3">
+<h3 class="anchored" data-anchor-id="storage-container">Storage Container</h3>
+<p>A Blob Storage container is created inside the storage account to store the dataset files.</p>
+<p><strong>Purpose:</strong></p>
+<ul>
+<li>Organizes dataset files used for machine learning experiments.</li>
+<li>Serves as the data source for the ML datastore.</li>
+</ul>
+<p>The container access level is set to: <strong>Private</strong></p>
+<p>This ensures that only authorized users or services can access the data, improving security and preventing public exposure of datasets.</p>
+</section>
+<section id="dataset-files" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-files">Dataset Files</h3>
+<p>The dataset files stored in the container are Parquet files (<code>.parquet</code>).</p>
+<p><strong>Characteristics of these files:</strong></p>
+<ul>
+<li>Each file is approximately 89 MB in size</li>
+<li>Because these files are relatively large, they cannot be directly uploaded to the GitHub repository, which has size limitations.</li>
+</ul>
+</section>
+<section id="manual-data-upload" class="level3">
+<h3 class="anchored" data-anchor-id="manual-data-upload">Manual Data Upload</h3>
+<p>After Terraform creates the storage resources, the dataset files must be uploaded manually through the Azure portal or storage console.</p>
+<p><strong>Steps:</strong></p>
+<ol type="1">
+<li>Navigate to the Azure Storage Account.</li>
+<li>Open the Blob Containers section.</li>
+<li>Select the created container.</li>
+<li>Upload the <code>.parquet</code> files.</li>
+</ol>
+<p>Once uploaded, these files can be accessed by the Machine Learning datastore, enabling the ML workspace to read the datasets during training and experimentation.</p>
+<hr>
+</section>
+</section>
+<section id="network-module" class="level2">
+<h2 class="anchored" data-anchor-id="network-module"><i class="fa-solid fa-network-wired" aria-label="network-wired"></i> Network Module</h2>
+<p>The <code>network</code> module is responsible for creating the networking infrastructure required for the machine learning environment. These resources ensure that the compute resources operate within a controlled and secure network.</p>
+<p>The main resources created inside this module are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 52%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Virtual Network (VNet)</td>
+<td>Provides a private network environment where Azure resources can communicate securely.</td>
+</tr>
+<tr class="even">
+<td>Subnet</td>
+<td>A smaller network segment inside the Virtual Network where specific resources are deployed.</td>
+</tr>
+</tbody>
+</table>
+<section id="virtual-network-vnet" class="level3">
+<h3 class="anchored" data-anchor-id="virtual-network-vnet">Virtual Network (VNet)</h3>
+<p>The Virtual Network acts as the primary networking layer for the infrastructure.</p>
+<p><strong>Purpose:</strong></p>
+<ul>
+<li>Provides a secure and isolated network environment.</li>
+<li>Allows Azure resources to communicate with each other within the same private network.</li>
+</ul>
+<p>The VNet helps ensure that compute resources are deployed in a controlled network environment rather than being directly exposed to the public internet.</p>
+</section>
+<section id="subnet" class="level3">
+<h3 class="anchored" data-anchor-id="subnet">Subnet</h3>
+<p>A Subnet is a subdivision of the Virtual Network that allows resources to be grouped and managed more effectively.</p>
+<p><strong>Purpose:</strong></p>
+<ul>
+<li>Organizes resources within the Virtual Network.</li>
+<li>Provides a dedicated network segment for specific services.</li>
+</ul>
+<p>In this lab, the subnet is used specifically for the Azure Machine Learning Compute Instance.</p>
+</section>
+<section id="integration-with-machine-learning-compute" class="level3">
+<h3 class="anchored" data-anchor-id="integration-with-machine-learning-compute">Integration with Machine Learning Compute</h3>
+<p>The Machine Learning Compute Instance is deployed inside the subnet created in this module.</p>
+<p><strong>Purpose:</strong></p>
+<ul>
+<li>Ensures that the compute instance runs within a private network.</li>
+<li>Allows controlled communication between the compute instance and other Azure resources such as storage and the ML workspace.</li>
+</ul>
+<p>By placing the compute instance inside a subnet, the infrastructure follows best practices for network isolation and secure resource communication.</p>
+<hr>
+</section>
+</section>
+<section id="key-vault-module" class="level2">
+<h2 class="anchored" data-anchor-id="key-vault-module"><i class="fa-solid fa-key" aria-label="key"></i> Key Vault Module</h2>
+<p>The <code>key_vault</code> module is responsible for creating the Azure Key Vault and configuring secure access to secrets used by the infrastructure. Key Vault is used to store sensitive information such as connection strings and credentials.</p>
+<p>The main resources created inside this module are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 52%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Azure Key Vault</td>
+<td>Securely stores secrets, keys, and credentials required by the infrastructure.</td>
+</tr>
+<tr class="even">
+<td>Key Vault Access Policies</td>
+<td>Defines which identities are allowed to access secrets inside the Key Vault.</td>
+</tr>
+<tr class="odd">
+<td>Key Vault Secret</td>
+<td>Stores the Storage Account connection string securely inside the vault.</td>
+</tr>
+</tbody>
+</table>
+<section id="azure-key-vault" class="level3">
+<h3 class="anchored" data-anchor-id="azure-key-vault">Azure Key Vault</h3>
+<p>The Azure Key Vault acts as the secure storage service for sensitive configuration values used by the infrastructure.</p>
+<p><strong>Purpose:</strong></p>
+<ul>
+<li>Stores secrets securely instead of hardcoding them in Terraform or source code.</li>
+<li>Provides controlled access to secrets through access policies.</li>
+</ul>
+<p>This ensures that sensitive information such as connection strings remains protected.</p>
+</section>
+<section id="key-vault-access-policies" class="level3">
+<h3 class="anchored" data-anchor-id="key-vault-access-policies">Key Vault Access Policies</h3>
+<p>Access policies are created to allow authorized identities to retrieve and manage secrets inside the Key Vault.</p>
+<p>The following identities are granted access:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 52%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Identity</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Current Azure User</td>
+<td>Allows the user deploying the infrastructure to access and manage secrets.</td>
+</tr>
+<tr class="even">
+<td>Service Principal (GitHub Actions)</td>
+<td>Allows the CI/CD pipeline to retrieve secrets during automated deployments.</td>
+</tr>
+</tbody>
+</table>
+<p>The permissions granted include:</p>
+<ul>
+<li><strong>Get</strong> – Retrieve secret values</li>
+<li><strong>List</strong> – View available secrets</li>
+<li><strong>Set</strong> – Create or update secrets</li>
+</ul>
+<p>These permissions allow both the user and the CI/CD pipeline to securely access secrets required by the infrastructure.</p>
+</section>
+<section id="key-vault-secret" class="level3">
+<h3 class="anchored" data-anchor-id="key-vault-secret">Key Vault Secret</h3>
+<p>A secret is created inside the Key Vault to store the primary connection string of the Azure Storage Account.</p>
+<p><strong>Purpose:</strong></p>
+<ul>
+<li>Allows secure access to the storage account without exposing credentials in the Terraform code or repository.</li>
+<li>Enables services such as the ML workspace or applications to retrieve the connection string securely.</li>
+</ul>
+<p>The creation of the secret depends on the access policy:</p>
+<pre class="hcl"><code>azurerm_key_vault_access_policy.pipeline_sp_policy</code></pre>
+<p>This dependency ensures that the Service Principal has the required permissions before Terraform attempts to create the secret inside the Key Vault.</p>
 
 
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

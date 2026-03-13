@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Need for MLOps – MLOps Lab: Boeing x WIC x UW</title>
+<title>Root Module Structure – MLOps Lab: Boeing x WIC x UW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -235,7 +235,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./MLOps.html">{{&lt; fa rocket &gt;}} Need for MLOps</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./terraform_modules.html">{{&lt; fa cube &gt;}} Terraform Infrastructure</a></li><li class="breadcrumb-item"><a href="./terraform_root.html">{{&lt; fa file-code &gt;}} Root Module</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -263,7 +263,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./MLOps.html" class="sidebar-item-text sidebar-link active">
+  <a href="./MLOps.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"> Need for MLOps</span></a>
   </div>
 </li>
@@ -342,7 +342,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./terraform_root.html" class="sidebar-item-text sidebar-link">
+  <a href="./terraform_root.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"> Root Module</span></a>
   </div>
 </li>
@@ -426,9 +426,10 @@ ul.task-list li input[type="checkbox"] {
 <!-- Load Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./terraform_modules.html">{{&lt; fa cube &gt;}} Terraform Infrastructure</a></li><li class="breadcrumb-item"><a href="./terraform_root.html">{{&lt; fa file-code &gt;}} Root Module</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Need for MLOps</h1>
+<h1 class="title">Root Module Structure</h1>
+<p class="subtitle lead">Terraform configuration and variables</p>
 </div>
 
 
@@ -445,223 +446,235 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What You’ll Learn
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This page explains why MLOps is essential for production ML systems, using NYC taxi prediction as a real-world example.</p>
-</div>
-</div>
-<section id="what-is-machine-learning-ml" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-machine-learning-ml"><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> What Is Machine Learning (ML)?</h2>
-<p>Machine Learning focuses on:</p>
+<section id="input-variables" class="level2">
+<h2 class="anchored" data-anchor-id="input-variables"><i class="fa-solid fa-arrow-down" aria-label="arrow-down"></i> Input Variables</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 52%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>resource_group_name</code></td>
+<td>Name of the Azure Resource Group where all resources will be created.</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>name</code></td>
+<td>Name of the Azure Storage Account.</td>
+<td>string</td>
+</tr>
+<tr class="odd">
+<td><code>account_tier</code></td>
+<td>Performance tier of the storage account (Standard or Premium).</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>account_replication_type</code></td>
+<td>Replication strategy for the storage account such as LRS, GRS, RAGRS, or ZRS.</td>
+<td>string</td>
+</tr>
+<tr class="odd">
+<td><code>container_name</code></td>
+<td>Name of the blob storage container used to store dataset files.</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>container_access_type</code></td>
+<td>Access level for the container (private, blob, or container). In this lab it is set to private.</td>
+<td>string</td>
+</tr>
+<tr class="odd">
+<td><code>virtual_network_name</code></td>
+<td>Name of the Virtual Network that will host the compute resources.</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>address_space</code></td>
+<td>Address range used by the Virtual Network.</td>
+<td>list(string)</td>
+</tr>
+<tr class="odd">
+<td><code>subnet_name</code></td>
+<td>Name of the subnet created inside the Virtual Network.</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>address_prefixes</code></td>
+<td>Address ranges assigned to the subnet within the virtual network.</td>
+<td>list(string)</td>
+</tr>
+<tr class="odd">
+<td><code>application_insights_name</code></td>
+<td>Name of the Azure Application Insights resource used for monitoring ML experiments.</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>application_type</code></td>
+<td>Type of Application Insights instance being created.</td>
+<td>string</td>
+</tr>
+<tr class="odd">
+<td><code>key_vault_name</code></td>
+<td>Name of the Azure Key Vault used to store secrets securely.</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>secret_name</code></td>
+<td>Name of the secret that will be stored inside the Key Vault.</td>
+<td>string</td>
+</tr>
+<tr class="odd">
+<td><code>sku_name</code></td>
+<td>SKU or pricing tier used for the Key Vault.</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>workspace_name</code></td>
+<td>Name of the Azure Machine Learning Workspace.</td>
+<td>string</td>
+</tr>
+<tr class="odd">
+<td><code>type</code></td>
+<td>Type of Managed Identity assigned to the ML workspace (for example SystemAssigned).</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>datastore_name</code></td>
+<td>Name of the Azure Machine Learning datastore that connects to blob storage.</td>
+<td>string</td>
+</tr>
+<tr class="odd">
+<td><code>ml_instance_name</code></td>
+<td>Name of the Machine Learning Compute Instance.</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>machine_size</code></td>
+<td>Virtual machine size used for the compute instance.</td>
+<td>string</td>
+</tr>
+<tr class="odd">
+<td><code>authorization_type</code></td>
+<td>Authorization type used for the ML compute instance.</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>object_id</code></td>
+<td>Azure Active Directory Object ID of the user to whom the compute instance will be assigned.</td>
+<td>string</td>
+</tr>
+<tr class="odd">
+<td><code>description</code></td>
+<td>Description assigned to the Machine Learning Compute Instance.</td>
+<td>string</td>
+</tr>
+<tr class="even">
+<td><code>tags</code></td>
+<td>Tags assigned to the compute instance for resource organization.</td>
+<td>object({ name = string })</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="output-variables" class="level2">
+<h2 class="anchored" data-anchor-id="output-variables"><i class="fa-solid fa-arrow-up" aria-label="arrow-up"></i> Output Variables</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>storage_account_id</code></td>
+<td>The unique resource ID of the Azure Storage Account created in the storage module. This ID can be referenced by other modules or resources that need to interact with the storage account.</td>
+</tr>
+<tr class="even">
+<td><code>storage_container_name</code></td>
+<td>The name of the blob storage container created inside the storage account. This container stores the dataset files used for machine learning experiments.</td>
+</tr>
+<tr class="odd">
+<td><code>storage_primary_key</code></td>
+<td>The primary access key of the Azure Storage Account. This key allows services to authenticate and access the storage account securely. It is marked as sensitive because it contains confidential credentials.</td>
+</tr>
+<tr class="even">
+<td><code>primary_connection_string</code></td>
+<td>The primary connection string of the storage account. This connection string is used to securely connect applications or services (such as ML datastore configuration) to the storage account. It is also marked as sensitive.</td>
+</tr>
+<tr class="odd">
+<td><code>subnet_id</code></td>
+<td>The resource ID of the subnet created in the network module. This value is passed to the Machine Learning module so that the ML compute instance can be deployed inside the subnet.</td>
+</tr>
+<tr class="even">
+<td><code>key_id</code></td>
+<td>The ID of the Key Vault secret created in the key vault module. This identifies the secret stored in Azure Key Vault that contains the storage account connection string.</td>
+</tr>
+<tr class="odd">
+<td><code>instance_id</code></td>
+<td>The resource ID of the Azure Machine Learning Compute Instance created in the machine learning module. This output can be used to reference or manage the compute instance after deployment.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="how-output-variables-are-accessed-from-modules-in-terraform" class="level2">
+<h2 class="anchored" data-anchor-id="how-output-variables-are-accessed-from-modules-in-terraform"><i class="fa-solid fa-code" aria-label="code"></i> How Output Variables Are Accessed from Modules in Terraform</h2>
+<p>In Terraform, output variables are used to share important information from one module so that it can be used by another module or by the root module.</p>
+<p>When resources are created inside a child module, some of their values (such as IDs, connection strings, or names) may be needed outside that module. To make these values available, they are defined in the child module using output variables.</p>
+<p>Once an output variable is defined inside a child module, it can be accessed in the root module using the following format:</p>
+<pre class="hcl"><code>module.&lt;module_name&gt;.&lt;output_variable_name&gt;</code></pre>
+<section id="how-this-works" class="level3">
+<h3 class="anchored" data-anchor-id="how-this-works">How This Works</h3>
+<ol type="1">
+<li>A resource is created inside a child module.</li>
+<li>The important value from that resource (for example a storage account ID) is defined as an output variable in the child module.</li>
+<li>The root module calls the child module.</li>
+<li>The root module can then access the output using: <code>module.&lt;module_name&gt;.&lt;output_name&gt;</code></li>
+</ol>
+</section>
+<section id="example" class="level3">
+<h3 class="anchored" data-anchor-id="example">Example</h3>
+<p>If the storage module defines an output variable called:</p>
+<pre class="hcl"><code>output "storage_account_id"</code></pre>
+<p>Then the root module can access this value as:</p>
+<pre class="hcl"><code>module.storage.storage_account_id</code></pre>
+<p>Here:</p>
 <ul>
-<li>learning patterns from historical data</li>
-<li>building models that predict outcomes</li>
-<li>optimizing accuracy of these models</li>
+<li><code>module</code> tells Terraform that we are accessing a module</li>
+<li><code>storage</code> is the name of the module</li>
+<li><code>storage_account_id</code> is the output variable defined inside that module</li>
 </ul>
-<p>In this example:</p>
-<p>ML learns how trip features affect duration and cost</p>
-<p>ML answers the question: “How do we build a predictive model?”</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Key Insight
+<span class="screen-reader-only">Tip</span>Best Practice
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>ML is about building accurate models from historical data, but accuracy alone doesn’t guarantee production success.</p>
-</div>
-</div>
-</section>
-<section id="what-is-operations-ops" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-operations-ops"><i class="fa-solid fa-gears" aria-label="gears"></i> What Is Operations (Ops)?</h2>
-<p>Operations focuses on:</p>
-<ul>
-<li>deploying systems reliably</li>
-<li>keeping services running</li>
-<li>monitoring performance</li>
-<li>handling failures and updates</li>
-</ul>
-<p>In this example:</p>
-<ul>
-<li>Ops ensures predictions are fast</li>
-<li>the service is always available</li>
-<li>failures don’t impact users</li>
-</ul>
-<p>Ops answers the question: “How do we run this system every day?”</p>
-</section>
-<section id="why-ml-alone-is-not-enough" class="level2">
-<h2 class="anchored" data-anchor-id="why-ml-alone-is-not-enough"><i class="fa-solid fa-triangle-exclamation" aria-label="triangle-exclamation"></i> Why ML Alone Is Not Enough</h2>
-<p>A trained model is only useful if:</p>
-<ul>
-<li>it runs reliably in production</li>
-<li>it stays accurate over time</li>
-<li>failures are detected quickly</li>
-<li>updates can be made safely</li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Common Pitfalls Without MLOps
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Accuracy drops silently</li>
-<li>No one knows when data changes</li>
-<li>Retraining is manual and risky</li>
-<li>Results are hard to reproduce</li>
-</ul>
-<p>This is where ML systems break in practice.</p>
-</div>
-</div>
-</section>
-<section id="what-is-mlops" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-mlops"><i class="fa-solid fa-rocket" aria-label="rocket"></i> What Is MLOps?</h2>
-<blockquote class="blockquote">
-<p>MLOps = ML + Ops</p>
-</blockquote>
-<p>MLOps ensures that:</p>
-<ul>
-<li>models can be deployed as production services</li>
-<li>data and models are versioned</li>
-<li>model performance is monitored</li>
-<li>data drift and model drift are detected</li>
-<li>retraining and redeployment are automated</li>
-</ul>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Core Question
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>MLOps answers: “How do we keep ML systems reliable in the real world?”</p>
-</div>
-</div>
-</section>
-<section id="a-simple-real-world-example-nyc-taxi-fare-trip-time-prediction" class="level2">
-<h2 class="anchored" data-anchor-id="a-simple-real-world-example-nyc-taxi-fare-trip-time-prediction"><i class="fa-solid fa-taxi" aria-label="taxi"></i> A Simple Real-World Example: NYC Taxi Fare &amp; Trip Time Prediction</h2>
-<p>Imagine you are building a system that predicts:</p>
-<ul>
-<li>trip duration</li>
-<li>fare amount</li>
-</ul>
-<p>for NYC taxi rides.</p>
-<p>You train a machine learning model using historical NYC taxi data:</p>
-<ul>
-<li>pickup and drop-off locations</li>
-<li>time of day</li>
-<li>day of week</li>
-<li>distance</li>
-<li>past traffic patterns</li>
-</ul>
-<p>In a notebook, the model performs well and predicts trip time accurately. So far, everything looks great.</p>
-</section>
-<section id="what-goes-wrong-in-the-real-world" class="level2">
-<h2 class="anchored" data-anchor-id="what-goes-wrong-in-the-real-world"><i class="fa-solid fa-circle-xmark" aria-label="circle-xmark"></i> What Goes Wrong in the Real World?</h2>
-<p>Once the model is deployed:</p>
-<ul>
-<li>traffic patterns change</li>
-<li>road construction begins</li>
-<li>weather impacts commute times</li>
-<li>ride demand shifts across neighborhoods</li>
-</ul>
-<p>After a few weeks, predictions slowly become inaccurate.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>The Real Problem
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The model didn’t fail. The environment changed.</p>
-<p>Without noticing, users start seeing:</p>
-<ul>
-<li>incorrect ETAs</li>
-<li>inconsistent fares</li>
-<li>unreliable estimates during peak hours</li>
-</ul>
-<p>This is a real production problem.</p>
-</div>
-</div>
-</section>
-<section id="how-mlops-works-for-the-nyc-taxi-example" class="level2">
-<h2 class="anchored" data-anchor-id="how-mlops-works-for-the-nyc-taxi-example"><i class="fa-solid fa-diagram-project" aria-label="diagram-project"></i> How MLOps Works for the NYC Taxi Example</h2>
-<p><strong>Data Ingestion</strong></p>
-<ul>
-<li>Continuously collect new taxi trip data</li>
-<li>Validate schema and data quality</li>
-</ul>
-<p><strong>Training Pipelines</strong></p>
-<ul>
-<li>Retrain models as traffic patterns change</li>
-<li>Track experiments and parameters</li>
-</ul>
-<p><strong>Versioning</strong></p>
-<ul>
-<li>Version datasets, features, and models</li>
-<li>Enable rollback to previous versions</li>
-</ul>
-<p><strong>Deployment</strong></p>
-<ul>
-<li>Serve the model via an API</li>
-<li>Use containers to ensure consistency</li>
-</ul>
-<p><strong>Monitoring</strong></p>
-<ul>
-<li>Track prediction accuracy</li>
-<li>Detect data drift (new routes, new traffic behavior)</li>
-<li>Monitor latency and failures</li>
-</ul>
-<p><strong>Automation</strong></p>
-<ul>
-<li>Trigger retraining when performance drops</li>
-</ul>
-</section>
-<section id="why-we-are-doing-this" class="level2">
-<h2 class="anchored" data-anchor-id="why-we-are-doing-this"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Why We Are Doing This?</h2>
-<p>In real companies, success is not about building one good model. It is about building systems that continue to work when data changes, usage scales, and business needs evolve.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Lab Focus
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This lab focuses on:</p>
-<ul>
-<li>Production-grade ML workflows</li>
-<li>Real-world failure scenarios</li>
-<li>End-to-end MLOps thinking</li>
-</ul>
-<p>By the end, you will understand how ML systems are built, deployed, monitored, and maintained in production—using the NYC Taxi problem as an example.</p>
+<p>Output variables make Terraform modules reusable and allow different parts of your infrastructure to communicate without hardcoding resource IDs or connection strings.</p>
 </div>
 </div>
 
 
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

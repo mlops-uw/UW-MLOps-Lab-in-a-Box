@@ -2,9 +2,9 @@
   {
     "objectID": "DE.html",
     "href": "DE.html",
-    "title": "Data Engineering",
+    "title": "MLOps Lab: Boeing x WIC x UW",
     "section": "",
-    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "{{< fa diagram-project >}} Data Engineering"
     ]
@@ -132,9 +132,9 @@
   {
     "objectID": "containers.html",
     "href": "containers.html",
-    "title": "Containerization",
+    "title": "MLOps Lab: Boeing x WIC x UW",
     "section": "",
-    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "{{< fa box >}} Containerization"
     ]
@@ -152,9 +152,9 @@
   {
     "objectID": "azure.html",
     "href": "azure.html",
-    "title": "Azure Cloud",
+    "title": "MLOps Lab: Boeing x WIC x UW",
     "section": "",
-    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "{{< fa cloud >}} Azure Cloud"
     ]
@@ -286,9 +286,9 @@
   {
     "objectID": "Testing_deploying.html",
     "href": "Testing_deploying.html",
-    "title": "Testing & Deployment",
+    "title": "MLOps Lab: Boeing x WIC x UW",
     "section": "",
-    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "{{< fa flask >}} Testing & Deployment"
     ]
@@ -350,9 +350,9 @@
   {
     "objectID": "Registry.html",
     "href": "Registry.html",
-    "title": "Model Registry",
+    "title": "MLOps Lab: Boeing x WIC x UW",
     "section": "",
-    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "{{< fa folder-open >}} Model Registry"
     ]
@@ -578,7 +578,7 @@
     "href": "data_ingestion.html#part-a---getting-data-into-azure-ingestion",
     "title": "Data Ingestion",
     "section": " Part A - Getting data into Azure (Ingestion)",
-    "text": "Part A - Getting data into Azure (Ingestion)\nBelow are 2 clear ingestion pathways:\n\nPath 1: Use Azure Open Datasets (no manual file downloads)\nPath 2: Manual download from TLC + upload to Blob (if you want to understand externally ingesting)\n\n\n Path 1 - Ingestion using Azure Open Datasets\n\n\n\n\n\n\nTipRecommended Approach\n\n\n\nThis is the easiest way to get started. Azure Open Datasets provides pre-hosted NYC taxi data without manual downloads.\n\n\n Add photos to explain how to create, use compute, get to ML Studio\n# verify environment -- anything between 3.8-3.12 is good\nimport sys\n\nprint(sys.executable)\nprint(sys.version)\n\n!{sys.executable} -m pip install -q --upgrade pip\n!{sys.executable} -m pip install -q azureml-opendatasets\n\n# restart kernel\n\n!pip install -q azureml-opendatasets pandas pyarrow\n\nfrom azureml.opendatasets import NycTlcYellow\nprint(\"OK: NycTlcYellow imported\")\n\n# pyarrow handles parquet files\n\nfrom dateutil import parser\n\nstart_date = parser.parse('2018-05-01')\nend_date = parser.parse('2018-06-01')\n\nnyc_tlc = NycTlcYellow(start_date=start_date, end_date=end_date)\nnyc_tlc_df = nyc_tlc.to_pandas_dataframe()\n\nnyc_tlc_df.head()\n\n\n\n\n\n\nNoteDate Range Selection\n\n\n\nWe use a limited date range (1-2 months) to keep compute and storage costs manageable for learning purposes.\n\n\n\n\n Path 2 – Ingestion using Azure Blob Storage (manual upload)\nThis ingestion path demonstrates how data typically enters Azure from an external source, such as a public data portal or a partner system. Unlike Azure Open Datasets, this approach requires explicit storage management, which is common in real production pipelines.\n\n\n\n\n\n\nTipWhen to Use This Path\n\n\n\nUse this approach when: - Data comes from external partners or systems - You need full control over storage configuration - You want to understand the complete ingestion workflow\n\n\nDownload data from https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page\nFile name: yellow_tripdata_2025-07.parquet\nSearch for Storage Account in Azure\nIn the Azure Portal:\n\nSearch for Storage accounts\nClick Create\nChoose:\n\nSubscription: Azure Student\nResource group: create a new one (example: rg-mlops-lab)\nStorage account name: unique name (example: mlopslabstorage)\n\n\nClick Review + Create → Create\nCreate a Blob container\nOnce the storage account is created:\n\nOpen the Storage Account\nGo to Containers\nClick + Container\nName: nyc-tlc-blob\nPublic access level: Private\n\nThis container will hold raw data.\nUpload the raw Parquet file\n\nOpen the nyc-tlc-blob container\nClick Upload\nSelect yellow_tripdata_2025-07.parquet\nClick Upload\n\n\n\n\n\n\n\nWarningSecurity Note\n\n\n\nAlways set container access to Private. Never expose raw data publicly unless absolutely necessary.\n\n\nRead data from Blob Storage\nOnce uploaded, you can read the file directly for processing in Azure ML Studio.\n!pip -q install azure-storage-blob pandas pyarrow\n\nfrom azure.storage.blob import BlobServiceClient\nfrom pathlib import Path\nimport pandas as pd\n\n# copy paste from Azure Portal\nCONNECTION_STRING = \"Enter connection string from Security + networking -&gt; Access keys\"\n\n# Blob details\nCONTAINER_NAME = \"nyc-tlc-blob\"\nBLOB_NAME = \"yellow_tripdata_2025-07.parquet\"\n\n# Local destination inside notebook VM\nLOCAL_DIR = Path(\"data_raw\")\nLOCAL_DIR.mkdir(exist_ok=True)\n\nLOCAL_PATH = LOCAL_DIR / \"yellow_tripdata_2025-07.parquet\"\n\nblob_service = BlobServiceClient.from_connection_string(CONNECTION_STRING)\nblob_client = blob_service.get_blob_client(\n    container=CONTAINER_NAME,\n    blob=BLOB_NAME\n)\n\nwith open(LOCAL_PATH, \"wb\") as f:\n    f.write(blob_client.download_blob().readall())\n\nprint(\"Downloaded to:\", LOCAL_PATH)\n\ndf = pd.read_parquet(LOCAL_PATH)\n\ndf.shape\n\ndf.head()\n\n\n\n\n\n\nImportantProduction Best Practice\n\n\n\nIn production, use Managed Identity instead of connection strings. Connection strings should never be committed to code or notebooks.\n\n\n\n\n Path 3 – Ingestion using Azure Blob Storage (Terraform-Automated Infrastructure)\nThis path demonstrates a production-grade approach where infrastructure is provisioned automatically using Infrastructure as Code (IaC), while data upload remains a manual step.\n\n\n\n\n\n\nTipWhen to Use This Path\n\n\n\nUse this approach when: - You need reproducible infrastructure across environments - You want to automate resource provisioning - You’re following DevOps best practices - You need consistent configuration management\n\n\n\nInfrastructure Setup (Automated)\nThe Azure Storage infrastructure is provisioned automatically using Terraform.\nDuring deployment, the following resources are created:\n\nAzure Storage Account (taxizonelookup)\nBlob Container (taxidata)\nPrivate access configuration for secure data storage\n\nThis ensures a consistent, reproducible environment across deployments.\n\n\nData Upload (Manual Step)\nWhile infrastructure is automated, the dataset itself must be uploaded manually.\nRequired Format:\n\nFile type: .parquet\nUploaded to: taxizonelookup → taxidata container\n\nSteps to Upload:\n\nGo to Azure Portal\nOpen Storage Accounts\nSelect storage account name: taxizonelookup\nNavigate to Containers\nOpen container name: taxidata\nClick Upload\nSelect your .parquet file\nConfirm upload\n\n\n\n\n\n\n\nNoteWhy Manual Upload?\n\n\n\nThe dataset is approximately 180 MB in size, which is too large to store in version control. Manual upload:\n\nKeeps large datasets out of GitHub\nMaintains clean DevOps practices\nSeparates infrastructure from data\nEnsures secure handling of production datasets\n\n\n\n\n\nPipeline Flow\nTerraform → Creates Storage Account + Container\nUser → Uploads .parquet file manually\nAzure ML → Reads data via Datastore\nNotebook → Performs EDA/Training\n\n\n\n\n\n\nImportantInfrastructure vs Data\n\n\n\nInfrastructure is code (automated). Data is content (manual). This separation is a best practice in production MLOps workflows.",
+    "text": "Part A - Getting data into Azure (Ingestion)\nBelow are 2 clear ingestion pathways:\n\nPath 1: Use Azure Open Datasets (no manual file downloads)\nPath 2: Manual download from TLC + upload to Blob (if you want to understand externally ingesting)\n\n\n Path 1 - Ingestion using Azure Open Datasets\n\n\n\n\n\n\nTipRecommended Approach\n\n\n\nThis is the easiest way to get started. Azure Open Datasets provides pre-hosted NYC taxi data without manual downloads.\n\n\n Add photos to explain how to create, use compute, get to ML Studio\n# verify environment -- anything between 3.8-3.12 is good\nimport sys\n\nprint(sys.executable)\nprint(sys.version)\n\n!{sys.executable} -m pip install -q --upgrade pip\n!{sys.executable} -m pip install -q azureml-opendatasets\n\n# restart kernel\n\n!pip install -q azureml-opendatasets pandas pyarrow\n\nfrom azureml.opendatasets import NycTlcYellow\nprint(\"OK: NycTlcYellow imported\")\n\n# pyarrow handles parquet files\n\nfrom dateutil import parser\n\nstart_date = parser.parse('2018-05-01')\nend_date = parser.parse('2018-06-01')\n\nnyc_tlc = NycTlcYellow(start_date=start_date, end_date=end_date)\nnyc_tlc_df = nyc_tlc.to_pandas_dataframe()\n\nnyc_tlc_df.head()\n\n\n\n\n\n\nNoteDate Range Selection\n\n\n\nWe use a limited date range (1-2 months) to keep compute and storage costs manageable for learning purposes.\n\n\n\n\n Path 2 – Ingestion using Azure Blob Storage (manual upload)\nThis ingestion path demonstrates how data typically enters Azure from an external source, such as a public data portal or a partner system. Unlike Azure Open Datasets, this approach requires explicit storage management, which is common in real production pipelines.\n\n\n\n\n\n\nTipWhen to Use This Path\n\n\n\nUse this approach when: - Data comes from external partners or systems - You need full control over storage configuration - You want to understand the complete ingestion workflow\n\n\nDownload data from https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page\nFile name: yellow_tripdata_2025-07.parquet\nSearch for Storage Account in Azure\nIn the Azure Portal:\n\nSearch for Storage accounts\nClick Create\nChoose:\n\nSubscription: Azure Student\nResource group: create a new one (example: rg-mlops-lab)\nStorage account name: unique name (example: mlopslabstorage)\n\n\nClick Review + Create → Create\nCreate a Blob container\nOnce the storage account is created:\n\nOpen the Storage Account\nGo to Containers\nClick + Container\nName: nyc-tlc-blob\nPublic access level: Private\n\nThis container will hold raw data.\nUpload the raw Parquet file\n\nOpen the nyc-tlc-blob container\nClick Upload\nSelect yellow_tripdata_2025-07.parquet\nClick Upload\n\n\n\n\n\n\n\nWarningSecurity Note\n\n\n\nAlways set container access to Private. Never expose raw data publicly unless absolutely necessary.\n\n\nRead data from Blob Storage\nOnce uploaded, you can read the file directly for processing in Azure ML Studio.\n!pip -q install azure-storage-blob pandas pyarrow\n\nfrom azure.storage.blob import BlobServiceClient\nfrom pathlib import Path\nimport pandas as pd\n\n# copy paste from Azure Portal\nCONNECTION_STRING = \"Enter connection string from Security + networking -&gt; Access keys\"\n\n# Blob details\nCONTAINER_NAME = \"nyc-tlc-blob\"\nBLOB_NAME = \"yellow_tripdata_2025-07.parquet\"\n\n# Local destination inside notebook VM\nLOCAL_DIR = Path(\"data_raw\")\nLOCAL_DIR.mkdir(exist_ok=True)\n\nLOCAL_PATH = LOCAL_DIR / \"yellow_tripdata_2025-07.parquet\"\n\nblob_service = BlobServiceClient.from_connection_string(CONNECTION_STRING)\nblob_client = blob_service.get_blob_client(\n    container=CONTAINER_NAME,\n    blob=BLOB_NAME\n)\n\nwith open(LOCAL_PATH, \"wb\") as f:\n    f.write(blob_client.download_blob().readall())\n\nprint(\"Downloaded to:\", LOCAL_PATH)\n\ndf = pd.read_parquet(LOCAL_PATH)\n\ndf.shape\n\ndf.head()\n\n\n\n\n\n\nImportantProduction Best Practice\n\n\n\nIn production, use Managed Identity instead of connection strings. Connection strings should never be committed to code or notebooks.",
     "crumbs": [
       "{{< fa brain >}} ML Foundations",
       "{{< fa download >}} Data Ingestion"
@@ -715,9 +715,9 @@
   {
     "objectID": "vc.html",
     "href": "vc.html",
-    "title": "Version Control",
+    "title": "MLOps Lab: Boeing x WIC x UW",
     "section": "",
-    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "{{< fa code-branch >}} Version Control"
     ]
@@ -825,9 +825,9 @@
   {
     "objectID": "monitoring_maintainance.html",
     "href": "monitoring_maintainance.html",
-    "title": "Monitoring & Maintenance",
+    "title": "MLOps Lab: Boeing x WIC x UW",
     "section": "",
-    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "{{< fa chart-simple >}} Monitoring & Maintainance"
     ]

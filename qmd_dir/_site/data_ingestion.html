@@ -360,29 +360,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
       </ul>
   </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text"><i class="fa-solid fa-cube" aria-label="cube"></i> Terraform Infrastructure</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./terraform_modules.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Module Structure</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./terraform_root.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Root Module</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./vc.html" class="sidebar-item-text sidebar-link">
@@ -699,95 +676,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In production, use Managed Identity instead of connection strings. Connection strings should never be committed to code or notebooks.</p>
 </div>
 </div>
-</section>
-<section id="path-3-ingestion-using-azure-blob-storage-terraform-automated-infrastructure" class="level3">
-<h3 class="anchored" data-anchor-id="path-3-ingestion-using-azure-blob-storage-terraform-automated-infrastructure"><i class="fa-solid fa-code" aria-label="code"></i> Path 3 – Ingestion using Azure Blob Storage (Terraform-Automated Infrastructure)</h3>
-<p>This path demonstrates a production-grade approach where infrastructure is provisioned automatically using <strong>Infrastructure as Code (IaC)</strong>, while data upload remains a manual step.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>When to Use This Path
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Use this approach when: - You need reproducible infrastructure across environments - You want to automate resource provisioning - You’re following DevOps best practices - You need consistent configuration management</p>
-</div>
-</div>
-<section id="infrastructure-setup-automated" class="level4">
-<h4 class="anchored" data-anchor-id="infrastructure-setup-automated">Infrastructure Setup (Automated)</h4>
-<p>The Azure Storage infrastructure is provisioned automatically using <strong>Terraform</strong>.</p>
-<p>During deployment, the following resources are created:</p>
-<ul>
-<li><strong>Azure Storage Account</strong> (<code>taxizonelookup</code>)</li>
-<li><strong>Blob Container</strong> (<code>taxidata</code>)</li>
-<li>Private access configuration for secure data storage</li>
-</ul>
-<p>This ensures a consistent, reproducible environment across deployments.</p>
-</section>
-<section id="data-upload-manual-step" class="level4">
-<h4 class="anchored" data-anchor-id="data-upload-manual-step">Data Upload (Manual Step)</h4>
-<p>While infrastructure is automated, the dataset itself must be uploaded manually.</p>
-<p><strong>Required Format:</strong></p>
-<ul>
-<li>File type: <strong><code>.parquet</code></strong></li>
-<li>Uploaded to: <code>taxizonelookup → taxidata</code> container</li>
-</ul>
-<p><strong>Steps to Upload:</strong></p>
-<ol type="1">
-<li>Go to <strong>Azure Portal</strong></li>
-<li>Open <strong>Storage Accounts</strong></li>
-<li>Select storage account name: <code>taxizonelookup</code></li>
-<li>Navigate to <strong>Containers</strong></li>
-<li>Open container name: <code>taxidata</code></li>
-<li>Click <strong>Upload</strong></li>
-<li>Select your <code>.parquet</code> file</li>
-<li>Confirm upload</li>
-</ol>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Why Manual Upload?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The dataset is approximately <strong>180 MB</strong> in size, which is too large to store in version control. Manual upload:</p>
-<ul>
-<li>Keeps large datasets out of GitHub</li>
-<li>Maintains clean DevOps practices</li>
-<li>Separates infrastructure from data</li>
-<li>Ensures secure handling of production datasets</li>
-</ul>
-</div>
-</div>
-</section>
-<section id="pipeline-flow" class="level4">
-<h4 class="anchored" data-anchor-id="pipeline-flow">Pipeline Flow</h4>
-<pre><code>Terraform → Creates Storage Account + Container
-User → Uploads .parquet file manually
-Azure ML → Reads data via Datastore
-Notebook → Performs EDA/Training</code></pre>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Infrastructure vs Data
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Infrastructure is code (automated). Data is content (manual). This separation is a best practice in production MLOps workflows.</p>
-</div>
-</div>
 
 
-</section>
 </section>
 </section>
 
