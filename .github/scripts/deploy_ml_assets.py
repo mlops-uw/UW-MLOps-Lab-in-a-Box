@@ -8,6 +8,7 @@ from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Environment, Data
 from azure.ai.ml.constants import AssetTypes
 from azure.identity import DefaultAzureCredential
+import datetime
 
 
 def make_asset_version(prefix: str = "v") -> str:
