@@ -49,10 +49,12 @@ def main():
     # 2. Create/Update Environment
     print("\n[2/4] Creating ML Environment...")
     try:
+        # Check for both .yml and .yaml extensions
+        env_file = "ML/environment.yaml" if Path("ML/environment.yaml").exists() else "ML/environment.yml"
         env = Environment(
             name="taxi-ml-env",
             description="Environment for NYC Taxi ML pipeline",
-            conda_file="ML/environment.yml",
+            conda_file=env_file,
             image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04"
         )
         ml_client.environments.create_or_update(env)
@@ -63,11 +65,13 @@ def main():
     # 3. Upload Pipeline Definition
     print("\n[3/3] Uploading Pipeline Definition...")
     try:
+        # Check for both .yml and .yaml extensions
+        pipeline_file = "ML/pipeline.yaml" if Path("ML/pipeline.yaml").exists() else "ML/pipeline.yml"
         pipeline_data = Data(
             name="taxi_ml_pipeline_definition",
             version="latest",
             description="NYC Taxi ML Pipeline YAML definition",
-            path="ML/pipeline.yml",
+            path=pipeline_file,
             type=AssetTypes.URI_FILE
         )
         ml_client.data.create_or_update(pipeline_data)
