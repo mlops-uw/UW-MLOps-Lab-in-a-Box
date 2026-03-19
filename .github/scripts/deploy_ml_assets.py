@@ -63,18 +63,13 @@ def main():
     # 2. Create/Update Environment
     print("\n[2/4] Creating ML Environment...")
     try:
-        # Check for both .yml and .yaml extensions
-        env_file = "ML/environment.yaml" if Path("ML/environment.yaml").exists() else "ML/environment.yml"
+        env_file = "ML/environment.yaml"
         if not Path(env_file).exists():
             print(f"⚠ Environment file not found: {env_file}")
         else:
-            env = Environment(
-                name="taxi-ml-env",
-                version=version,
-                description="Environment for NYC Taxi ML pipeline",
-                conda_file=env_file,
-                image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04"
-            )
+            env = Environment.load(path=env_file)
+            env.name = "taxi-ml-env"
+            env.version = version
             ml_client.environments.create_or_update(env)
             print(f"✓ Environment created: taxi-ml-env (version: {version})")
     except Exception as e:
@@ -87,7 +82,7 @@ def main():
             name="taxi_ml_pipeline_definition",
             version=make_asset_version("pl-"),
             description="NYC Taxi ML Pipeline YAML definition",
-            path="ML/pipeline.yml",
+            path="ML/pipeline.yaml",
             type=AssetTypes.URI_FILE
         )
         ml_client.data.create_or_update(pipeline_data)
