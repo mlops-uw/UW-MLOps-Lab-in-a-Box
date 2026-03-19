@@ -35,9 +35,9 @@ print("Shape:", df.shape)
 
 ---
 
-## {{< fa cogs >}} Feature Selection and Scaling
+## {{< fa cogs >}} Feature Selection and Normalization
 
-We select features that capture trip behavior: where, when, how far, and how much. We sample 100,000 rows for performance and standardize features since K-Means is distance-based.
+We select features that capture trip behavior: where, when, how far, and how much. We sample 100,000 rows for performance and apply normalization to ensure all features contribute equally to the clustering algorithm.
 
 ```python
 from sklearn.cluster import MiniBatchKMeans
@@ -49,22 +49,82 @@ cluster_features = ['PULocationID', 'pickup_hour', 'trip_distance', 'fare_amount
 # Sample for performance
 df_sample = df[cluster_features].sample(n=100000, random_state=42)
 
-# Standardize features
+# Normalize features using StandardScaler (Z-score normalization)
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(df_sample)
 
 print("Sample shape:", df_sample.shape)
 print("Scaled data ready for clustering")
+
+# Verify normalization: mean should be ~0, std should be ~1
+print("\nNormalization verification:")
+print(f"Mean of scaled features: {X_scaled.mean(axis=0).round(4)}")
+print(f"Std of scaled features: {X_scaled.std(axis=0).round(4)}")
 ```
 
 ::: {.callout-tip}
-## Why Standardize?
-K-Means uses Euclidean distance to assign points to clusters. Without scaling, features with large ranges (like `PULocationID: 1–265`) would dominate over features with small ranges (like `pickup_hour: 0–23`). StandardScaler ensures all features contribute equally.
+## Why Normalize?
+K-Means uses Euclidean distance to assign points to clusters. Without normalization, features with large ranges (like `PULocationID: 1–265`) would dominate over features with small ranges (like `pickup_hour: 0–23`). 
+
+**StandardScaler (Z-score normalization)** transforms each feature to have:
+- Mean (μ) = 0
+- Standard deviation (σ) = 1
+
+Formula: `z = (x - μ) / σ`
+
+This ensures all features contribute equally to the distance calculations, preventing bias toward high-magnitude features.
 :::
 
 ::: {.callout-tip}
 ## Why Sample?
 Running K-Means on 11M+ rows is computationally expensive. A random sample of 100,000 rows captures the same patterns while keeping runtime manageable. We use `MiniBatchKMeans` for additional speed.
+:::
+
+---
+
+## {{< fa shield-halved >}} Regularization in Clustering
+
+While regularization is more commonly associated with supervised learning, it plays an important role in unsupervised learning to prevent overfitting and improve cluster quality.
+
+### Regularization Techniques Applied
+
+**1. Sample Size Regularization**
+- We use 100,000 samples instead of the full 11M+ dataset
+- This prevents overfitting to noise in the data
+- Ensures clusters represent genuine patterns, not random variations
+
+**2. Feature Selection**
+- We carefully select 4 meaningful features instead of using all available columns
+- This reduces dimensionality and prevents the "curse of dimensionality"
+- Focuses the algorithm on relevant patterns
+
+**3. MiniBatchKMeans Parameters**
+```python
+kmeans = MiniBatchKMeans(
+    n_clusters=4,
+    random_state=42,      # Ensures reproducibility
+    batch_size=10000,     # Regularizes by processing data in batches
+    max_iter=100,         # Prevents excessive iterations
+    n_init=3              # Number of initializations (default: 3)
+)
+```
+
+**4. Elbow Method for K Selection**
+- Prevents overfitting by choosing the optimal number of clusters
+- Balances model complexity (number of clusters) with performance (inertia)
+- Avoids creating too many clusters that fit noise rather than patterns
+
+::: {.callout-note}
+## Regularization vs Overfitting
+In clustering, overfitting occurs when:
+- Too many clusters are created (high K)
+- Clusters fit noise rather than genuine patterns
+- The model doesn't generalize to new data
+
+Our regularization approach ensures clusters are:
+- Meaningful and interpretable
+- Generalizable to the full dataset
+- Robust to random variations
 :::
 
 ---
@@ -188,6 +248,8 @@ plt.show()
 | Algorithm | MiniBatchKMeans (scikit-learn) |
 | Sample size | 100,000 rows |
 | Features | PULocationID, pickup_hour, trip_distance, fare_amount |
+| Normalization | StandardScaler (Z-score normalization) |
+| Regularization | Sample size control, feature selection, optimal K selection |
 | Optimal K | 4 (Elbow Method) |
 | Key finding | Clear separation between airport/long-distance trips and urban trips |
 
@@ -197,4 +259,6 @@ plt.show()
 - Use `pickup_dayofweek` to differentiate weekday vs weekend clusters
 - Try DBSCAN for density-based clustering that doesn't require specifying K
 - Apply clustering results as a new feature in the supervised model to improve fare prediction
+- Experiment with different normalization techniques (MinMaxScaler, RobustScaler)
+- Use silhouette score as an additional metric for cluster quality
 :::
