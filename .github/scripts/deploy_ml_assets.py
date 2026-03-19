@@ -18,7 +18,7 @@ def make_asset_version(prefix: str = "v") -> str:
     run_id = os.environ.get("GITHUB_RUN_ID")
     if run_id:
         return f"{prefix}{run_id}"
-    return f"{prefix}{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+    return f"{prefix}{datetime.datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
 
 
 def main():
@@ -46,13 +46,13 @@ def main():
     print("="*60)
     
     # Generate version from timestamp
-    version = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    version = datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S")
     
     # 1. Upload Jupyter Notebook (auto-generated from scripts)
     print("\n[1/4] Uploading Jupyter Notebook...")
     notebook_data = Data(
         name="taxi_ml_analysis_notebook",
-        version="latest",
+        version=make_asset_version("nb-"),
         description="NYC Taxi ML Analysis - Auto-generated from Python scripts",
         path="ML/taxi_ml_analysis.ipynb",
         type=AssetTypes.URI_FILE
@@ -85,7 +85,7 @@ def main():
     try:
         pipeline_data = Data(
             name="taxi_ml_pipeline_definition",
-            version="latest",
+            version=make_asset_version("pl-"),
             description="NYC Taxi ML Pipeline YAML definition",
             path="ML/pipeline.yml",
             type=AssetTypes.URI_FILE
