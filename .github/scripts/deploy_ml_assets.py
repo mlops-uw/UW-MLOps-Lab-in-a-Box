@@ -63,15 +63,15 @@ def main():
     # 2. Create/Update Environment
     print("\n[2/4] Creating ML Environment...")
     try:
-        env_file = "ML/environment.yaml"
-        if not Path(env_file).exists():
-            print(f"⚠ Environment file not found: {env_file}")
+        conda_env_file = "ML/environment.yml"
+        if not Path(conda_env_file).exists():
+            print(f"⚠ Conda environment file not found: {conda_env_file}")
         else:
             env = Environment(
                 name="taxi-ml-env",
                 version=version,
                 description="Environment for NYC Taxi ML pipeline",
-                conda_file=env_file,
+                conda_file=conda_env_file,
                 image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04"
             )
             ml_client.environments.create_or_update(env)
