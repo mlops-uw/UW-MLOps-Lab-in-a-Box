@@ -1,14 +1,14 @@
 name: Deploy ML Pipeline to Azure ML
 
 on:
-  push:
-    branches:
-      - main-v2
-      - main
-    paths:
-      - 'ML/**'
-      - 'qmd_dir/supervised.qmd'
-      - 'qmd_dir/unsupervised.qmd'
+  # push:
+  #   branches:
+  #     - main-v2
+  #     - main
+  #   paths:
+  #     - 'ML/**'
+  #     - 'qmd_dir/supervised.qmd'
+  #     - 'qmd_dir/unsupervised.qmd'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
