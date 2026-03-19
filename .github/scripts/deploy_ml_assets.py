@@ -4,11 +4,20 @@ Deploy ML assets (environment, components, pipeline, notebook) to Azure ML works
 """
 import os
 from pathlib import Path
-from datetime import datetime
 from azure.ai.ml import MLClient
 from azure.ai.ml.entities import Environment, Data
 from azure.ai.ml.constants import AssetTypes
 from azure.identity import DefaultAzureCredential
+
+
+def make_asset_version(prefix: str = "v") -> str:
+    gh_sha = os.environ.get("GITHUB_SHA")
+    if gh_sha:
+        return f"{prefix}{gh_sha[:8]}"
+    run_id = os.environ.get("GITHUB_RUN_ID")
+    if run_id:
+        return f"{prefix}{run_id}"
+    return f"{prefix}{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
 
 
 def main():
@@ -40,19 +49,15 @@ def main():
     
     # 1. Upload Jupyter Notebook (auto-generated from scripts)
     print("\n[1/4] Uploading Jupyter Notebook...")
-    try:
-        notebook_data = Data(
-            name="taxi_ml_analysis_notebook",
-            version=version,
-            description="NYC Taxi ML Analysis - Auto-generated from Python scripts",
-            path="ML/taxi_ml_analysis.ipynb",
-            type=AssetTypes.URI_FILE
-        )
-        ml_client.data.create_or_update(notebook_data)
-        print(f"✓ Notebook uploaded: taxi_ml_analysis_notebook (version: {version})")
-    except Exception as e:
-        print(f"⚠ Notebook upload failed: {e}")
-        # Continue with other deployments
+    notebook_data = Data(
+        name="taxi_ml_analysis_notebook",
+        version="latest",
+        description="NYC Taxi ML Analysis - Auto-generated from Python scripts",
+        path="ML/taxi_ml_analysis.ipynb",
+        type=AssetTypes.URI_FILE
+    )
+    ml_client.data.create_or_update(notebook_data)
+    print("✓ Notebook uploaded: taxi_ml_analysis_notebook")
     
     # 2. Create/Update Environment
     print("\n[2/4] Creating ML Environment...")
@@ -77,38 +82,15 @@ def main():
     # 3. Upload Pipeline Definition
     print("\n[3/4] Uploading Pipeline Definition...")
     try:
-        # Check for both .yml and .yaml extensions
-        pipeline_file = "ML/pipeline.yaml" if Path("ML/pipeline.yaml").exists() else "ML/pipeline.yml"
-        if not Path(pipeline_file).exists():
-            print(f"⚠ Pipeline file not found: {pipeline_file}")
-        else:
-            pipeline_data = Data(
-                name="taxi_ml_pipeline_definition",
-                version=version,
-                description="NYC Taxi ML Pipeline YAML definition",
-                path=pipeline_file,
-                type=AssetTypes.URI_FILE
-            )
-            ml_client.data.create_or_update(pipeline_data)
-            print(f"✓ Pipeline definition uploaded (version: {version})")
-    except Exception as e:
-        print(f"⚠ Pipeline upload failed: {e}")
-    
-    # 4. Upload Python Scripts
-    print("\n[4/4] Uploading Python Scripts...")
-    try:
-        for script_name in ["supervised_learning.py", "unsupervised_learning.py"]:
-            script_path = f"ML/{script_name}"
-            if Path(script_path).exists():
-                script_data = Data(
-                    name=script_name.replace(".py", "_code"),
-                    version=version,
-                    description=f"{script_name} for ML pipeline",
-                    path=script_path,
-                    type=AssetTypes.URI_FILE
-                )
-                ml_client.data.create_or_update(script_data)
-                print(f"✓ {script_name} uploaded")
+        pipeline_data = Data(
+            name="taxi_ml_pipeline_definition",
+            version="latest",
+            description="NYC Taxi ML Pipeline YAML definition",
+            path="ML/pipeline.yml",
+            type=AssetTypes.URI_FILE
+        )
+        ml_client.data.create_or_update(pipeline_data)
+        print("✓ Pipeline definition uploaded")
     except Exception as e:
         print(f"⚠ Script upload failed: {e}")
     
