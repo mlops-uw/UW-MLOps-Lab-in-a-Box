@@ -22,3 +22,29 @@ jobs:
             --container-name taxidata \
             --name yellow_tripdata_2025-09.parquet \
             --auth-mode login
+            
+      - name: Check multiple datasets exist
+        run: |
+          FILES=(
+            "yellow_tripdata_2025-09.parquet"
+            "yellow_tripdata_2025-10.parquet"
+            "yellow_tripdata_2025-11.parquet"
+          )
+
+          for file in "${FILES[@]}"; do
+            echo "Checking $file..."
+            exists=$(az storage blob exists \
+              --account-name taxizonelookup \
+              --container-name taxidata \
+              --name "$file" \
+              --auth-mode login \
+              --query exists \
+              -o tsv)
+
+            if [ "$exists" != "true" ]; then
+              echo "❌ $file NOT found"
+              exit 1
+            else
+              echo "✅ $file exists"
+            fi
+          done
