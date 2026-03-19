@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+
+# Outputs
+outputs/
+*.png
+*.json
+
+# Jupyter (if someone creates notebooks locally)
+.ipynb_checkpoints/
+*.ipynb
+
+# Azure ML
+.azureml/
