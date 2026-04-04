@@ -53,4 +53,4 @@ jobs:
       parameters-file: ML/pipeline.yml
       job-name: test
     secrets:
-      creds: ${{ secrets.AZURE_CREDENTIALS }}
+      creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
