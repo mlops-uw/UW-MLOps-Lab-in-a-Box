@@ -16,10 +16,8 @@ jobs:
       resource_group: ${{ needs.get-config.outputs.resource_group }}
       workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
       environment_file: ML/environment.yaml
-      client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+    secrets:
+      creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
 
   register-dataset:
     needs: get-config
@@ -29,10 +27,8 @@ jobs:
       workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
       name: taxi-data
       data_file: ML/data.yml
-      client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+    secrets:
+      creds: ${{ secrets.AZURE_CREDENTIALS }}
 
   create-compute:
     needs: [get-config, register-environment, register-dataset]
@@ -45,10 +41,8 @@ jobs:
       cluster_tier: low_priority
       resource_group: ${{ needs.get-config.outputs.resource_group }}
       workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
-      client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+    secrets:
+      creds: ${{ secrets.AZURE_CREDENTIALS }}
 
   run-pipeline:
     needs: [get-config, register-environment, create-compute, register-dataset]
@@ -58,7 +52,5 @@ jobs:
       workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
       parameters-file: ML/pipeline.yml
       job-name: test
-      client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+    secrets:
+      creds: ${{ secrets.AZURE_CREDENTIALS }}
