@@ -1,0 +1,6 @@
+$schema: https://azuremlschemas.azureedge.net/latest/data.schema.json
+
+type: uri_file
+name: taxi-data
+description: taxi dataset
+path: azureml://datastores/mlops_datastore/paths/yellow_tripdata_2025-09.parquet

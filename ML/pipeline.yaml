@@ -4,12 +4,12 @@ display_name: NYC_Taxi_ML_Pipeline
 description: ML pipeline for NYC taxi analysis
 
 settings:
-  default_compute: azureml:capstone
+  default_compute: azureml:cpu-cluster
 
 inputs:
   data_path:
     type: uri_file
-    path: https://taxizonelookup.blob.core.windows.net/taxidata/yellow_tripdata_2025-09.parquet
+    path: azureml://datastores/mlops_datastore/paths/yellow_tripdata_cleaned.parquet
 
 jobs:
   supervised_learning:
