@@ -1,0 +1,36 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: NYC_Taxi_ML_Pipeline
+description: ML pipeline for NYC taxi analysis
+
+settings:
+  default_compute: azureml:example
+
+inputs:
+  data_path:
+    type: uri_file
+    path: azureml://datastores/mlops_datastore/paths/yellow_tripdata_cleaned.parquet
+
+jobs:
+  supervised_learning:
+    type: command
+    command: python supervised_learning.py --data-path ${{inputs.data_path}} --output-dir ${{outputs.output_dir}}
+    inputs:
+      data_path: ${{parent.inputs.data_path}}
+    outputs:
+      output_dir:
+        type: uri_folder
+    environment: azureml:taxi-ml-env:1
+    code: ./
+    
+  unsupervised_learning:
+    type: command
+    command: python unsupervised_learning.py --data-path ${{inputs.data_path}} --output-dir ${{outputs.output_dir}}
+    inputs:
+      data_path: ${{parent.inputs.data_path}}
+    outputs:
+      output_dir:
+        type: uri_folder
+    environment: azureml:taxi-ml-env:1
+    code: ./
+

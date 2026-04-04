@@ -1,0 +1,254 @@
+---
+title: "Terraform Module Structure"
+subtitle: "Infrastructure as Code organization"
+---
+
+## {{< fa bullseye >}} Objective
+
+To maintain a clear and scalable Infrastructure as Code setup, the Terraform configuration is organized into modules. This approach separates infrastructure components into logical units, making the code easier to maintain and reuse.
+
+Terraform uses two types of modules:
+
+- **Root Module** – the entry point of the Terraform configuration
+- **Child Modules** – reusable components that create specific infrastructure resources
+
+The child modules are machine learning module, storage, key vault and network modules which provisions all resources required for the Azure Machine Learning environment.
+
+---
+
+## {{< fa file-code >}} Purpose of Each Terraform File
+
+| File Name | Root Module Purpose | Child Module Purpose |
+|-----------|---------------------|----------------------|
+| `main.tf` | Acts as the main orchestration file. It calls the child modules such as network, storage, and machine_learning, and passes the required variables to each module. | Defines the actual Azure resources created by that module. For example: Network module creates VNet and Subnet, Storage module creates Storage Account and Container, Machine Learning module creates ML Workspace, Datastore, and Compute Instance. |
+| `variables.tf` | Declares input variables that will be used by the root module and passed to child modules. These variables allow infrastructure configuration to remain flexible and reusable. | Declares variables required specifically by that module to create resources, such as subnet name, storage account name, workspace name, or compute instance configuration. |
+| `outputs.tf` | Displays important outputs after Terraform deployment and can expose outputs returned from child modules, such as workspace ID or storage account name. | Returns key resource attributes (such as subnet ID or storage account ID) so they can be referenced by the root module or other modules. |
+| `terraform.tfvars` | Provides actual values for variables defined in variables.tf. Terraform automatically reads this file when running terraform plan or terraform apply, allowing configuration values to be separated from infrastructure code. | Typically not used inside child modules. Child modules receive their variable values from the root module when the module is called. |
+
+---
+
+## {{< fa brain >}} Machine Learning Module
+
+The `machine_learning` module is responsible for creating all the core resources required to run machine learning workloads in Azure. This module provisions the Azure Machine Learning workspace, connects it to storage, and creates a compute environment for experimentation.
+
+The key resources created inside this module are:
+
+| Resource | Purpose |
+|----------|---------|
+| Azure Machine Learning Workspace | Acts as the central environment for managing machine learning experiments, datasets, models, and pipelines. |
+| Machine Learning Datastore (Blob Storage) | Connects the ML workspace to a storage container where datasets, experiment outputs, and model artifacts are stored. |
+| Machine Learning Compute Instance | Provides a managed compute environment where users can run Jupyter notebooks, develop models, and execute ML experiments. |
+
+### Azure Machine Learning Workspace
+
+The Azure Machine Learning Workspace serves as the central hub for all ML operations.
+
+It integrates with the following supporting services:
+
+| Dependency | Purpose |
+|------------|---------|
+| Storage Account | Stores datasets, models, and experiment artifacts. |
+| Key Vault | Securely stores secrets such as connection strings and credentials. |
+| Application Insights | Collects logs and monitoring data from ML experiments. |
+
+These dependencies ensure that the workspace has access to secure storage, secret management, and monitoring capabilities.
+
+### Machine Learning Datastore (Blob Storage)
+
+The Machine Learning Datastore connects the ML workspace to an Azure Blob Storage container.
+
+**Purpose:**
+
+- Enables the workspace to access datasets stored in blob storage.
+- Allows ML experiments to read input data and store model outputs or artifacts.
+
+### Machine Learning Compute Instance
+
+The Compute Instance provides an interactive development environment for data scientists.
+
+**Purpose:**
+
+- Runs Jupyter Notebook or Jupyter Lab environments.
+- Allows users to train models, explore data, and run ML experiments within the ML workspace.
+
+### User Assignment
+
+```hcl
+assign_to_user {
+  object_id = var.object_id
+  tenant_id = var.tenant_id
+}
+```
+
+| Field | Explanation |
+|-------|-------------|
+| `object_id` | The Azure Active Directory object ID of the user. This ensures that the compute instance is assigned to that specific user who will access it through Jupyter Notebook or Jupyter Lab. |
+| `tenant_id` | The Azure Active Directory tenant ID representing the organization. It identifies the directory where the user account exists. |
+
+Assigning the compute instance to a specific user ensures secure access and proper user ownership of the development environment.
+
+---
+
+## {{< fa database >}} Storage Module
+
+The `storage` module is responsible for creating the storage resources required for the machine learning environment. These resources store datasets, experiment outputs, and model artifacts used during the MLOps workflow.
+
+The main resources created inside this module are:
+
+| Resource | Purpose |
+|----------|---------|
+| Azure Storage Account | Provides scalable cloud storage for datasets, ML artifacts, and intermediate results used during experiments. |
+| Storage Container (Blob Container) | Stores the dataset files that will be accessed by the Azure Machine Learning workspace. |
+
+### Azure Storage Account
+
+The Azure Storage Account acts as the primary data storage service for the ML environment.
+
+**Purpose:**
+
+- Stores machine learning datasets and experiment artifacts.
+- Provides secure and scalable blob storage used by the ML workspace.
+
+This storage account is later connected to the Azure Machine Learning workspace datastore so that the workspace can access the stored data.
+
+### Storage Container
+
+A Blob Storage container is created inside the storage account to store the dataset files.
+
+**Purpose:**
+
+- Organizes dataset files used for machine learning experiments.
+- Serves as the data source for the ML datastore.
+
+The container access level is set to: **Private**
+
+This ensures that only authorized users or services can access the data, improving security and preventing public exposure of datasets.
+
+### Dataset Files
+
+The dataset files stored in the container are Parquet files (`.parquet`).
+
+**Characteristics of these files:**
+
+- Each file is approximately 89 MB in size
+- Because these files are relatively large, they cannot be directly uploaded to the GitHub repository, which has size limitations.
+
+### Manual Data Upload
+
+After Terraform creates the storage resources, the dataset files must be uploaded manually through the Azure portal or storage console.
+
+**Steps:**
+
+1. Navigate to the Azure Storage Account.
+2. Open the Blob Containers section.
+3. Select the created container.
+4. Upload the `.parquet` files.
+
+Once uploaded, these files can be accessed by the Machine Learning datastore, enabling the ML workspace to read the datasets during training and experimentation.
+
+---
+
+## {{< fa network-wired >}} Network Module
+
+The `network` module is responsible for creating the networking infrastructure required for the machine learning environment. These resources ensure that the compute resources operate within a controlled and secure network.
+
+The main resources created inside this module are:
+
+| Resource | Purpose |
+|----------|---------|
+| Virtual Network (VNet) | Provides a private network environment where Azure resources can communicate securely. |
+| Subnet | A smaller network segment inside the Virtual Network where specific resources are deployed. |
+
+### Virtual Network (VNet)
+
+The Virtual Network acts as the primary networking layer for the infrastructure.
+
+**Purpose:**
+
+- Provides a secure and isolated network environment.
+- Allows Azure resources to communicate with each other within the same private network.
+
+The VNet helps ensure that compute resources are deployed in a controlled network environment rather than being directly exposed to the public internet.
+
+### Subnet
+
+A Subnet is a subdivision of the Virtual Network that allows resources to be grouped and managed more effectively.
+
+**Purpose:**
+
+- Organizes resources within the Virtual Network.
+- Provides a dedicated network segment for specific services.
+
+In this lab, the subnet is used specifically for the Azure Machine Learning Compute Instance.
+
+### Integration with Machine Learning Compute
+
+The Machine Learning Compute Instance is deployed inside the subnet created in this module.
+
+**Purpose:**
+
+- Ensures that the compute instance runs within a private network.
+- Allows controlled communication between the compute instance and other Azure resources such as storage and the ML workspace.
+
+By placing the compute instance inside a subnet, the infrastructure follows best practices for network isolation and secure resource communication.
+
+---
+
+## {{< fa key >}} Key Vault Module
+
+The `key_vault` module is responsible for creating the Azure Key Vault and configuring secure access to secrets used by the infrastructure. Key Vault is used to store sensitive information such as connection strings and credentials.
+
+The main resources created inside this module are:
+
+| Resource | Purpose |
+|----------|---------|
+| Azure Key Vault | Securely stores secrets, keys, and credentials required by the infrastructure. |
+| Key Vault Access Policies | Defines which identities are allowed to access secrets inside the Key Vault. |
+| Key Vault Secret | Stores the Storage Account connection string securely inside the vault. |
+
+### Azure Key Vault
+
+The Azure Key Vault acts as the secure storage service for sensitive configuration values used by the infrastructure.
+
+**Purpose:**
+
+- Stores secrets securely instead of hardcoding them in Terraform or source code.
+- Provides controlled access to secrets through access policies.
+
+This ensures that sensitive information such as connection strings remains protected.
+
+### Key Vault Access Policies
+
+Access policies are created to allow authorized identities to retrieve and manage secrets inside the Key Vault.
+
+The following identities are granted access:
+
+| Identity | Purpose |
+|----------|---------|
+| Current Azure User | Allows the user deploying the infrastructure to access and manage secrets. |
+| Service Principal (GitHub Actions) | Allows the CI/CD pipeline to retrieve secrets during automated deployments. |
+
+The permissions granted include:
+
+- **Get** – Retrieve secret values
+- **List** – View available secrets
+- **Set** – Create or update secrets
+
+These permissions allow both the user and the CI/CD pipeline to securely access secrets required by the infrastructure.
+
+### Key Vault Secret
+
+A secret is created inside the Key Vault to store the primary connection string of the Azure Storage Account.
+
+**Purpose:**
+
+- Allows secure access to the storage account without exposing credentials in the Terraform code or repository.
+- Enables services such as the ML workspace or applications to retrieve the connection string securely.
+
+The creation of the secret depends on the access policy:
+
+```hcl
+azurerm_key_vault_access_policy.pipeline_sp_policy
+```
+
+This dependency ensures that the Service Principal has the required permissions before Terraform attempts to create the secret inside the Key Vault.

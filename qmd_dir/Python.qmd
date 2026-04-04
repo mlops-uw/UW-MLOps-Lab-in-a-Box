@@ -1,0 +1,44 @@
+---
+title: "Python learning resources"
+---
+
+## {{< fa book-open >}} How to use these resources?
+
+- Start with **Python documentation** for concepts and correct terminology
+- Use **GeeksforGeeks** and **TutorialsPoint** for examples and quick practice
+- Focus on writing small scripts and understanding errors
+
+::: {.callout-tip}
+## Learning Strategy
+The best way to learn Python is by doing. Write code, make mistakes, debug, and iterate. These resources provide the foundation—your practice builds the skill.
+:::
+
+**Recommended topics:**
+
+- Variables and data types
+- Input and output
+- Loops and conditionals
+- Functions
+- Lists, tuples, sets, dictionaries
+- File handling
+- Pandas
+- NumPy
+- Seaborn
+- Scikit-learn
+
+## {{< fa graduation-cap >}} Learning Resources
+
+**Official Python documentation:** https://docs.python.org/3/tutorial/index.html
+
+**Introduction to Programming (e-book):** https://infx511.github.io/
+
+**GeeksforGeeks:** https://www.geeksforgeeks.org/python-programming-language/
+
+**TutorialsPoint:** https://www.tutorialspoint.com/python/index.htm
+
+**Practice:** Leetcode, Neetcode
+
+::: {.callout-note}
+## For MLOps Focus
+Pay special attention to Pandas, NumPy, and Scikit-learn—these are essential for data manipulation and machine learning workflows.
+:::
