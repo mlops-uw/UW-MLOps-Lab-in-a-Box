@@ -11,46 +11,93 @@ jobs:
 
   register-environment:
     needs: get-config
-    uses: Azure/mlops-templates/.github/workflows/register-environment.yml@main
-    with:
-      resource_group: ${{ needs.get-config.outputs.resource_group }}
-      workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
-      environment_file: ML/environment.yaml
-    secrets:
-      creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+
+      - name: Install Azure ML extension
+        run: |
+          az extension add -n ml -y
+
+      - name: Register environment
+        run: |
+          az ml environment create \
+            --file ML/environment.yaml \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
 
   register-dataset:
     needs: get-config
-    uses: Azure/mlops-templates/.github/workflows/register-dataset.yml@main
-    with:
-      resource_group: ${{ needs.get-config.outputs.resource_group }}
-      workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
-      name: taxi-data
-      data_file: ML/data.yml
-    secrets:
-      creds: ${{ secrets.AZURE_CREDENTIALS }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+
+      - name: Install Azure ML extension
+        run: |
+          az extension add -n ml -y
+
+      - name: Register dataset
+        run: |
+          az ml data create \
+            --file ML/data.yml \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
 
   create-compute:
     needs: [get-config, register-environment, register-dataset]
-    uses: Azure/mlops-templates/.github/workflows/create-compute.yml@main
-    with:
-      cluster_name: cpu-cluster
-      size: Standard_DS3_v2
-      min_instances: 0
-      max_instances: 4
-      cluster_tier: low_priority
-      resource_group: ${{ needs.get-config.outputs.resource_group }}
-      workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
-    secrets:
-      creds: ${{ secrets.AZURE_CREDENTIALS }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+
+      - name: Install Azure ML extension
+        run: |
+          az extension add -n ml -y
+
+      - name: Create compute cluster
+        run: |
+          az ml compute create \
+            --name cpu-cluster \
+            --type amlcompute \
+            --size Standard_DS3_v2 \
+            --min-instances 0 \
+            --max-instances 4 \
+            --tier low_priority \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
 
   run-pipeline:
     needs: [get-config, register-environment, create-compute, register-dataset]
-    uses: Azure/mlops-templates/.github/workflows/run-pipeline.yml@main
-    with:
-      resource_group: ${{ needs.get-config.outputs.resource_group }}
-      workspace_name: ${{ needs.get-config.outputs.aml_workspace }}
-      parameters-file: ML/pipeline.yml
-      job-name: test
-    secrets:
-      creds: ${{ secrets.AZURE_CREDENTIALS }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+
+      - name: Install Azure ML extension
+        run: |
+          az extension add -n ml -y
+
+      - name: Run training pipeline
+        run: |
+          az ml job create \
+            --file ML/pipeline.yml \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
