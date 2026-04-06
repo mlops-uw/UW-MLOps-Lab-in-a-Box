@@ -98,6 +98,6 @@ jobs:
       - name: Run training pipeline
         run: |
           az ml job create \
-            --file ML/pipeline.yml \
+            --file ML/pipeline.yaml \
             --resource-group "${{ needs.get-config.outputs.resource_group }}" \
             --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
