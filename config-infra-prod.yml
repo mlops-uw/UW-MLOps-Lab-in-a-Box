@@ -19,7 +19,7 @@ variables:
 
   # For pipeline reference
   resource_group: "mlops"
-  aml_workspace: "finalworkspacemlopscapstone9"
+  aml_workspace: "finalworkspacemlopscapstone10"
   application_insights: "mlops-insights"
   key_vault: "finalmlopscaptonevault9"
   # container_registry: cr$(namespace)$(postfix)$(environment)
