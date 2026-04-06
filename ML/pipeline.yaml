@@ -4,7 +4,7 @@ display_name: NYC_Taxi_ML_Pipeline
 description: ML pipeline for NYC taxi analysis
 
 settings:
-  default_compute: azureml:cpu-cluster
+  default_compute: azureml:capstone
 
 inputs:
   data_path:
