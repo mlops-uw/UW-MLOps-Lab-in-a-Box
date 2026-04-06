@@ -26,17 +26,17 @@ resource "azurerm_machine_learning_datastore_blobstorage" "blob" {
  account_key          = var.account_key
 }
 
-# resource "azurerm_machine_learning_compute_instance" "example" {
-#   name                          = var.ml_instance_name
-#   machine_learning_workspace_id = azurerm_machine_learning_workspace.mlworkspace.id
-#   virtual_machine_size          = var.machine_size
-#   authorization_type            = var.authorization_type
+resource "azurerm_machine_learning_compute_instance" "example" {
+  name                          = var.ml_instance_name
+  machine_learning_workspace_id = azurerm_machine_learning_workspace.mlworkspace.id
+  virtual_machine_size          = var.machine_size
+  authorization_type            = var.authorization_type
 
-#   assign_to_user{
-#     object_id = var.object_id
-#     tenant_id = var.tenant_id
-#   }
-#   subnet_resource_id = var.subnet_resource_id
-#   description        = var.description
-#   tags = var.tags
-# }
+  assign_to_user{
+    object_id = var.object_id
+    tenant_id = var.tenant_id
+  }
+  subnet_resource_id = var.subnet_resource_id
+  description        = var.description
+  tags = var.tags
+}
