@@ -20,10 +20,10 @@ variable sku_name{
 }
 
 
-variable object_id{
-    type = string
-    description = "User's AAD Object Id"
-}
+# variable object_id{
+#     type = string
+#     description = "User's AAD Object Id"
+# }
   
 variable object_id_sp{
     type = string

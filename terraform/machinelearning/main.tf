@@ -33,7 +33,7 @@ resource "azurerm_machine_learning_compute_instance" "example" {
   authorization_type            = var.authorization_type
 
   assign_to_user{
-    object_id = var.object_id
+    object_id = var.object_id_sp
     tenant_id = var.tenant_id
   }
   subnet_resource_id = var.subnet_resource_id

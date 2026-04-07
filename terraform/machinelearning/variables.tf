@@ -58,9 +58,9 @@ variable authorization_type{
     description = "The Compute Instance Authorization type"
 }
 
-variable object_id{
+variable object_id_sp{
     type = string
-    description = "User's AAD Object Id"
+    description = "Service Principal's Object Id"
 }
   
 variable tenant_id{
