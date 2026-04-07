@@ -17,8 +17,23 @@ sns.set_style("whitegrid")
 def load_data(data_path: str) -> pd.DataFrame:
     """Load cleaned taxi data"""
     print(f"Loading data from {data_path}")
-    df = pd.read_parquet(data_path)
-    print(f"Shape: {df.shape}")
+    
+    # Get all parquet files in the folder
+    parquet_files = glob.glob(os.path.join(data_path, "*.parquet"))
+    
+    if not parquet_files:
+        raise ValueError(f"No parquet files found in {data_path}")
+    
+    print(f"Found {len(parquet_files)} parquet files")
+    
+    # Read and combine all parquet files
+    df = pd.concat(
+        (pd.read_parquet(file) for file in parquet_files),
+        ignore_index=True
+    )
+    
+    print(f"Final shape: {df.shape}")
+    
     return df
 
 

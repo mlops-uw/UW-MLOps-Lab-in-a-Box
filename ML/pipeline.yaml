@@ -9,7 +9,7 @@ settings:
 inputs:
   data_path:
     type: uri_file
-    path: azureml://datastores/mlops_datastore/paths/yellow_tripdata_cleaned.parquet
+    path: azureml://datastores/mlops_datastore/paths/taxidata/
 
 jobs:
   supervised_learning:
