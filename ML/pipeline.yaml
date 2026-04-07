@@ -8,8 +8,8 @@ settings:
 
 inputs:
   data_path:
-    type: uri_file
-    path: azureml://datastores/mlops_datastore/paths/taxidata/
+    type: uri_folder
+    path: azureml:taxi-data@latest
 
 jobs:
   supervised_learning:
