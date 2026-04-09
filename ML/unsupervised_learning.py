@@ -1,203 +1,115 @@
-"""
-Unsupervised Learning - K-Means Clustering for NYC Taxi Trip Patterns
-"""
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.cluster import MiniBatchKMeans
-from sklearn.preprocessing import StandardScaler
 import argparse
 import json
 from pathlib import Path
 import glob
 import os
 
-sns.set_style("whitegrid")
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score
 
 
 def load_data(data_path: str) -> pd.DataFrame:
-    """Load cleaned taxi data"""
-    print(f"Loading data from {data_path}")
-    
-    # Get all parquet files in the folder
-    parquet_files = glob.glob(os.path.join(data_path, "*.parquet"))
-    
+    print(f"Loading preprocessed data from {data_path}")
+
+    if os.path.isdir(data_path):
+        parquet_files = glob.glob(os.path.join(data_path, "*.parquet"))
+    else:
+        parquet_files = [data_path] if data_path.endswith(".parquet") else []
+
     if not parquet_files:
         raise ValueError(f"No parquet files found in {data_path}")
-    
-    print(f"Found {len(parquet_files)} parquet files")
-    
-    # Read and combine all parquet files
+
     df = pd.concat(
         (pd.read_parquet(file) for file in parquet_files),
         ignore_index=True
     )
-    
-    print(f"Final shape: {df.shape}")
-    
+
+    print(f"Loaded data shape: {df.shape}")
+    print("Columns:", df.columns.tolist())
     return df
 
 
-def prepare_features(df: pd.DataFrame, sample_size: int = 100000, random_state: int = 42):
-    """Prepare features for clustering"""
-    cluster_features = ['PULocationID', 'pickup_hour', 'trip_distance', 'fare_amount']
-    
-    # Sample for performance
-    df_sample = df[cluster_features].sample(n=sample_size, random_state=random_state)
-    
-    # Normalize features
+def prepare_features(df: pd.DataFrame):
+    features = ['trip_distance', 'trip_duration_min', 'pickup_hour', 'passenger_count', 'fare_amount']
+
+    missing = [col for col in features if col not in df.columns]
+    if missing:
+        raise ValueError(f"Missing required columns in preprocessed dataset: {missing}")
+
+    X = df[features]
+
     scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(df_sample)
-    
-    print(f"Sample shape: {df_sample.shape}")
-    print("Scaled data ready for clustering")
-    print(f"\nMean of scaled features: {X_scaled.mean(axis=0).round(4)}")
-    print(f"Std of scaled features: {X_scaled.std(axis=0).round(4)}")
-    
-    return df_sample, X_scaled, scaler, cluster_features
+    X_scaled = scaler.fit_transform(X)
+
+    return X, X_scaled, features
 
 
-def elbow_method(X_scaled, k_range=range(2, 11), batch_size: int = 10000):
-    """Find optimal K using elbow method"""
-    print("\n=== Running Elbow Method ===")
-    inertias = []
-    
-    for k in k_range:
-        kmeans = MiniBatchKMeans(n_clusters=k, random_state=42, batch_size=batch_size)
-        kmeans.fit(X_scaled)
-        inertias.append(kmeans.inertia_)
-        print(f"K={k}, Inertia={kmeans.inertia_:.0f}")
-    
-    return list(k_range), inertias
+def train_kmeans(X_scaled, n_clusters: int = 5):
+    model = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+    labels = model.fit_predict(X_scaled)
+    return model, labels
 
 
-def train_kmeans(X_scaled, n_clusters: int = 4, batch_size: int = 10000):
-    """Train K-Means model"""
-    print(f"\n=== Training K-Means (K={n_clusters}) ===")
-    kmeans = MiniBatchKMeans(n_clusters=n_clusters, random_state=42, batch_size=batch_size)
-    labels = kmeans.fit_predict(X_scaled)
-    return kmeans, labels
+def evaluate_clustering(X_scaled, labels):
+    score = silhouette_score(X_scaled, labels)
+    print(f"Silhouette Score: {score:.4f}")
+    return score
 
 
-def analyze_clusters(df_sample, labels, cluster_features):
-    """Analyze cluster characteristics"""
-    df_sample = df_sample.copy()
-    df_sample['cluster'] = labels
-    
-    print("\n=== Cluster Summary ===")
-    cluster_summary = df_sample.groupby('cluster')[cluster_features].mean().round(2)
-    print(cluster_summary)
-    
-    print("\n=== Cluster Sizes ===")
-    cluster_sizes = df_sample['cluster'].value_counts().sort_index()
-    print(cluster_sizes)
-    
-    return df_sample, cluster_summary, cluster_sizes
-
-
-def save_results(k_range, inertias, cluster_summary, cluster_sizes, output_dir: str):
-    """Save clustering results"""
+def save_results(metrics: dict, output_dir: str):
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
-    
-    results = {
-        'elbow_method': {
-            'k_values': k_range,
-            'inertias': inertias
-        },
-        'cluster_summary': cluster_summary.to_dict(),
-        'cluster_sizes': cluster_sizes.to_dict()
-    }
-    
-    with open(output_path / 'unsupervised_metrics.json', 'w') as f:
-        json.dump(results, f, indent=2)
-    
-    print(f"\n✓ Results saved to {output_path / 'unsupervised_metrics.json'}")
+
+    with open(output_path / "unsupervised_metrics.json", "w") as f:
+        json.dump(metrics, f, indent=2)
+
+    print(f"Saved metrics to {output_path / 'unsupervised_metrics.json'}")
 
 
-def plot_results(df_sample, k_range, inertias, output_dir: str):
-    """Create and save visualizations"""
+def plot_clusters(df_features, labels, output_dir: str):
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
-    
-    # Elbow plot
-    fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(k_range, inertias, marker='o', color='steelblue')
-    ax.set_title('Elbow Method - Optimal Number of Clusters')
-    ax.set_xlabel('Number of Clusters (K)')
-    ax.set_ylabel('Inertia')
+
+    plt.figure(figsize=(8, 6))
+    plt.scatter(df_features['trip_distance'], df_features['fare_amount'], c=labels, s=5, alpha=0.4)
+    plt.xlabel("Trip Distance")
+    plt.ylabel("Fare Amount")
+    plt.title("KMeans Clusters: Trip Distance vs Fare Amount")
     plt.tight_layout()
-    plt.savefig(output_path / 'elbow_plot.png', dpi=150)
-    print(f"✓ Elbow plot saved to {output_path / 'elbow_plot.png'}")
+    plt.savefig(output_path / "unsupervised_clusters.png", dpi=150)
     plt.close()
-    
-    # Cluster visualization
-    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
-    colors = ['#2196F3', '#FF9800', '#4CAF50', '#E91E63']
-    
-    # Scatter: pickup hour vs fare
-    for c in range(4):
-        mask = df_sample['cluster'] == c
-        axes[0].scatter(df_sample.loc[mask, 'pickup_hour'],
-                        df_sample.loc[mask, 'fare_amount'],
-                        alpha=0.3, s=5, c=colors[c], label=f'Cluster {c}')
-    axes[0].set_xlabel('Pickup Hour')
-    axes[0].set_ylabel('Fare Amount ($)')
-    axes[0].set_title('Clusters: Pickup Hour vs Fare')
-    axes[0].legend()
-    
-    # Bar chart: average fare by cluster
-    cluster_stats = df_sample.groupby('cluster')['fare_amount'].mean()
-    cluster_stats.plot(kind='bar', ax=axes[1], color=colors)
-    axes[1].set_title('Average Fare by Cluster')
-    axes[1].set_xlabel('Cluster')
-    axes[1].set_ylabel('Average Fare ($)')
-    axes[1].set_xticklabels([f'C{i}' for i in range(4)], rotation=0)
-    
-    plt.tight_layout()
-    plt.savefig(output_path / 'cluster_visualization.png', dpi=150)
-    print(f"✓ Cluster plot saved to {output_path / 'cluster_visualization.png'}")
-    plt.close()
+
+    print(f"Saved plot to {output_path / 'unsupervised_clusters.png'}")
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Train unsupervised learning model')
-    parser.add_argument('--data-path', type=str, default='data_cleaned/yellow_tripdata_cleaned.parquet',
-                        help='Path to cleaned data')
-    parser.add_argument('--output-dir', type=str, default='outputs',
-                        help='Output directory for results')
-    parser.add_argument('--sample-size', type=int, default=100000,
-                        help='Sample size for clustering')
-    parser.add_argument('--n-clusters', type=int, default=4,
-                        help='Number of clusters')
-    
+    parser = argparse.ArgumentParser(description="Run unsupervised learning on preprocessed taxi data")
+    parser.add_argument("--data-path", type=str, required=True, help="Path to preprocessed data")
+    parser.add_argument("--output-dir", type=str, default="outputs", help="Directory for results")
+    parser.add_argument("--n-clusters", type=int, default=5, help="Number of clusters")
+
     args = parser.parse_args()
-    
-    # Load and prepare data
+
     df = load_data(args.data_path)
-    df_sample, X_scaled, scaler, cluster_features = prepare_features(
-        df, sample_size=args.sample_size
-    )
-    
-    # Elbow method
-    k_range, inertias = elbow_method(X_scaled)
-    
-    # Train K-Means
-    kmeans, labels = train_kmeans(X_scaled, n_clusters=args.n_clusters)
-    
-    # Analyze clusters
-    df_sample, cluster_summary, cluster_sizes = analyze_clusters(
-        df_sample, labels, cluster_features
-    )
-    
-    # Save results
-    save_results(k_range, inertias, cluster_summary, cluster_sizes, args.output_dir)
-    
-    # Plot results
-    plot_results(df_sample, k_range, inertias, args.output_dir)
-    
-    print("\n✓ Unsupervised learning pipeline completed successfully")
+    df_features, X_scaled, features = prepare_features(df)
+
+    model, labels = train_kmeans(X_scaled, args.n_clusters)
+    silhouette = evaluate_clustering(X_scaled, labels)
+
+    metrics = {
+        "model": "KMeans",
+        "n_clusters": args.n_clusters,
+        "silhouette_score": silhouette,
+        "features_used": features
+    }
+
+    save_results(metrics, args.output_dir)
+    plot_clusters(df_features, labels, args.output_dir)
+
+    print("Unsupervised learning completed successfully")
 
 
 if __name__ == "__main__":
