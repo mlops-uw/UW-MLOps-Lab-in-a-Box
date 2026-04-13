@@ -1,0 +1,68 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+
+display_name: NYC_Taxi_ML_Pipeline
+description: ML pipeline for NYC taxi analysis
+
+settings:
+  default_compute: azureml:capstone
+
+inputs:
+  data_path:
+    type: uri_folder
+    path: azureml:taxi-data@latest
+
+jobs:
+  preprocess_data:
+    type: command
+    command: >-
+      python preprocess.py
+      --data-path ${{inputs.data_path}}
+      --output-dir ${{outputs.output_dir}}
+    inputs:
+      data_path: ${{parent.inputs.data_path}}
+    outputs:
+      output_dir:
+        type: uri_folder
+    environment: azureml:taxi-ml-env:1
+    code: ./
+
+  supervised_learning:
+    type: command
+    command: >-
+      python supervised_learning.py
+      --data-path ${{inputs.data_path}}
+      --output-dir ${{outputs.output_dir}}
+    inputs:
+      data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
+    outputs:
+      output_dir:
+        type: uri_folder
+    environment: azureml:taxi-ml-env:1
+    code: ./
+
+  unsupervised_learning:
+    type: command
+    command: >-
+      python unsupervised_learning.py
+      --data-path ${{inputs.data_path}}
+      --output-dir ${{outputs.output_dir}}
+    inputs:
+      data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
+    outputs:
+      output_dir:
+        type: uri_folder
+    environment: azureml:taxi-ml-env:1
+    code: ./
+
+  register_models:
+    type: command
+    command: >-
+      python register_models.py
+      --supervised-dir ${{inputs.supervised_dir}}
+      --unsupervised-dir ${{inputs.unsupervised_dir}}
+    inputs:
+      supervised_dir: ${{parent.jobs.supervised_learning.outputs.output_dir}}
+      unsupervised_dir: ${{parent.jobs.unsupervised_learning.outputs.output_dir}}
+    environment: azureml:taxi-ml-env:1
+    code: ./

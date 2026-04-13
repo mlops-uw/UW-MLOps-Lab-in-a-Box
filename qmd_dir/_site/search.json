@@ -1,0 +1,845 @@
+[
+  {
+    "objectID": "DE.html",
+    "href": "DE.html",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "{{< fa diagram-project >}} Data Engineering"
+    ]
+  },
+  {
+    "objectID": "DE.html#objective",
+    "href": "DE.html#objective",
+    "title": "Data Engineering",
+    "section": " Objective",
+    "text": "Objective\nContent coming soon.",
+    "crumbs": [
+      "{{< fa diagram-project >}} Data Engineering"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html",
+    "href": "security_best_practices.html",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html#identity-and-access-rbac---role-based-access-control",
+    "href": "security_best_practices.html#identity-and-access-rbac---role-based-access-control",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": " Identity and access (RBAC - Role Based Access Control)",
+    "text": "Identity and access (RBAC - Role Based Access Control)\n\nAssign roles at the smallest scope possible (resource group, workspace, storage container)\nSeparate duties\n\nData owners manage data access\nML engineers run training jobs\nRelease owners deploy to production\n\n\n\n\n\n\n\n\nTipBest Practice\n\n\n\nUse Azure’s built-in roles (Contributor, Reader, Data Scientist) when possible. Create custom roles only when necessary.",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html#secrets-management",
+    "href": "security_best_practices.html#secrets-management",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": " Secrets management",
+    "text": "Secrets management\n\nStore secrets in Azure Key Vault\nAccess Key Vault using Managed Identity (avoid connection strings in code)\nDo not put secrets in\n\nGit repos\nnotebooks\nenvironment variables committed to YAML files\n\nRotate secrets regularly if any must exist\n\n\n\n\n\n\n\nWarningCommon Mistake\n\n\n\nNever hardcode connection strings or API keys in notebooks or code. Always use Key Vault with Managed Identity.",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html#data-protection",
+    "href": "security_best_practices.html#data-protection",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": " Data protection",
+    "text": "Data protection\n\nStore data in Azure Storage (Blob or ADLS Gen2)\nDisable public blob access\nUse RBAC for data access instead of storage account keys when possible\nKeep clear data zones\n\nraw\nprocessed\nfeatures\nevaluation\n\nTrack dataset versions (Azure ML Data assets) and record which version trained each model\n\n\n\n\n\n\n\nNoteData Versioning\n\n\n\nTracking which dataset version trained each model is critical for reproducibility and debugging production issues.",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html#network-protection",
+    "href": "security_best_practices.html#network-protection",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": " Network protection",
+    "text": "Network protection\n\nPrefer private access when data is sensitive\n\n\n\n\n\n\n\nTipProduction Recommendation\n\n\n\nFor production workloads with sensitive data, use Azure Private Link to keep traffic within the Azure network.",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html#reproducible-pipelines",
+    "href": "security_best_practices.html#reproducible-pipelines",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": " Reproducible pipelines",
+    "text": "Reproducible pipelines\n\nRun preprocessing and training as Azure ML Jobs (not only notebooks)\nPin dependencies (requirements or conda environment)\nVersion everything in git\n\ncode\nenvironment files\npipeline definitions\ndeployment configs\n\nCapture metadata in every run\n\ndata version\ngit commit SHA\nmetrics\nenvironment version\n\n\n\n\n\n\n\n\nImportantReproducibility Checklist\n\n\n\nEvery training run should be fully reproducible. If you can’t recreate a model from its metadata, your pipeline needs improvement.",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html#model-registry-and-promotion",
+    "href": "security_best_practices.html#model-registry-and-promotion",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": " Model registry and promotion",
+    "text": "Model registry and promotion\n\nRegister models in Azure ML Model Registry\nRequire minimum metadata tags\n\ndata_version\ngit_sha\nmetric_summary\nowner\n\nUse promotion stages\n\ncandidate\nvalidated\nproduction\n\nAvoid “latest” for prod deployments (deploy specific versions only)\n\n\n\n\n\n\n\nWarningDeployment Safety\n\n\n\nNever deploy “latest” to production. Always deploy specific, validated model versions with known performance characteristics.",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html#deployment-hardening",
+    "href": "security_best_practices.html#deployment-hardening",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": " Deployment hardening",
+    "text": "Deployment hardening\n\nEnable authentication\nValidate inputs (types, ranges, schema) before scoring\nDo not log raw sensitive payloads\n\nlog request IDs, latency, error codes, and summary stats instead\n\n\n\n\n\n\n\n\nTipInput Validation\n\n\n\nAlways validate input data before scoring. Invalid inputs can cause errors, security issues, or incorrect predictions.",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html#monitoring-and-alerts",
+    "href": "security_best_practices.html#monitoring-and-alerts",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": " Monitoring and alerts",
+    "text": "Monitoring and alerts\n\nUse Application Insights + Log Analytics for endpoint telemetry\nMonitor service health\n\nlatency\nerror rate\nthroughput\n\nMonitor model signals\n\nfeature drift (compare to training stats)\nprediction drift\n\nSet alerts to notify owners when thresholds are exceeded\n\n\n\n\n\n\n\nNoteDrift Detection\n\n\n\nModel drift and data drift are inevitable in production. Set up monitoring to detect them early before they impact users.",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html#code-safety",
+    "href": "security_best_practices.html#code-safety",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": " Code Safety",
+    "text": "Code Safety\n\nRequire PR reviews and CI checks before merge\nPin dependencies and avoid installing random packages at runtime\nStore images in Azure Container Registry (ACR)\n\n\n\n\n\n\n\nTipDependency Management\n\n\n\nPin exact versions in requirements.txt (e.g., pandas==2.0.3 not pandas&gt;=2.0). This prevents unexpected breaking changes.",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "security_best_practices.html#compute-hygiene-and-cost-guardrails",
+    "href": "security_best_practices.html#compute-hygiene-and-cost-guardrails",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": " Compute hygiene and cost guardrails",
+    "text": "Compute hygiene and cost guardrails\n\nPrefer autoscaling compute clusters for jobs and scale down to zero\nStop/delete unused compute instances\nSet budgets and alerts per resource group\nTag resources with owner and environment\n\n\n\n\n\n\n\nWarningCost Management\n\n\n\nUnused compute instances can drain your Azure credits quickly. Always stop or delete them when not in use, and set up budget alerts.",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
+    "objectID": "containers.html",
+    "href": "containers.html",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "{{< fa box >}} Containerization"
+    ]
+  },
+  {
+    "objectID": "containers.html#objective",
+    "href": "containers.html#objective",
+    "title": "Containerization",
+    "section": " Objective",
+    "text": "Objective\nContent coming soon.",
+    "crumbs": [
+      "{{< fa box >}} Containerization"
+    ]
+  },
+  {
+    "objectID": "azure.html",
+    "href": "azure.html",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "{{< fa cloud >}} Azure Cloud"
+    ]
+  },
+  {
+    "objectID": "azure.html#objective",
+    "href": "azure.html#objective",
+    "title": "Azure Cloud",
+    "section": " Objective",
+    "text": "Objective\nContent coming soon.",
+    "crumbs": [
+      "{{< fa cloud >}} Azure Cloud"
+    ]
+  },
+  {
+    "objectID": "supervised.html",
+    "href": "supervised.html",
+    "title": "Supervised Learning",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa graduation-cap >}} Supervised Learning"
+    ]
+  },
+  {
+    "objectID": "supervised.html#objective",
+    "href": "supervised.html#objective",
+    "title": "Supervised Learning",
+    "section": " Objective",
+    "text": "Objective\nIn this lab, we apply supervised learning to the cleaned NYC taxi dataset. By the end, you will be able to:\n\nTrain a Linear Regression model to predict taxi fare amounts\nEvaluate model performance using R², MAE, and RMSE\nVisualize prediction accuracy and residual distribution\n\n\n\n\n\n\n\nNotePrerequisites\n\n\n\nThis lab requires the cleaned dataset from the Data Processing lab. Make sure you have yellow_tripdata_cleaned.parquet saved from Part B.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa graduation-cap >}} Supervised Learning"
+    ]
+  },
+  {
+    "objectID": "supervised.html#load-cleaned-data",
+    "href": "supervised.html#load-cleaned-data",
+    "title": "Supervised Learning",
+    "section": " Load Cleaned Data",
+    "text": "Load Cleaned Data\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom pathlib import Path\n\nsns.set_style(\"whitegrid\")\n\ndf = pd.read_parquet(\"data_cleaned/yellow_tripdata_cleaned.parquet\")\nprint(\"Shape:\", df.shape)\ndf.head()\nExpected output: 11,320,592 rows × 14 columns",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa graduation-cap >}} Supervised Learning"
+    ]
+  },
+  {
+    "objectID": "supervised.html#feature-selection-and-train-test-split",
+    "href": "supervised.html#feature-selection-and-train-test-split",
+    "title": "Supervised Learning",
+    "section": " Feature Selection and Train-Test Split",
+    "text": "Feature Selection and Train-Test Split\nWe select features that are known at the time of pickup and can reasonably predict the fare. We use an 80/20 train-test split.\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score\n\nfeatures = ['trip_distance', 'trip_duration_min', 'pickup_hour', 'passenger_count']\ntarget = 'fare_amount'\n\nX = df[features]\ny = df[target]\n\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\nprint(f\"Training set: {X_train.shape[0]:,} rows\")\nprint(f\"Test set: {X_test.shape[0]:,} rows\")\n\n\n\nFeature\nRationale\n\n\n\n\ntrip_distance\nPrimary driver of fare (0.90 correlation from EDA)\n\n\ntrip_duration_min\nLonger trips cost more (0.79 correlation)\n\n\npickup_hour\nTime-of-day pricing effects\n\n\npassenger_count\nMinor effect, included for completeness",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa graduation-cap >}} Supervised Learning"
+    ]
+  },
+  {
+    "objectID": "supervised.html#train-and-evaluate",
+    "href": "supervised.html#train-and-evaluate",
+    "title": "Supervised Learning",
+    "section": " Train and Evaluate",
+    "text": "Train and Evaluate\n# Train Linear Regression model\nmodel = LinearRegression()\nmodel.fit(X_train, y_train)\n\n# Predict on test set\ny_pred = model.predict(X_test)\n\n# Evaluation metrics\nprint(\"=== Linear Regression Results ===\")\nprint(f\"R² Score:           {r2_score(y_test, y_pred):.4f}\")\nprint(f\"Mean Absolute Error: ${mean_absolute_error(y_test, y_pred):.2f}\")\nprint(f\"Root Mean Sq Error:  ${np.sqrt(mean_squared_error(y_test, y_pred)):.2f}\")\n\nprint(\"\\nFeature Coefficients:\")\nfor feat, coef in zip(features, model.coef_):\n    print(f\"  {feat}: {coef:.4f}\")\nprint(f\"  Intercept: {model.intercept_:.4f}\")\n\nResults\n\n\n\nMetric\nValue\n\n\n\n\nR² Score\n0.8260\n\n\nMean Absolute Error\n$7.27\n\n\nRoot Mean Squared Error\n$7.27\n\n\n\n\n\nFeature Coefficients\n\n\n\nFeature\nCoefficient\nInterpretation\n\n\n\n\ntrip_distance\n2.8104\nEach additional mile adds ~$2.81 to fare\n\n\ntrip_duration_min\n0.2830\nEach additional minute adds ~$0.28\n\n\npickup_hour\n0.0475\nMinimal time-of-day effect\n\n\npassenger_count\n0.8558\nSlight increase per passenger\n\n\nIntercept\n3.1394\nBase fare ~$3.14\n\n\n\n\n\n\n\n\n\nTipInterpreting R²\n\n\n\nAn R² of 0.826 means the model explains ~83% of the variance in fare amounts. This is a strong result for a simple linear model, driven primarily by trip distance and duration.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa graduation-cap >}} Supervised Learning"
+    ]
+  },
+  {
+    "objectID": "supervised.html#visualize-model-performance",
+    "href": "supervised.html#visualize-model-performance",
+    "title": "Supervised Learning",
+    "section": " Visualize Model Performance",
+    "text": "Visualize Model Performance\n# Visualize actual vs predicted fares\nsample_idx = X_test.sample(n=5000, random_state=42).index\ny_test_sample = y_test.loc[sample_idx]\ny_pred_sample = pd.Series(y_pred, index=y_test.index).loc[sample_idx]\n\nfig, axes = plt.subplots(1, 2, figsize=(14, 5))\n\n# Actual vs Predicted scatter\naxes[0].scatter(y_test_sample, y_pred_sample, alpha=0.3, s=5)\naxes[0].plot([0, 100], [0, 100], 'r--', label='Perfect prediction')\naxes[0].set_xlim(0, 100)\naxes[0].set_ylim(0, 100)\naxes[0].set_xlabel('Actual Fare ($)')\naxes[0].set_ylabel('Predicted Fare ($)')\naxes[0].set_title('Actual vs Predicted Fare')\naxes[0].legend()\n\n# Residual distribution\nresiduals = y_test_sample - y_pred_sample\naxes[1].hist(residuals, bins=50, edgecolor='black')\naxes[1].set_xlabel('Residual ($)')\naxes[1].set_ylabel('Frequency')\naxes[1].set_title('Residual Distribution')\naxes[1].axvline(x=0, color='r', linestyle='--')\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\nNoteObservations\n\n\n\n\nActual vs Predicted: Points cluster tightly along the red diagonal line, indicating good predictions. A vertical cluster at ~$70 actual fare shows the model struggles with flat-rate airport trips.\nResiduals: Centered near zero with a slight right skew. Most predictions are within ±$10 of the actual fare.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa graduation-cap >}} Supervised Learning"
+    ]
+  },
+  {
+    "objectID": "supervised.html#summary",
+    "href": "supervised.html#summary",
+    "title": "Supervised Learning",
+    "section": " Summary",
+    "text": "Summary\n\n\n\n\n\n\n\nAspect\nDetail\n\n\n\n\nAlgorithm\nLinear Regression (scikit-learn)\n\n\nTraining rows\n9,056,473\n\n\nTest rows\n2,264,119\n\n\nR² Score\n0.826\n\n\nBest predictor\nTrip distance ($2.81 per mile)\n\n\nKnown limitation\nFlat-rate airport fares (~$70) are poorly predicted\n\n\n\n\n\n\n\n\n\nTipPotential Improvements\n\n\n\n\nAdd PULocationID / DOLocationID as categorical features to capture zone-based pricing\nUse a non-linear model (e.g., Random Forest, Gradient Boosting) to handle flat-rate fares\nEngineer an is_airport binary feature for JFK/LaGuardia/Newark trips",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa graduation-cap >}} Supervised Learning"
+    ]
+  },
+  {
+    "objectID": "Python.html",
+    "href": "Python.html",
+    "title": "Python learning resources",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa python >}} Python resources"
+    ]
+  },
+  {
+    "objectID": "Python.html#how-to-use-these-resources",
+    "href": "Python.html#how-to-use-these-resources",
+    "title": "Python learning resources",
+    "section": " How to use these resources?",
+    "text": "How to use these resources?\n\nStart with Python documentation for concepts and correct terminology\nUse GeeksforGeeks and TutorialsPoint for examples and quick practice\nFocus on writing small scripts and understanding errors\n\n\n\n\n\n\n\nTipLearning Strategy\n\n\n\nThe best way to learn Python is by doing. Write code, make mistakes, debug, and iterate. These resources provide the foundation—your practice builds the skill.\n\n\nRecommended topics:\n\nVariables and data types\nInput and output\nLoops and conditionals\nFunctions\nLists, tuples, sets, dictionaries\nFile handling\nPandas\nNumPy\nSeaborn\nScikit-learn",
+    "crumbs": [
+      "{{< fa python >}} Python resources"
+    ]
+  },
+  {
+    "objectID": "Python.html#learning-resources",
+    "href": "Python.html#learning-resources",
+    "title": "Python learning resources",
+    "section": " Learning Resources",
+    "text": "Learning Resources\nOfficial Python documentation: https://docs.python.org/3/tutorial/index.html\nIntroduction to Programming (e-book): https://infx511.github.io/\nGeeksforGeeks: https://www.geeksforgeeks.org/python-programming-language/\nTutorialsPoint: https://www.tutorialspoint.com/python/index.htm\nPractice: Leetcode, Neetcode\n\n\n\n\n\n\nNoteFor MLOps Focus\n\n\n\nPay special attention to Pandas, NumPy, and Scikit-learn—these are essential for data manipulation and machine learning workflows.",
+    "crumbs": [
+      "{{< fa python >}} Python resources"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html",
+    "href": "Testing_deploying.html",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "{{< fa flask >}} Testing & Deployment"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html#objective",
+    "href": "Testing_deploying.html#objective",
+    "title": "Testing & Deployment",
+    "section": " Objective",
+    "text": "Objective\nContent coming soon.",
+    "crumbs": [
+      "{{< fa flask >}} Testing & Deployment"
+    ]
+  },
+  {
+    "objectID": "terraform_root.html",
+    "href": "terraform_root.html",
+    "title": "Root Module Structure",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa file-code >}} Root Module"
+    ]
+  },
+  {
+    "objectID": "terraform_root.html#input-variables",
+    "href": "terraform_root.html#input-variables",
+    "title": "Root Module Structure",
+    "section": " Input Variables",
+    "text": "Input Variables\n\n\n\n\n\n\n\n\nName\nDescription\nType\n\n\n\n\nresource_group_name\nName of the Azure Resource Group where all resources will be created.\nstring\n\n\nname\nName of the Azure Storage Account.\nstring\n\n\naccount_tier\nPerformance tier of the storage account (Standard or Premium).\nstring\n\n\naccount_replication_type\nReplication strategy for the storage account such as LRS, GRS, RAGRS, or ZRS.\nstring\n\n\ncontainer_name\nName of the blob storage container used to store dataset files.\nstring\n\n\ncontainer_access_type\nAccess level for the container (private, blob, or container). In this lab it is set to private.\nstring\n\n\nvirtual_network_name\nName of the Virtual Network that will host the compute resources.\nstring\n\n\naddress_space\nAddress range used by the Virtual Network.\nlist(string)\n\n\nsubnet_name\nName of the subnet created inside the Virtual Network.\nstring\n\n\naddress_prefixes\nAddress ranges assigned to the subnet within the virtual network.\nlist(string)\n\n\napplication_insights_name\nName of the Azure Application Insights resource used for monitoring ML experiments.\nstring\n\n\napplication_type\nType of Application Insights instance being created.\nstring\n\n\nkey_vault_name\nName of the Azure Key Vault used to store secrets securely.\nstring\n\n\nsecret_name\nName of the secret that will be stored inside the Key Vault.\nstring\n\n\nsku_name\nSKU or pricing tier used for the Key Vault.\nstring\n\n\nworkspace_name\nName of the Azure Machine Learning Workspace.\nstring\n\n\ntype\nType of Managed Identity assigned to the ML workspace (for example SystemAssigned).\nstring\n\n\ndatastore_name\nName of the Azure Machine Learning datastore that connects to blob storage.\nstring\n\n\nml_instance_name\nName of the Machine Learning Compute Instance.\nstring\n\n\nmachine_size\nVirtual machine size used for the compute instance.\nstring\n\n\nauthorization_type\nAuthorization type used for the ML compute instance.\nstring\n\n\nobject_id\nAzure Active Directory Object ID of the user to whom the compute instance will be assigned.\nstring\n\n\ndescription\nDescription assigned to the Machine Learning Compute Instance.\nstring\n\n\ntags\nTags assigned to the compute instance for resource organization.\nobject({ name = string })",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa file-code >}} Root Module"
+    ]
+  },
+  {
+    "objectID": "terraform_root.html#output-variables",
+    "href": "terraform_root.html#output-variables",
+    "title": "Root Module Structure",
+    "section": " Output Variables",
+    "text": "Output Variables\n\n\n\n\n\n\n\nName\nDescription\n\n\n\n\nstorage_account_id\nThe unique resource ID of the Azure Storage Account created in the storage module. This ID can be referenced by other modules or resources that need to interact with the storage account.\n\n\nstorage_container_name\nThe name of the blob storage container created inside the storage account. This container stores the dataset files used for machine learning experiments.\n\n\nstorage_primary_key\nThe primary access key of the Azure Storage Account. This key allows services to authenticate and access the storage account securely. It is marked as sensitive because it contains confidential credentials.\n\n\nprimary_connection_string\nThe primary connection string of the storage account. This connection string is used to securely connect applications or services (such as ML datastore configuration) to the storage account. It is also marked as sensitive.\n\n\nsubnet_id\nThe resource ID of the subnet created in the network module. This value is passed to the Machine Learning module so that the ML compute instance can be deployed inside the subnet.\n\n\nkey_id\nThe ID of the Key Vault secret created in the key vault module. This identifies the secret stored in Azure Key Vault that contains the storage account connection string.\n\n\ninstance_id\nThe resource ID of the Azure Machine Learning Compute Instance created in the machine learning module. This output can be used to reference or manage the compute instance after deployment.",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa file-code >}} Root Module"
+    ]
+  },
+  {
+    "objectID": "terraform_root.html#how-output-variables-are-accessed-from-modules-in-terraform",
+    "href": "terraform_root.html#how-output-variables-are-accessed-from-modules-in-terraform",
+    "title": "Root Module Structure",
+    "section": " How Output Variables Are Accessed from Modules in Terraform",
+    "text": "How Output Variables Are Accessed from Modules in Terraform\nIn Terraform, output variables are used to share important information from one module so that it can be used by another module or by the root module.\nWhen resources are created inside a child module, some of their values (such as IDs, connection strings, or names) may be needed outside that module. To make these values available, they are defined in the child module using output variables.\nOnce an output variable is defined inside a child module, it can be accessed in the root module using the following format:\nmodule.&lt;module_name&gt;.&lt;output_variable_name&gt;\n\nHow This Works\n\nA resource is created inside a child module.\nThe important value from that resource (for example a storage account ID) is defined as an output variable in the child module.\nThe root module calls the child module.\nThe root module can then access the output using: module.&lt;module_name&gt;.&lt;output_name&gt;\n\n\n\nExample\nIf the storage module defines an output variable called:\noutput \"storage_account_id\"\nThen the root module can access this value as:\nmodule.storage.storage_account_id\nHere:\n\nmodule tells Terraform that we are accessing a module\nstorage is the name of the module\nstorage_account_id is the output variable defined inside that module\n\n\n\n\n\n\n\nTipBest Practice\n\n\n\nOutput variables make Terraform modules reusable and allow different parts of your infrastructure to communicate without hardcoding resource IDs or connection strings.",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa file-code >}} Root Module"
+    ]
+  },
+  {
+    "objectID": "Registry.html",
+    "href": "Registry.html",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "{{< fa folder-open >}} Model Registry"
+    ]
+  },
+  {
+    "objectID": "Registry.html#objective",
+    "href": "Registry.html#objective",
+    "title": "Model Registry",
+    "section": " Objective",
+    "text": "Objective\nContent coming soon.",
+    "crumbs": [
+      "{{< fa folder-open >}} Model Registry"
+    ]
+  },
+  {
+    "objectID": "terraform_modules.html",
+    "href": "terraform_modules.html",
+    "title": "Terraform Module Structure",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa folder-tree >}} Module Structure"
+    ]
+  },
+  {
+    "objectID": "terraform_modules.html#objective",
+    "href": "terraform_modules.html#objective",
+    "title": "Terraform Module Structure",
+    "section": " Objective",
+    "text": "Objective\nTo maintain a clear and scalable Infrastructure as Code setup, the Terraform configuration is organized into modules. This approach separates infrastructure components into logical units, making the code easier to maintain and reuse.\nTerraform uses two types of modules:\n\nRoot Module – the entry point of the Terraform configuration\nChild Modules – reusable components that create specific infrastructure resources\n\nThe child modules are machine learning module, storage, key vault and network modules which provisions all resources required for the Azure Machine Learning environment.",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa folder-tree >}} Module Structure"
+    ]
+  },
+  {
+    "objectID": "terraform_modules.html#purpose-of-each-terraform-file",
+    "href": "terraform_modules.html#purpose-of-each-terraform-file",
+    "title": "Terraform Module Structure",
+    "section": " Purpose of Each Terraform File",
+    "text": "Purpose of Each Terraform File\n\n\n\n\n\n\n\n\nFile Name\nRoot Module Purpose\nChild Module Purpose\n\n\n\n\nmain.tf\nActs as the main orchestration file. It calls the child modules such as network, storage, and machine_learning, and passes the required variables to each module.\nDefines the actual Azure resources created by that module. For example: Network module creates VNet and Subnet, Storage module creates Storage Account and Container, Machine Learning module creates ML Workspace, Datastore, and Compute Instance.\n\n\nvariables.tf\nDeclares input variables that will be used by the root module and passed to child modules. These variables allow infrastructure configuration to remain flexible and reusable.\nDeclares variables required specifically by that module to create resources, such as subnet name, storage account name, workspace name, or compute instance configuration.\n\n\noutputs.tf\nDisplays important outputs after Terraform deployment and can expose outputs returned from child modules, such as workspace ID or storage account name.\nReturns key resource attributes (such as subnet ID or storage account ID) so they can be referenced by the root module or other modules.\n\n\nterraform.tfvars\nProvides actual values for variables defined in variables.tf. Terraform automatically reads this file when running terraform plan or terraform apply, allowing configuration values to be separated from infrastructure code.\nTypically not used inside child modules. Child modules receive their variable values from the root module when the module is called.",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa folder-tree >}} Module Structure"
+    ]
+  },
+  {
+    "objectID": "terraform_modules.html#machine-learning-module",
+    "href": "terraform_modules.html#machine-learning-module",
+    "title": "Terraform Module Structure",
+    "section": " Machine Learning Module",
+    "text": "Machine Learning Module\nThe machine_learning module is responsible for creating all the core resources required to run machine learning workloads in Azure. This module provisions the Azure Machine Learning workspace, connects it to storage, and creates a compute environment for experimentation.\nThe key resources created inside this module are:\n\n\n\n\n\n\n\nResource\nPurpose\n\n\n\n\nAzure Machine Learning Workspace\nActs as the central environment for managing machine learning experiments, datasets, models, and pipelines.\n\n\nMachine Learning Datastore (Blob Storage)\nConnects the ML workspace to a storage container where datasets, experiment outputs, and model artifacts are stored.\n\n\nMachine Learning Compute Instance\nProvides a managed compute environment where users can run Jupyter notebooks, develop models, and execute ML experiments.\n\n\n\n\nAzure Machine Learning Workspace\nThe Azure Machine Learning Workspace serves as the central hub for all ML operations.\nIt integrates with the following supporting services:\n\n\n\n\n\n\n\nDependency\nPurpose\n\n\n\n\nStorage Account\nStores datasets, models, and experiment artifacts.\n\n\nKey Vault\nSecurely stores secrets such as connection strings and credentials.\n\n\nApplication Insights\nCollects logs and monitoring data from ML experiments.\n\n\n\nThese dependencies ensure that the workspace has access to secure storage, secret management, and monitoring capabilities.\n\n\nMachine Learning Datastore (Blob Storage)\nThe Machine Learning Datastore connects the ML workspace to an Azure Blob Storage container.\nPurpose:\n\nEnables the workspace to access datasets stored in blob storage.\nAllows ML experiments to read input data and store model outputs or artifacts.\n\n\n\nMachine Learning Compute Instance\nThe Compute Instance provides an interactive development environment for data scientists.\nPurpose:\n\nRuns Jupyter Notebook or Jupyter Lab environments.\nAllows users to train models, explore data, and run ML experiments within the ML workspace.\n\n\n\nUser Assignment\nassign_to_user {\n  object_id = var.object_id\n  tenant_id = var.tenant_id\n}\n\n\n\n\n\n\n\nField\nExplanation\n\n\n\n\nobject_id\nThe Azure Active Directory object ID of the user. This ensures that the compute instance is assigned to that specific user who will access it through Jupyter Notebook or Jupyter Lab.\n\n\ntenant_id\nThe Azure Active Directory tenant ID representing the organization. It identifies the directory where the user account exists.\n\n\n\nAssigning the compute instance to a specific user ensures secure access and proper user ownership of the development environment.",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa folder-tree >}} Module Structure"
+    ]
+  },
+  {
+    "objectID": "terraform_modules.html#storage-module",
+    "href": "terraform_modules.html#storage-module",
+    "title": "Terraform Module Structure",
+    "section": " Storage Module",
+    "text": "Storage Module\nThe storage module is responsible for creating the storage resources required for the machine learning environment. These resources store datasets, experiment outputs, and model artifacts used during the MLOps workflow.\nThe main resources created inside this module are:\n\n\n\n\n\n\n\nResource\nPurpose\n\n\n\n\nAzure Storage Account\nProvides scalable cloud storage for datasets, ML artifacts, and intermediate results used during experiments.\n\n\nStorage Container (Blob Container)\nStores the dataset files that will be accessed by the Azure Machine Learning workspace.\n\n\n\n\nAzure Storage Account\nThe Azure Storage Account acts as the primary data storage service for the ML environment.\nPurpose:\n\nStores machine learning datasets and experiment artifacts.\nProvides secure and scalable blob storage used by the ML workspace.\n\nThis storage account is later connected to the Azure Machine Learning workspace datastore so that the workspace can access the stored data.\n\n\nStorage Container\nA Blob Storage container is created inside the storage account to store the dataset files.\nPurpose:\n\nOrganizes dataset files used for machine learning experiments.\nServes as the data source for the ML datastore.\n\nThe container access level is set to: Private\nThis ensures that only authorized users or services can access the data, improving security and preventing public exposure of datasets.\n\n\nDataset Files\nThe dataset files stored in the container are Parquet files (.parquet).\nCharacteristics of these files:\n\nEach file is approximately 89 MB in size\nBecause these files are relatively large, they cannot be directly uploaded to the GitHub repository, which has size limitations.\n\n\n\nManual Data Upload\nAfter Terraform creates the storage resources, the dataset files must be uploaded manually through the Azure portal or storage console.\nSteps:\n\nNavigate to the Azure Storage Account.\nOpen the Blob Containers section.\nSelect the created container.\nUpload the .parquet files.\n\nOnce uploaded, these files can be accessed by the Machine Learning datastore, enabling the ML workspace to read the datasets during training and experimentation.",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa folder-tree >}} Module Structure"
+    ]
+  },
+  {
+    "objectID": "terraform_modules.html#network-module",
+    "href": "terraform_modules.html#network-module",
+    "title": "Terraform Module Structure",
+    "section": " Network Module",
+    "text": "Network Module\nThe network module is responsible for creating the networking infrastructure required for the machine learning environment. These resources ensure that the compute resources operate within a controlled and secure network.\nThe main resources created inside this module are:\n\n\n\n\n\n\n\nResource\nPurpose\n\n\n\n\nVirtual Network (VNet)\nProvides a private network environment where Azure resources can communicate securely.\n\n\nSubnet\nA smaller network segment inside the Virtual Network where specific resources are deployed.\n\n\n\n\nVirtual Network (VNet)\nThe Virtual Network acts as the primary networking layer for the infrastructure.\nPurpose:\n\nProvides a secure and isolated network environment.\nAllows Azure resources to communicate with each other within the same private network.\n\nThe VNet helps ensure that compute resources are deployed in a controlled network environment rather than being directly exposed to the public internet.\n\n\nSubnet\nA Subnet is a subdivision of the Virtual Network that allows resources to be grouped and managed more effectively.\nPurpose:\n\nOrganizes resources within the Virtual Network.\nProvides a dedicated network segment for specific services.\n\nIn this lab, the subnet is used specifically for the Azure Machine Learning Compute Instance.\n\n\nIntegration with Machine Learning Compute\nThe Machine Learning Compute Instance is deployed inside the subnet created in this module.\nPurpose:\n\nEnsures that the compute instance runs within a private network.\nAllows controlled communication between the compute instance and other Azure resources such as storage and the ML workspace.\n\nBy placing the compute instance inside a subnet, the infrastructure follows best practices for network isolation and secure resource communication.",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa folder-tree >}} Module Structure"
+    ]
+  },
+  {
+    "objectID": "terraform_modules.html#key-vault-module",
+    "href": "terraform_modules.html#key-vault-module",
+    "title": "Terraform Module Structure",
+    "section": " Key Vault Module",
+    "text": "Key Vault Module\nThe key_vault module is responsible for creating the Azure Key Vault and configuring secure access to secrets used by the infrastructure. Key Vault is used to store sensitive information such as connection strings and credentials.\nThe main resources created inside this module are:\n\n\n\n\n\n\n\nResource\nPurpose\n\n\n\n\nAzure Key Vault\nSecurely stores secrets, keys, and credentials required by the infrastructure.\n\n\nKey Vault Access Policies\nDefines which identities are allowed to access secrets inside the Key Vault.\n\n\nKey Vault Secret\nStores the Storage Account connection string securely inside the vault.\n\n\n\n\nAzure Key Vault\nThe Azure Key Vault acts as the secure storage service for sensitive configuration values used by the infrastructure.\nPurpose:\n\nStores secrets securely instead of hardcoding them in Terraform or source code.\nProvides controlled access to secrets through access policies.\n\nThis ensures that sensitive information such as connection strings remains protected.\n\n\nKey Vault Access Policies\nAccess policies are created to allow authorized identities to retrieve and manage secrets inside the Key Vault.\nThe following identities are granted access:\n\n\n\n\n\n\n\nIdentity\nPurpose\n\n\n\n\nCurrent Azure User\nAllows the user deploying the infrastructure to access and manage secrets.\n\n\nService Principal (GitHub Actions)\nAllows the CI/CD pipeline to retrieve secrets during automated deployments.\n\n\n\nThe permissions granted include:\n\nGet – Retrieve secret values\nList – View available secrets\nSet – Create or update secrets\n\nThese permissions allow both the user and the CI/CD pipeline to securely access secrets required by the infrastructure.\n\n\nKey Vault Secret\nA secret is created inside the Key Vault to store the primary connection string of the Azure Storage Account.\nPurpose:\n\nAllows secure access to the storage account without exposing credentials in the Terraform code or repository.\nEnables services such as the ML workspace or applications to retrieve the connection string securely.\n\nThe creation of the secret depends on the access policy:\nazurerm_key_vault_access_policy.pipeline_sp_policy\nThis dependency ensures that the Service Principal has the required permissions before Terraform attempts to create the secret inside the Key Vault.",
+    "crumbs": [
+      "{{< fa cube >}} Terraform Infrastructure",
+      "{{< fa folder-tree >}} Module Structure"
+    ]
+  },
+  {
+    "objectID": "unsupervised.html",
+    "href": "unsupervised.html",
+    "title": "Unsupervised Learning",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "unsupervised.html#objective",
+    "href": "unsupervised.html#objective",
+    "title": "Unsupervised Learning",
+    "section": " Objective",
+    "text": "Objective\nIn this lab, we apply unsupervised learning to the cleaned NYC taxi dataset. By the end, you will be able to:\n\nUse K-Means clustering to identify distinct taxi trip patterns\nApply the Elbow Method to determine the optimal number of clusters\nInterpret and visualize cluster characteristics\n\n\n\n\n\n\n\nNotePrerequisites\n\n\n\nThis lab requires the cleaned dataset from the Data Processing lab. Make sure you have yellow_tripdata_cleaned.parquet saved from Part B.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "unsupervised.html#load-cleaned-data",
+    "href": "unsupervised.html#load-cleaned-data",
+    "title": "Unsupervised Learning",
+    "section": " Load Cleaned Data",
+    "text": "Load Cleaned Data\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom pathlib import Path\n\nsns.set_style(\"whitegrid\")\n\ndf = pd.read_parquet(\"data_cleaned/yellow_tripdata_cleaned.parquet\")\nprint(\"Shape:\", df.shape)",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "unsupervised.html#feature-selection-and-scaling",
+    "href": "unsupervised.html#feature-selection-and-scaling",
+    "title": "Unsupervised Learning",
+    "section": " Feature Selection and Scaling",
+    "text": "Feature Selection and Scaling\nWe select features that capture trip behavior: where, when, how far, and how much. We sample 100,000 rows for performance and standardize features since K-Means is distance-based.\nfrom sklearn.cluster import MiniBatchKMeans\nfrom sklearn.preprocessing import StandardScaler\n\n# Select features for clustering\ncluster_features = ['PULocationID', 'pickup_hour', 'trip_distance', 'fare_amount']\n\n# Sample for performance\ndf_sample = df[cluster_features].sample(n=100000, random_state=42)\n\n# Standardize features\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(df_sample)\n\nprint(\"Sample shape:\", df_sample.shape)\nprint(\"Scaled data ready for clustering\")\n\n\n\n\n\n\nTipWhy Standardize?\n\n\n\nK-Means uses Euclidean distance to assign points to clusters. Without scaling, features with large ranges (like PULocationID: 1–265) would dominate over features with small ranges (like pickup_hour: 0–23). StandardScaler ensures all features contribute equally.\n\n\n\n\n\n\n\n\nTipWhy Sample?\n\n\n\nRunning K-Means on 11M+ rows is computationally expensive. A random sample of 100,000 rows captures the same patterns while keeping runtime manageable. We use MiniBatchKMeans for additional speed.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "unsupervised.html#elbow-method-finding-optimal-k",
+    "href": "unsupervised.html#elbow-method-finding-optimal-k",
+    "title": "Unsupervised Learning",
+    "section": " Elbow Method — Finding Optimal K",
+    "text": "Elbow Method — Finding Optimal K\nThe Elbow Method plots inertia (within-cluster sum of squares) against the number of clusters. The “elbow” — where the curve starts flattening — indicates the optimal K.\n# Elbow Method to find optimal K\ninertias = []\nK_range = range(2, 11)\n\nfor k in K_range:\n    kmeans = MiniBatchKMeans(n_clusters=k, random_state=42, batch_size=10000)\n    kmeans.fit(X_scaled)\n    inertias.append(kmeans.inertia_)\n    print(f\"K={k}, Inertia={kmeans.inertia_:.0f}\")\n\nfig, ax = plt.subplots(figsize=(10, 5))\nax.plot(K_range, inertias, marker='o', color='steelblue')\nax.set_title('Elbow Method - Optimal Number of Clusters')\nax.set_xlabel('Number of Clusters (K)')\nax.set_ylabel('Inertia')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\nNoteObservation\n\n\n\nThe elbow occurs around K=4, where the rate of inertia decrease slows significantly. Beyond K=4, adding more clusters yields diminishing returns.\n\n\n\nK\nInertia\n\n\n\n\n2\n295,310\n\n\n3\n208,845\n\n\n4\n164,797\n\n\n5\n143,856\n\n\n6\n125,351",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "unsupervised.html#fit-k-means-k4",
+    "href": "unsupervised.html#fit-k-means-k4",
+    "title": "Unsupervised Learning",
+    "section": " Fit K-Means (K=4)",
+    "text": "Fit K-Means (K=4)\n# Fit K-Means with K=4\nkmeans = MiniBatchKMeans(n_clusters=4, random_state=42, batch_size=10000)\ndf_sample['cluster'] = kmeans.fit_predict(X_scaled)\n\n# Analyze cluster characteristics\nprint(\"=== Cluster Summary ===\\n\")\nprint(df_sample.groupby('cluster')[cluster_features].mean().round(2))\nprint(\"\\n=== Cluster Sizes ===\\n\")\nprint(df_sample['cluster'].value_counts().sort_index())\n\nCluster Profiles\n\n\n\n\n\n\n\n\n\n\n\n\nCluster\nAvg Location ID\nAvg Pickup Hour\nAvg Distance\nAvg Fare\nSize\nInterpretation\n\n\n\n\n0\n102\n8:00 AM\n3.00 mi\n$17.36\n21,146\nMorning commuters, mid-distance\n\n\n1\n136\n7:00 PM\n2.37 mi\n$15.78\n33,543\nEvening rush, short urban trips\n\n\n2\n230\n1:00 PM\n2.05 mi\n$14.54\n35,498\nMidday, short trips, outer zones\n\n\n3\n141\n2:00 PM\n14.52 mi\n$61.40\n9,813\nLong-distance / airport trips\n\n\n\n\n\n\n\n\n\nNoteKey Insight\n\n\n\nThe algorithm clearly separates airport/long-distance trips (Cluster 3) from regular urban trips (Clusters 0, 1, 2). The urban clusters are further differentiated by time of day — morning commuters (Cluster 0), evening rush (Cluster 1), and midday rides (Cluster 2).",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "unsupervised.html#visualize-clusters",
+    "href": "unsupervised.html#visualize-clusters",
+    "title": "Unsupervised Learning",
+    "section": " Visualize Clusters",
+    "text": "Visualize Clusters\n# Visualize clusters\nfig, axes = plt.subplots(1, 2, figsize=(14, 5))\n\n# Scatter: pickup hour vs fare, colored by cluster\ncolors = ['#2196F3', '#FF9800', '#4CAF50', '#E91E63']\nfor c in range(4):\n    mask = df_sample['cluster'] == c\n    axes[0].scatter(df_sample.loc[mask, 'pickup_hour'],\n                    df_sample.loc[mask, 'fare_amount'],\n                    alpha=0.3, s=5, c=colors[c], label=f'Cluster {c}')\naxes[0].set_xlabel('Pickup Hour')\naxes[0].set_ylabel('Fare Amount ($)')\naxes[0].set_title('Clusters: Pickup Hour vs Fare')\naxes[0].legend()\n\n# Bar chart: average fare by cluster\ncluster_stats = df_sample.groupby('cluster').agg(\n    count=('fare_amount', 'size'),\n    avg_fare=('fare_amount', 'mean'),\n    avg_distance=('trip_distance', 'mean')\n).round(2)\n\ncluster_stats['avg_fare'].plot(kind='bar', ax=axes[1], color=colors)\naxes[1].set_title('Average Fare by Cluster')\naxes[1].set_xlabel('Cluster')\naxes[1].set_ylabel('Average Fare ($)')\naxes[1].set_xticklabels([f'C{i}' for i in range(4)], rotation=0)\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\nNoteObservations\n\n\n\n\nLeft plot: Cluster 3 (pink) clearly stands out with high fares across all hours — these are the long-distance/airport trips. Clusters 0, 1, 2 overlap in fare range but separate by time of day.\nRight plot: Cluster 3 has an average fare of ~$61, roughly 4x the average of the other clusters ($14–$17).",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "unsupervised.html#summary",
+    "href": "unsupervised.html#summary",
+    "title": "Unsupervised Learning",
+    "section": " Summary",
+    "text": "Summary\n\n\n\n\n\n\n\nAspect\nDetail\n\n\n\n\nAlgorithm\nMiniBatchKMeans (scikit-learn)\n\n\nSample size\n100,000 rows\n\n\nFeatures\nPULocationID, pickup_hour, trip_distance, fare_amount\n\n\nOptimal K\n4 (Elbow Method)\n\n\nKey finding\nClear separation between airport/long-distance trips and urban trips\n\n\n\n\n\n\n\n\n\nTipPotential Improvements\n\n\n\n\nAdd DOLocationID to capture destination-based patterns\nUse pickup_dayofweek to differentiate weekday vs weekend clusters\nTry DBSCAN for density-based clustering that doesn’t require specifying K\nApply clustering results as a new feature in the supervised model to improve fare prediction",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
+    ]
+  },
+  {
+    "objectID": "data_ingestion.html",
+    "href": "data_ingestion.html",
+    "title": "Data Ingestion",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa download >}} Data Ingestion"
+    ]
+  },
+  {
+    "objectID": "data_ingestion.html#objective",
+    "href": "data_ingestion.html#objective",
+    "title": "Data Ingestion",
+    "section": " Objective",
+    "text": "Objective\nIn this lab, we focus on data ingestion. By the end of this, you will be able to:\n\n[Part A] Ingest real-world data into Azure\n\n\n\n\n\n\n\nNoteScope\n\n\n\nThis section intentionally stops before processing & model training. The processed output will later be used for:\n\nSupervised learning (Linear Regression)\nUnsupervised learning (K-Means clustering)",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa download >}} Data Ingestion"
+    ]
+  },
+  {
+    "objectID": "data_ingestion.html#what-you-need",
+    "href": "data_ingestion.html#what-you-need",
+    "title": "Data Ingestion",
+    "section": " What you need:",
+    "text": "What you need:\n\nAn Azure student account\n\n\n\n\n\n\n\nWarningCost Management\n\n\n\nAlways stop your Azure ML compute instance when not in use to avoid Azure credits consumption.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa download >}} Data Ingestion"
+    ]
+  },
+  {
+    "objectID": "data_ingestion.html#part-a---getting-data-into-azure-ingestion",
+    "href": "data_ingestion.html#part-a---getting-data-into-azure-ingestion",
+    "title": "Data Ingestion",
+    "section": " Part A - Getting data into Azure (Ingestion)",
+    "text": "Part A - Getting data into Azure (Ingestion)\nBelow are 2 clear ingestion pathways:\n\nPath 1: Use Azure Open Datasets (no manual file downloads)\nPath 2: Manual download from TLC + upload to Blob (if you want to understand externally ingesting)\n\n\n Path 1 - Ingestion using Azure Open Datasets\n\n\n\n\n\n\nTipRecommended Approach\n\n\n\nThis is the easiest way to get started. Azure Open Datasets provides pre-hosted NYC taxi data without manual downloads.\n\n\n Add photos to explain how to create, use compute, get to ML Studio\n# verify environment -- anything between 3.8-3.12 is good\nimport sys\n\nprint(sys.executable)\nprint(sys.version)\n\n!{sys.executable} -m pip install -q --upgrade pip\n!{sys.executable} -m pip install -q azureml-opendatasets\n\n# restart kernel\n\n!pip install -q azureml-opendatasets pandas pyarrow\n\nfrom azureml.opendatasets import NycTlcYellow\nprint(\"OK: NycTlcYellow imported\")\n\n# pyarrow handles parquet files\n\nfrom dateutil import parser\n\nstart_date = parser.parse('2018-05-01')\nend_date = parser.parse('2018-06-01')\n\nnyc_tlc = NycTlcYellow(start_date=start_date, end_date=end_date)\nnyc_tlc_df = nyc_tlc.to_pandas_dataframe()\n\nnyc_tlc_df.head()\n\n\n\n\n\n\nNoteDate Range Selection\n\n\n\nWe use a limited date range (1-2 months) to keep compute and storage costs manageable for learning purposes.\n\n\n\n\n Path 2 – Ingestion using Azure Blob Storage (manual upload)\nThis ingestion path demonstrates how data typically enters Azure from an external source, such as a public data portal or a partner system. Unlike Azure Open Datasets, this approach requires explicit storage management, which is common in real production pipelines.\n\n\n\n\n\n\nTipWhen to Use This Path\n\n\n\nUse this approach when: - Data comes from external partners or systems - You need full control over storage configuration - You want to understand the complete ingestion workflow\n\n\nDownload data from https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page\nFile name: yellow_tripdata_2025-07.parquet\nSearch for Storage Account in Azure\nIn the Azure Portal:\n\nSearch for Storage accounts\nClick Create\nChoose:\n\nSubscription: Azure Student\nResource group: create a new one (example: rg-mlops-lab)\nStorage account name: unique name (example: mlopslabstorage)\n\n\nClick Review + Create → Create\nCreate a Blob container\nOnce the storage account is created:\n\nOpen the Storage Account\nGo to Containers\nClick + Container\nName: nyc-tlc-blob\nPublic access level: Private\n\nThis container will hold raw data.\nUpload the raw Parquet file\n\nOpen the nyc-tlc-blob container\nClick Upload\nSelect yellow_tripdata_2025-07.parquet\nClick Upload\n\n\n\n\n\n\n\nWarningSecurity Note\n\n\n\nAlways set container access to Private. Never expose raw data publicly unless absolutely necessary.\n\n\nRead data from Blob Storage\nOnce uploaded, you can read the file directly for processing in Azure ML Studio.\n!pip -q install azure-storage-blob pandas pyarrow\n\nfrom azure.storage.blob import BlobServiceClient\nfrom pathlib import Path\nimport pandas as pd\n\n# copy paste from Azure Portal\nCONNECTION_STRING = \"Enter connection string from Security + networking -&gt; Access keys\"\n\n# Blob details\nCONTAINER_NAME = \"nyc-tlc-blob\"\nBLOB_NAME = \"yellow_tripdata_2025-07.parquet\"\n\n# Local destination inside notebook VM\nLOCAL_DIR = Path(\"data_raw\")\nLOCAL_DIR.mkdir(exist_ok=True)\n\nLOCAL_PATH = LOCAL_DIR / \"yellow_tripdata_2025-07.parquet\"\n\nblob_service = BlobServiceClient.from_connection_string(CONNECTION_STRING)\nblob_client = blob_service.get_blob_client(\n    container=CONTAINER_NAME,\n    blob=BLOB_NAME\n)\n\nwith open(LOCAL_PATH, \"wb\") as f:\n    f.write(blob_client.download_blob().readall())\n\nprint(\"Downloaded to:\", LOCAL_PATH)\n\ndf = pd.read_parquet(LOCAL_PATH)\n\ndf.shape\n\ndf.head()\n\n\n\n\n\n\nImportantProduction Best Practice\n\n\n\nIn production, use Managed Identity instead of connection strings. Connection strings should never be committed to code or notebooks.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa download >}} Data Ingestion"
+    ]
+  },
+  {
+    "objectID": "dataset.html",
+    "href": "dataset.html",
+    "title": "Dataset choice and source",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa database >}} Understanding dataset"
+    ]
+  },
+  {
+    "objectID": "dataset.html#what-dataset-will-we-use",
+    "href": "dataset.html#what-dataset-will-we-use",
+    "title": "Dataset choice and source",
+    "section": " What dataset will we use?",
+    "text": "What dataset will we use?\nNYC Taxi & Limousine Commission (TLC) Trip Record Data\nWe’ll use Yellow taxi trips for a few recent months (example: 3 months) to keep compute/storage on Azure manageable. This is a real-world, large-scale data with timestamps, locations, distance, passenger count, and fare components\nThis dataset represents actual taxi trips in New York City and contains rich information such as:\n\nTrip start and end timestamps\nPickup and drop-off locations\nTrip distance\nPassenger count\nFare and payment details\n\n\n\n\n\n\n\nTipWhy This Dataset?\n\n\n\nBecause of this rich information, the dataset is well-suited for both:\n\nSupervised learning (predicting trip duration or fare)\nUnsupervised learning (identifying taxi demand hotspots)",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa database >}} Understanding dataset"
+    ]
+  },
+  {
+    "objectID": "dataset.html#official-source",
+    "href": "dataset.html#official-source",
+    "title": "Dataset choice and source",
+    "section": " Official source:",
+    "text": "Official source:\nNYC TLC Trip Record Data portal\nData dictionary for Yellow Taxi trip record",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa database >}} Understanding dataset"
+    ]
+  },
+  {
+    "objectID": "dataset.html#understanding-the-columns",
+    "href": "dataset.html#understanding-the-columns",
+    "title": "Dataset choice and source",
+    "section": " Understanding the columns:",
+    "text": "Understanding the columns:\nThe Yellow Taxi dataset contains many fields. For this lab, we focus on the most relevant columns needed for EDA, ETL, and modeling.\nTime-related columns:\n\ntpep_pickup_datetime: Timestamp when the passenger was picked up\ntpep_dropoff_datetime: Timestamp when the passenger was dropped off\n\nLocation columns:\n\nPULocationID: Taxi Zone ID where the trip started\nDOLocationID: Taxi Zone ID where the trip ended\n\nTrip characteristics:\n\ntrip_distance: Distance traveled during the trip (in miles)\npassenger_count: Number of passengers in the taxi\n\nFare-related columns:\n\nfare_amount: Base fare charged for the trip (excluding taxes, tips, tolls)\ntotal_amount: Total amount charged, including fare, taxes, tolls, tips, and surcharges\n\n\n\n\n\n\n\nNoteData Dictionary\n\n\n\nFor complete column definitions and data types, refer to the official data dictionary.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa database >}} Understanding dataset"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa house >}} Home"
+    ]
+  },
+  {
+    "objectID": "index.html#welcome-to-the-mlops-lab",
+    "href": "index.html#welcome-to-the-mlops-lab",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": "Welcome to the MLOps Lab",
+    "text": "Welcome to the MLOps Lab\nWe are a group of four graduate students from the University of Washington, Information Management Class of 2026, and this lab is designed to guide you through the core concepts and practical applications of MLOps.\nThis lab is developed in collaboration with Boeing, working closely with Jared, Uzma, and Geetha, and supported by the Women in Cloud (WIC) team.\nOur goal is to provide a hands-on, structured learning experience that bridges academic foundations with real-world MLOps practices used in industry.",
+    "crumbs": [
+      "{{< fa house >}} Home"
+    ]
+  },
+  {
+    "objectID": "index.html#learning-path",
+    "href": "index.html#learning-path",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": " Learning Path",
+    "text": "Learning Path\nExplore the topics below to build your MLOps expertise from foundations to production deployment.\n\n\n\n\n ML Foundations\nLearn the fundamentals of machine learning, datasets, and algorithms.\n\nUnderstanding Dataset\nData Ingestion\nData Processing\nSupervised Learning\nUnsupervised Learning\n\n\n\n\n\n\n\n MLOps Pipeline\nBuild production-ready ML workflows with versioning, testing, and deployment.\n\nNeed for MLOps\nVersion Control\nModel Registry\nTesting & Deployment\nMonitoring & Maintenance\n\n\n\n\n\n\n\n Cloud & Infrastructure\nDeploy and scale ML systems on Azure with containers and data engineering.\n\nAzure Cloud\nContainerization\nData Engineering\nSecurity & Best Practices\n\n\n\n\n\n\n\n Python Resources\nEssential Python learning resources for data science and ML.\n\nPython Learning Resources\n\nMaster Python fundamentals, Pandas, NumPy, and Scikit-learn for MLOps workflows.\n\n\n\n\n\n\n Getting Started\nNew to MLOps? Start here to understand why it matters.\n\nNeed for MLOps\n\nLearn why production ML systems need more than just accurate models.\n\n\n\n\n\n\n Best Practices\nSecurity, reproducibility, and production-grade workflows.\n\nSecurity & Best Practices\n\nLearn RBAC, secrets management, monitoring, and cost optimization on Azure.",
+    "crumbs": [
+      "{{< fa house >}} Home"
+    ]
+  },
+  {
+    "objectID": "index.html#our-team",
+    "href": "index.html#our-team",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": " Our Team",
+    "text": "Our Team\nUW Team:\n\nShakshi Gandhi\nVinod Kamat\nArohi Narang\nSneha Reddy\n\nBoeing Mentors: Jared, Uzma, Geetha\nSupported by: Women in Cloud (WIC)\n\n\n\n\n\n\n\nNoteAbout This Lab\n\n\n\nThis lab uses the NYC Taxi dataset as a real-world example throughout all modules. You’ll learn how to build, deploy, monitor, and maintain ML systems that predict trip duration and fare amounts—just like production systems at scale.",
+    "crumbs": [
+      "{{< fa house >}} Home"
+    ]
+  },
+  {
+    "objectID": "data_processing.html",
+    "href": "data_processing.html",
+    "title": "Data Processing",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa gears >}} Data Processing"
+    ]
+  },
+  {
+    "objectID": "data_processing.html#objective",
+    "href": "data_processing.html#objective",
+    "title": "Data Processing",
+    "section": " Objective",
+    "text": "Objective\nIn this lab, we focus on data processing, which is the foundation of any MLOps workflow.\nBy the end of this lab, you will be able to:\n\n[Part B] Perform data cleaning and transformation to produce a model-ready dataset\n[Part C] Perform EDA to understand data distributions and relationships\n\n\n\n\n\n\n\nNoteScope\n\n\n\nThis section intentionally stops before model training. The processed output will later be used for:\n\nSupervised learning (Linear Regression)\nUnsupervised learning (K-Means clustering)",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa gears >}} Data Processing"
+    ]
+  },
+  {
+    "objectID": "data_processing.html#part-b---data-transformation",
+    "href": "data_processing.html#part-b---data-transformation",
+    "title": "Data Processing",
+    "section": " Part B - Data Transformation",
+    "text": "Part B - Data Transformation\n\nWhat you need\n\nAn Azure ML workspace with a running compute instance\nData ingested into Azure Blob Storage (from Part A)\nConnection string stored securely in Azure Key Vault\n\n\n\n\n\n\n\nWarningAzure Credits\n\n\n\nAlways stop your Azure ML compute instance when not in use to avoid unnecessary credit consumption.\n\n\n\n\n\nStep 1 — Install Dependencies\n!/anaconda/envs/azureml_py310_sdkv2/bin/pip install azure-keyvault-secrets azure-identity azure-storage-blob pandas pyarrow seaborn\n\n\n\n\n\n\nTipKernel Restart\n\n\n\nAfter installing new packages, restart the Jupyter kernel before proceeding. Some packages (like azure-keyvault-secrets) won’t be available until the kernel is restarted.\n\n\n\n\n\nStep 2 — Securely Retrieve Connection String from Key Vault\nInstead of hardcoding credentials, we retrieve the Blob Storage connection string from Azure Key Vault. This keeps secrets out of your codebase and safe for version control.\nfrom azure.identity import DefaultAzureCredential\nfrom azure.keyvault.secrets import SecretClient\nfrom azure.storage.blob import BlobServiceClient\nfrom pathlib import Path\nimport pandas as pd\n\n# Retrieve connection string securely from Key Vault\ncredential = DefaultAzureCredential()\nvault_url = \"https://&lt;your-keyvault-name&gt;.vault.azure.net/\"\nsecret_client = SecretClient(vault_url=vault_url, credential=credential)\nCONNECTION_STRING = secret_client.get_secret(\"blob-connection-string\").value\n\nprint(\"Connection string retrieved securely from Key Vault!\")\n\n\n\n\n\n\nImportantKey Vault Access\n\n\n\nMake sure your user has Get, List, and Set permissions under the Key Vault’s Access Policies. Without this, the notebook will throw a Forbidden error.\n\n\n\n\n\nStep 3 — Download Raw Data from Blob Storage\nWe pull the raw parquet files from the nyc-tlc-raw Blob container into the compute instance.\nCONTAINER_NAME = \"nyc-tlc-raw\"\n\nLOCAL_DIR = Path(\"data_raw\")\nLOCAL_DIR.mkdir(exist_ok=True)\n\n# Specify the monthly files to download\nfiles = [\n    \"yellow_tripdata_2025-09.parquet\",\n    \"yellow_tripdata_2025-10.parquet\",\n    \"yellow_tripdata_2025-11.parquet\"\n]\n\nblob_service = BlobServiceClient.from_connection_string(CONNECTION_STRING)\n\nfor f in files:\n    blob_client = blob_service.get_blob_client(container=CONTAINER_NAME, blob=f)\n    local_path = LOCAL_DIR / f\n    with open(local_path, \"wb\") as fh:\n        fh.write(blob_client.download_blob().readall())\n    print(f\"Downloaded: {f}\")\n\nprint(\"All files downloaded!\")\n\n\n\nStep 4 — Load and Combine Data\nWe load all three monthly files and combine them into a single DataFrame for unified processing.\n# Load all parquet files and combine into one DataFrame\ndf = pd.concat(\n    [pd.read_parquet(LOCAL_DIR / f) for f in files],\n    ignore_index=True\n)\n\nprint(\"Shape:\", df.shape)\nprint(\"Columns:\", df.columns.tolist())\ndf.head()\nExpected output: 12,861,158 rows × 20 columns\n\n\n\nStep 5 — Initial Exploration\nBefore cleaning, we inspect the data to understand what we’re working with.\n# Explore data types, null counts, duplicates, and summary stats\nprint(\"Data types:\\n\", df.dtypes)\nprint(\"\\nNull counts:\\n\", df.isnull().sum())\nprint(\"\\nDuplicates:\", df.duplicated().sum())\ndf.describe()\n\n\n\n\n\n\nNoteKey Findings\n\n\n\nFrom the initial exploration:\n\n~3 million nulls in passenger_count, RatecodeID, store_and_fwd_flag, congestion_surcharge, and Airport_fee\nDatetime columns are properly typed as datetime64\nSome numeric columns have suspicious min/max values (negative fares, zero distances)\n\n\n\n\n\n\nStep 6 — Drop Unnecessary Columns\nWe remove columns that aren’t needed for downstream analysis or modeling.\n# Drop columns not needed for analysis\ncolumns_to_drop = ['store_and_fwd_flag', 'RatecodeID', 'congestion_surcharge',\n                   'Airport_fee', 'improvement_surcharge', 'mta_tax',\n                   'extra', 'tolls_amount', 'cbd_congestion_fee']\n\ndf = df.drop(columns=columns_to_drop)\nprint(\"Remaining columns:\", df.columns.tolist())\nprint(\"Shape after drop:\", df.shape)\nResult: 20 columns → 11 columns\n\n\n\nStep 7 — Handle Null Values\nRather than dropping ~3 million rows with null passenger_count, we fill with the median value to preserve data volume.\n# Fill null passenger_count with median instead of dropping rows\nprint(\"Nulls before fill:\", df['passenger_count'].isnull().sum())\ndf['passenger_count'] = df['passenger_count'].fillna(df['passenger_count'].median())\nprint(\"Nulls after fill:\", df['passenger_count'].isnull().sum())\nprint(\"Shape:\", df.shape)\n\n\n\n\n\n\nTipWhy Median?\n\n\n\nWe use the median instead of the mean because passenger count is a discrete value and the median (1.0) better represents a typical taxi ride. Dropping 3M rows would unnecessarily reduce our dataset by ~24%.\n\n\n\n\n\nStep 8 — Remove Invalid and Outlier Rows\nWe filter out rows that are clearly erroneous or represent extreme outliers.\n# Remove rows with zero/negative values and extreme outliers\ndf = df[df['fare_amount'] &gt; 0]\ndf = df[df['trip_distance'] &gt; 0]\ndf = df[df['passenger_count'] &gt; 0]\ndf = df[df['fare_amount'] &lt; 500]\ndf = df[df['trip_distance'] &lt; 100]\ndf = df[df['passenger_count'] &lt;= 6]\ndf = df[df['total_amount'] &gt; 0]\n\nprint(\"Shape after removing outliers:\", df.shape)\n\n\n\n\n\n\n\nFilter\nRationale\n\n\n\n\nfare_amount &gt; 0\nNegative/zero fares are data entry errors\n\n\ntrip_distance &gt; 0\nZero distance means the trip didn’t happen\n\n\npassenger_count &gt; 0\nA trip with 0 passengers is invalid\n\n\nfare_amount &lt; 500\nFares above $500 are almost certainly errors\n\n\ntrip_distance &lt; 100\nTrips over 100 miles are extreme outliers\n\n\npassenger_count &lt;= 6\nStandard taxis seat a maximum of 6 passengers\n\n\ntotal_amount &gt; 0\nNegative totals indicate refunds or errors\n\n\n\n\n\n\nStep 9 — Feature Engineering\nWe create new columns derived from existing data to enrich the dataset for modeling.\n# Create trip duration and time-based features\ndf['trip_duration_min'] = (\n    df['tpep_dropoff_datetime'] - df['tpep_pickup_datetime']\n).dt.total_seconds() / 60\n\n# Remove nonsensical durations (less than 1 min or more than 3 hours)\ndf = df[(df['trip_duration_min'] &gt; 1) & (df['trip_duration_min'] &lt; 180)]\n\n# Extract time-based features\ndf['pickup_hour'] = df['tpep_pickup_datetime'].dt.hour\ndf['pickup_dayofweek'] = df['tpep_pickup_datetime'].dt.dayofweek\n\nprint(\"Shape after feature engineering:\", df.shape)\ndf.head()\n\n\n\n\n\n\n\nNew Column\nDescription\n\n\n\n\ntrip_duration_min\nTrip length in minutes, computed from pickup and dropoff timestamps\n\n\npickup_hour\nHour of the day (0–23) when the trip started\n\n\npickup_dayofweek\nDay of the week (0 = Monday, 6 = Sunday)\n\n\n\n\n\n\nStep 10 — Verify Cleaned Data\nA final sanity check to confirm the dataset is clean and ready.\n# Final check on cleaned dataset\nprint(\"Final shape:\", df.shape)\nprint(\"\\nNull counts:\\n\", df.isnull().sum())\ndf.describe()\nExpected output: 11,320,592 rows × 14 columns, zero nulls\n\n\n\nStep 11 — Save Cleaned Data\nWe save the processed dataset as a parquet file for reuse in future modeling labs.\n# Save cleaned data as parquet for future use\noutput_path = Path(\"data_cleaned\")\noutput_path.mkdir(exist_ok=True)\n\ndf.to_parquet(output_path / \"yellow_tripdata_cleaned.parquet\", index=False)\nprint(\"Saved cleaned data to:\", output_path / \"yellow_tripdata_cleaned.parquet\")\nprint(\"File size: {:.2f} MB\".format(\n    (output_path / \"yellow_tripdata_cleaned.parquet\").stat().st_size / 1e6\n))\n\n\n\n Transformation Summary\n\n\n\n\n\n\n\n\n\nStage\nRows\nColumns\nAction\n\n\n\n\nRaw data loaded\n12,861,158\n20\nCombined 3 monthly parquet files\n\n\nDrop columns\n12,861,158\n11\nRemoved 9 unused columns\n\n\nFill nulls\n12,861,158\n11\nFilled passenger_count nulls with median\n\n\nRemove outliers\n11,546,705\n11\nFiltered invalid/extreme rows\n\n\nFeature engineering\n11,320,592\n14\nAdded duration, hour, day of week",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa gears >}} Data Processing"
+    ]
+  },
+  {
+    "objectID": "data_processing.html#part-c---exploratory-data-analysis-eda",
+    "href": "data_processing.html#part-c---exploratory-data-analysis-eda",
+    "title": "Data Processing",
+    "section": " Part C - Exploratory Data Analysis (EDA)",
+    "text": "Part C - Exploratory Data Analysis (EDA)\nNow that the data is clean, we perform EDA to understand patterns and distributions before modeling.\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nsns.set_style(\"whitegrid\")\n\n\nFare Amount Distribution\n# Distribution of fare amounts\nfig, ax = plt.subplots(figsize=(10, 5))\ndf['fare_amount'].clip(upper=100).hist(bins=50, ax=ax, edgecolor='black')\nax.set_title('Distribution of Fare Amount (capped at $100)')\nax.set_xlabel('Fare Amount ($)')\nax.set_ylabel('Frequency')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\nNoteObservation\n\n\n\nThe distribution is right-skewed with most fares concentrated between $5–$20. There is a noticeable spike around $70, which corresponds to the JFK airport flat-rate fare.\n\n\n\n\n\nTrip Distance Distribution\n# Distribution of trip distances\nfig, ax = plt.subplots(figsize=(10, 5))\ndf['trip_distance'].clip(upper=30).hist(bins=50, ax=ax, edgecolor='black')\nax.set_title('Distribution of Trip Distance (capped at 30 miles)')\nax.set_xlabel('Trip Distance (miles)')\nax.set_ylabel('Frequency')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\nNoteObservation\n\n\n\nThe majority of trips are under 5 miles, typical of short urban rides. A small bump around 17–20 miles corresponds to airport trips (JFK/EWR).\n\n\n\n\n\nTrips by Hour of Day\n# Number of trips by hour of day\nfig, ax = plt.subplots(figsize=(10, 5))\ndf['pickup_hour'].value_counts().sort_index().plot(kind='bar', ax=ax, color='steelblue')\nax.set_title('Number of Trips by Hour of Day')\nax.set_xlabel('Hour')\nax.set_ylabel('Trip Count')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\nNoteObservation\n\n\n\nTrip volume peaks at 6 PM (evening rush hour) and is lowest between 4–5 AM. Demand rises steadily from 7 AM through the afternoon.\n\n\n\n\n\nCorrelation Heatmap\n# Correlation heatmap of numeric columns\nnumeric_cols = ['trip_distance', 'fare_amount', 'tip_amount',\n                'total_amount', 'trip_duration_min', 'passenger_count']\n\nfig, ax = plt.subplots(figsize=(8, 6))\nsns.heatmap(df[numeric_cols].corr(), annot=True, cmap='coolwarm',\n            fmt='.2f', ax=ax, vmin=-1, vmax=1)\nax.set_title('Correlation Heatmap')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\nNoteKey Correlations\n\n\n\n\ntrip_distance ↔︎ fare_amount: 0.90 — very strong positive correlation, as expected\ntrip_duration_min ↔︎ fare_amount: 0.79 — longer trips cost more\nfare_amount ↔︎ total_amount: 0.97 — fare is the dominant component of total\npassenger_count: Near-zero correlation with all other features — does not meaningfully affect fare\n\n\n\n\n\n\nFare vs Trip Distance\n# Scatter plot of fare vs distance (sampled for performance)\nsample = df.sample(n=10000, random_state=42)\n\nfig, ax = plt.subplots(figsize=(10, 6))\nax.scatter(sample['trip_distance'], sample['fare_amount'], alpha=0.3, s=5)\nax.set_title('Fare Amount vs Trip Distance (10K sample)')\nax.set_xlabel('Trip Distance (miles)')\nax.set_ylabel('Fare Amount ($)')\nax.set_xlim(0, 40)\nax.set_ylim(0, 150)\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\nNoteObservation\n\n\n\nA clear linear relationship between distance and fare is visible. The horizontal band at ~$70 for trips between 15–20 miles represents the JFK airport flat-rate fare. We sample 10,000 points for visualization performance.\n\n\n\n\n\nAverage Fare by Hour of Day\n# Average fare by hour of day\nfig, ax = plt.subplots(figsize=(10, 5))\ndf.groupby('pickup_hour')['fare_amount'].mean().plot(kind='line', ax=ax,\n                                                       marker='o', color='green')\nax.set_title('Average Fare by Hour of Day')\nax.set_xlabel('Hour')\nax.set_ylabel('Average Fare ($)')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\nNoteObservation\n\n\n\nThe highest average fares occur at 5 AM (~$25), likely driven by longer early-morning airport trips. Fares dip to their lowest around 2–3 AM, then remain relatively stable during daytime hours ($19–$22).\n\n\n\n\n\n EDA Summary\n\n\n\n\n\n\n\nInsight\nFinding\n\n\n\n\nFare distribution\nRight-skewed, most fares between $5–$20, spike at $70 (airport flat rate)\n\n\nTrip distance\nMajority under 5 miles, bump at 17–20 miles (airport trips)\n\n\nPeak hours\nHighest volume at 6 PM, lowest at 4–5 AM\n\n\nHighest avg fare\n5 AM (~$25) — early morning airport trips\n\n\nStrongest predictor\nTrip distance (0.90 correlation with fare)\n\n\nPassenger count\nNear-zero correlation — minimal impact on fare\n\n\n\n\n\n\n\n\n\nNoteNext Steps\n\n\n\nThe cleaned and explored dataset is now ready for:\n\nSupervised learning — Predicting fare amount using Linear Regression\nUnsupervised learning — Identifying taxi demand clusters using K-Means",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa gears >}} Data Processing"
+    ]
+  },
+  {
+    "objectID": "vc.html",
+    "href": "vc.html",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "{{< fa code-branch >}} Version Control"
+    ]
+  },
+  {
+    "objectID": "vc.html#objective",
+    "href": "vc.html#objective",
+    "title": "Version Control",
+    "section": " Objective",
+    "text": "Objective\nContent coming soon.",
+    "crumbs": [
+      "{{< fa code-branch >}} Version Control"
+    ]
+  },
+  {
+    "objectID": "MLOps.html",
+    "href": "MLOps.html",
+    "title": "Need for MLOps",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
+    "crumbs": [
+      "{{< fa rocket >}} Need for MLOps"
+    ]
+  },
+  {
+    "objectID": "MLOps.html#what-is-machine-learning-ml",
+    "href": "MLOps.html#what-is-machine-learning-ml",
+    "title": "Need for MLOps",
+    "section": " What Is Machine Learning (ML)?",
+    "text": "What Is Machine Learning (ML)?\nMachine Learning focuses on:\n\nlearning patterns from historical data\nbuilding models that predict outcomes\noptimizing accuracy of these models\n\nIn this example:\nML learns how trip features affect duration and cost\nML answers the question: “How do we build a predictive model?”\n\n\n\n\n\n\nTipKey Insight\n\n\n\nML is about building accurate models from historical data, but accuracy alone doesn’t guarantee production success.",
+    "crumbs": [
+      "{{< fa rocket >}} Need for MLOps"
+    ]
+  },
+  {
+    "objectID": "MLOps.html#what-is-operations-ops",
+    "href": "MLOps.html#what-is-operations-ops",
+    "title": "Need for MLOps",
+    "section": " What Is Operations (Ops)?",
+    "text": "What Is Operations (Ops)?\nOperations focuses on:\n\ndeploying systems reliably\nkeeping services running\nmonitoring performance\nhandling failures and updates\n\nIn this example:\n\nOps ensures predictions are fast\nthe service is always available\nfailures don’t impact users\n\nOps answers the question: “How do we run this system every day?”",
+    "crumbs": [
+      "{{< fa rocket >}} Need for MLOps"
+    ]
+  },
+  {
+    "objectID": "MLOps.html#why-ml-alone-is-not-enough",
+    "href": "MLOps.html#why-ml-alone-is-not-enough",
+    "title": "Need for MLOps",
+    "section": " Why ML Alone Is Not Enough",
+    "text": "Why ML Alone Is Not Enough\nA trained model is only useful if:\n\nit runs reliably in production\nit stays accurate over time\nfailures are detected quickly\nupdates can be made safely\n\n\n\n\n\n\n\nWarningCommon Pitfalls Without MLOps\n\n\n\n\nAccuracy drops silently\nNo one knows when data changes\nRetraining is manual and risky\nResults are hard to reproduce\n\nThis is where ML systems break in practice.",
+    "crumbs": [
+      "{{< fa rocket >}} Need for MLOps"
+    ]
+  },
+  {
+    "objectID": "MLOps.html#what-is-mlops",
+    "href": "MLOps.html#what-is-mlops",
+    "title": "Need for MLOps",
+    "section": " What Is MLOps?",
+    "text": "What Is MLOps?\n\nMLOps = ML + Ops\n\nMLOps ensures that:\n\nmodels can be deployed as production services\ndata and models are versioned\nmodel performance is monitored\ndata drift and model drift are detected\nretraining and redeployment are automated\n\n\n\n\n\n\n\nImportantCore Question\n\n\n\nMLOps answers: “How do we keep ML systems reliable in the real world?”",
+    "crumbs": [
+      "{{< fa rocket >}} Need for MLOps"
+    ]
+  },
+  {
+    "objectID": "MLOps.html#a-simple-real-world-example-nyc-taxi-fare-trip-time-prediction",
+    "href": "MLOps.html#a-simple-real-world-example-nyc-taxi-fare-trip-time-prediction",
+    "title": "Need for MLOps",
+    "section": " A Simple Real-World Example: NYC Taxi Fare & Trip Time Prediction",
+    "text": "A Simple Real-World Example: NYC Taxi Fare & Trip Time Prediction\nImagine you are building a system that predicts:\n\ntrip duration\nfare amount\n\nfor NYC taxi rides.\nYou train a machine learning model using historical NYC taxi data:\n\npickup and drop-off locations\ntime of day\nday of week\ndistance\npast traffic patterns\n\nIn a notebook, the model performs well and predicts trip time accurately. So far, everything looks great.",
+    "crumbs": [
+      "{{< fa rocket >}} Need for MLOps"
+    ]
+  },
+  {
+    "objectID": "MLOps.html#what-goes-wrong-in-the-real-world",
+    "href": "MLOps.html#what-goes-wrong-in-the-real-world",
+    "title": "Need for MLOps",
+    "section": " What Goes Wrong in the Real World?",
+    "text": "What Goes Wrong in the Real World?\nOnce the model is deployed:\n\ntraffic patterns change\nroad construction begins\nweather impacts commute times\nride demand shifts across neighborhoods\n\nAfter a few weeks, predictions slowly become inaccurate.\n\n\n\n\n\n\nWarningThe Real Problem\n\n\n\nThe model didn’t fail. The environment changed.\nWithout noticing, users start seeing:\n\nincorrect ETAs\ninconsistent fares\nunreliable estimates during peak hours\n\nThis is a real production problem.",
+    "crumbs": [
+      "{{< fa rocket >}} Need for MLOps"
+    ]
+  },
+  {
+    "objectID": "MLOps.html#how-mlops-works-for-the-nyc-taxi-example",
+    "href": "MLOps.html#how-mlops-works-for-the-nyc-taxi-example",
+    "title": "Need for MLOps",
+    "section": " How MLOps Works for the NYC Taxi Example",
+    "text": "How MLOps Works for the NYC Taxi Example\nData Ingestion\n\nContinuously collect new taxi trip data\nValidate schema and data quality\n\nTraining Pipelines\n\nRetrain models as traffic patterns change\nTrack experiments and parameters\n\nVersioning\n\nVersion datasets, features, and models\nEnable rollback to previous versions\n\nDeployment\n\nServe the model via an API\nUse containers to ensure consistency\n\nMonitoring\n\nTrack prediction accuracy\nDetect data drift (new routes, new traffic behavior)\nMonitor latency and failures\n\nAutomation\n\nTrigger retraining when performance drops",
+    "crumbs": [
+      "{{< fa rocket >}} Need for MLOps"
+    ]
+  },
+  {
+    "objectID": "MLOps.html#why-we-are-doing-this",
+    "href": "MLOps.html#why-we-are-doing-this",
+    "title": "Need for MLOps",
+    "section": " Why We Are Doing This?",
+    "text": "Why We Are Doing This?\nIn real companies, success is not about building one good model. It is about building systems that continue to work when data changes, usage scales, and business needs evolve.\n\n\n\n\n\n\nNoteLab Focus\n\n\n\nThis lab focuses on:\n\nProduction-grade ML workflows\nReal-world failure scenarios\nEnd-to-end MLOps thinking\n\nBy the end, you will understand how ML systems are built, deployed, monitored, and maintained in production—using the NYC Taxi problem as an example.",
+    "crumbs": [
+      "{{< fa rocket >}} Need for MLOps"
+    ]
+  },
+  {
+    "objectID": "monitoring_maintainance.html",
+    "href": "monitoring_maintainance.html",
+    "title": "MLOps Lab: Boeing x WIC x UW",
+    "section": "",
+    "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙\n      \n    \n  \n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "{{< fa chart-simple >}} Monitoring & Maintainance"
+    ]
+  },
+  {
+    "objectID": "monitoring_maintainance.html#objective",
+    "href": "monitoring_maintainance.html#objective",
+    "title": "Monitoring & Maintenance",
+    "section": " Objective",
+    "text": "Objective\nContent coming soon.",
+    "crumbs": [
+      "{{< fa chart-simple >}} Monitoring & Maintainance"
+    ]
+  }
+]

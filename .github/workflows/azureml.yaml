@@ -1,0 +1,103 @@
+name: deploy-model-training-pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-config:
+    uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
+    with:
+      file_name: config-infra-prod.yml
+
+  register-environment:
+    needs: get-config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+
+      - name: Install Azure ML extension
+        run: |
+          az extension add -n ml -y
+
+      - name: Register environment
+        run: |
+          az ml environment create \
+            --file ML/environment.yaml \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+
+  register-dataset:
+    needs: get-config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+
+      - name: Install Azure ML extension
+        run: |
+          az extension add -n ml -y
+
+      - name: Register dataset
+        run: |
+          az ml data create \
+            --file ML/data.yml \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+
+  # create-compute:
+  #   needs: [get-config, register-environment, register-dataset]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Azure login
+  #       uses: azure/login@v2
+  #       with:
+  #         creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+
+  #     - name: Install Azure ML extension
+  #       run: |
+  #         az extension add -n ml -y
+
+      # - name: Create compute cluster
+      #   run: |
+      #     az ml compute create \
+      #       --name cpu-cluster \
+      #       --type amlcompute \
+      #       --size Standard_DS1_v2 \
+      #       --min-instances 0 \
+      #       --max-instances 1 \
+      #       --tier low_priority \
+      #       --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+      #       --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+
+  run-pipeline:
+    needs: [get-config, register-environment, register-dataset]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+
+      - name: Install Azure ML extension
+        run: |
+          az extension add -n ml -y
+
+      - name: Run training pipeline
+        run: |
+          az ml job create \
+            --file ML/pipeline.yaml \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"

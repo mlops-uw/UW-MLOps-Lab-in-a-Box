@@ -1,0 +1,89 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "MLOps Lab: Boeing x WIC x UW"
+  favicon: favicon.svg
+  search: false
+  back-to-top-navigation: true
+  navbar: false
+  page-navigation: false
+
+  sidebar:
+    style: docked
+    collapse-level: 3
+    contents:
+      - text: "{{< fa house >}} Home"
+        href: index.qmd
+
+      - text: "{{< fa rocket >}} Need for MLOps"
+        href: MLOps.qmd
+
+      - text: "{{< fa python >}} Python resources"
+        href: Python.qmd
+
+      - section: "{{< fa brain >}} ML Foundations"
+        contents:
+          - text: "{{< fa database >}} Understanding dataset"
+            href: dataset.qmd
+          - text: "{{< fa download >}} Data Ingestion"
+            href: data_ingestion.qmd
+          - text: "{{< fa gears >}} Data Processing"
+            href: data_processing.qmd
+          - section: "{{< fa chart-line >}} Algorithms"
+            contents:
+              - text: "{{< fa graduation-cap >}} Supervised Learning"
+                href: supervised.qmd
+              - text: "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
+                href: unsupervised.qmd
+
+      - section: "{{< fa cube >}} Terraform Infrastructure"
+        contents:
+          - text: "{{< fa folder-tree >}} Module Structure"
+            href: terraform_modules.qmd
+          - text: "{{< fa file-code >}} Root Module"
+            href: terraform_root.qmd
+
+      - text: "{{< fa code-branch >}} Version Control"
+        href: vc.qmd
+
+      - text: "{{< fa cloud >}} Azure Cloud"
+        href: azure.qmd
+
+      - text: "{{< fa box >}} Containerization"
+        href: containers.qmd
+
+      - text: "{{< fa diagram-project >}} Data Engineering"
+        href: DE.qmd
+
+      - text: "{{< fa folder-open >}} Model Registry"
+        href: Registry.qmd
+
+      - text: "{{< fa flask >}} Testing & Deployment"
+        href: Testing_deploying.qmd
+
+      - text: "{{< fa chart-simple >}} Monitoring & Maintainance"
+        href: monitoring_maintainance.qmd
+
+      - text: "{{< fa shield-halved >}} Security & Best Practices"
+        href: security_best_practices.qmd
+
+format:
+  html:
+    theme: 
+      light: [flatly, custom.scss]
+      dark: [darkly, custom.scss]
+    css: styles.css
+    toc: false
+    code-copy: true
+    code-overflow: scroll
+    highlight-style: 
+      light: github
+      dark: github-dark
+    include-before-body: _includes/navbar.html
+    include-after-body: 
+      - _includes/footer.html
+      - _includes/theme-toggle.js
+    link-external-newwindow: true
+    link-external-icon: true
