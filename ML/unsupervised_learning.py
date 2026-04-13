@@ -7,7 +7,10 @@ import json
 from pathlib import Path
 import glob
 import os
+<<<<<<< HEAD
 import joblib
+=======
+>>>>>>> origin/main
 
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
@@ -125,6 +128,7 @@ def save_results(metrics: dict, output_dir: str):
     print(f"Saved metrics to {output_path / 'unsupervised_metrics.json'}")
 
 
+<<<<<<< HEAD
 def save_model_artifact(model, output_dir: str, artifact_name: str = "kmeans"):
     output_path = Path(output_dir) / artifact_name
     output_path.mkdir(parents=True, exist_ok=True)
@@ -133,6 +137,8 @@ def save_model_artifact(model, output_dir: str, artifact_name: str = "kmeans"):
     print(f"Saved model artifact to {model_path}")
 
 
+=======
+>>>>>>> origin/main
 # ---------------------------
 # Plot Clusters (ZONE LEVEL)
 # ---------------------------

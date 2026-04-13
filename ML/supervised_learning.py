@@ -5,14 +5,20 @@ import seaborn as sns
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+<<<<<<< HEAD
 from sklearn.pipeline import Pipeline
+=======
+>>>>>>> origin/main
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import argparse
 import json
 from pathlib import Path
 import glob
 import os
+<<<<<<< HEAD
 import joblib
+=======
+>>>>>>> origin/main
 
 sns.set_style("whitegrid")
 
@@ -54,32 +60,51 @@ def prepare_features(df: pd.DataFrame, test_size: float = 0.2, random_state: int
         X, y, test_size=test_size, random_state=random_state
     )
 
+<<<<<<< HEAD
     print(f"Training set: {X_train.shape[0]:,} rows")
     print(f"Test set: {X_test.shape[0]:,} rows")
 
     return X_train, X_test, y_train, y_test, features
+=======
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    print(f"Training set: {X_train.shape[0]:,} rows")
+    print(f"Test set: {X_test.shape[0]:,} rows")
+
+    return X_train_scaled, X_test_scaled, y_train, y_test, scaler, features
+>>>>>>> origin/main
 
 
 def train_linear_regression(X_train, y_train):
     print("\n=== Training Linear Regression ===")
+<<<<<<< HEAD
     model = Pipeline(
         steps=[
             ('scaler', StandardScaler()),
             ('model', LinearRegression())
         ]
     )
+=======
+    model = LinearRegression()
+>>>>>>> origin/main
     model.fit(X_train, y_train)
     return model
 
 
 def train_ridge_regression(X_train, y_train, alpha: float = 1.0):
     print(f"\n=== Training Ridge Regression (alpha={alpha}) ===")
+<<<<<<< HEAD
     model = Pipeline(
         steps=[
             ('scaler', StandardScaler()),
             ('model', Ridge(alpha=alpha, random_state=42))
         ]
     )
+=======
+    model = Ridge(alpha=alpha, random_state=42)
+>>>>>>> origin/main
     model.fit(X_train, y_train)
     return model
 

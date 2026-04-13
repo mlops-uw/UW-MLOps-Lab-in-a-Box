@@ -1,0 +1,56 @@
+{
+  "unsupervised.qmd": {
+    "unsupervised.html": "351fdba7"
+  },
+  "data_ingestion.qmd": {
+    "data_ingestion.html": "7af1e448"
+  },
+  "dataset.qmd": {
+    "dataset.html": "55a496b6"
+  },
+  "index.qmd": {
+    "index.html": "abebaf18"
+  },
+  "supervised.qmd": {
+    "supervised.html": "91d8cb29"
+  },
+  "data_processing.qmd": {
+    "data_processing.html": "8855c652"
+  },
+  "azure.qmd": {
+    "azure.html": "f0cef9f4"
+  },
+  "vc.qmd": {
+    "vc.html": "95cc669c"
+  },
+  "containers.qmd": {
+    "containers.html": "4eb684c1"
+  },
+  "security_best_practices.qmd": {
+    "security_best_practices.html": "18a6e588"
+  },
+  "monitoring_maintainance.qmd": {
+    "monitoring_maintainance.html": "b10a8a9a"
+  },
+  "MLOps.qmd": {
+    "MLOps.html": "dcb39e22"
+  },
+  "Python.qmd": {
+    "Python.html": "739277ba"
+  },
+  "Registry.qmd": {
+    "Registry.html": "e71c1c12"
+  },
+  "Testing_deploying.qmd": {
+    "Testing_deploying.html": "edb57e28"
+  },
+  "DE.qmd": {
+    "DE.html": "d69ff190"
+  },
+  "terraform_modules.qmd": {
+    "terraform_modules.html": "7e8e9abc"
+  },
+  "terraform_root.qmd": {
+    "terraform_root.html": "a6af5c99"
+  }
+}
