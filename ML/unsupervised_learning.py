@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import glob
 import os
+import joblib
 
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
@@ -122,6 +123,14 @@ def save_results(metrics: dict, output_dir: str):
         json.dump(metrics, f, indent=2)
 
     print(f"Saved metrics to {output_path / 'unsupervised_metrics.json'}")
+
+
+def save_model_artifact(model, output_dir: str, artifact_name: str = "kmeans"):
+    output_path = Path(output_dir) / artifact_name
+    output_path.mkdir(parents=True, exist_ok=True)
+    model_path = output_path / "model.joblib"
+    joblib.dump(model, model_path)
+    print(f"Saved model artifact to {model_path}")
 
 
 # ---------------------------

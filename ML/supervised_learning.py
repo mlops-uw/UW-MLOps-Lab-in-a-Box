@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 import glob
 import os
+import joblib
 
 sns.set_style("whitegrid")
 
@@ -155,7 +156,7 @@ def main():
     args = parser.parse_args()
 
     df = load_data(args.data_path)
-    X_train, X_test, y_train, y_test, features = prepare_features(df)
+    X_train, X_test, y_train, y_test, scaler, features = prepare_features(df)
 
     lr_model = train_linear_regression(X_train, y_train)
     ridge_model = train_ridge_regression(X_train, y_train, args.alpha)
@@ -173,6 +174,7 @@ def main():
     plot_results(y_test, y_pred, args.output_dir)
     save_model_artifact(lr_model, args.output_dir, 'linear_regression')
     save_model_artifact(ridge_model, args.output_dir, 'ridge_regression')
+    save_model_artifact(scaler, args.output_dir, 'feature_scaler')
 
     print("Supervised learning completed successfully")
 
