@@ -1,6 +1,6 @@
 $schema: https://azuremlschemas.azureedge.net/latest/data.schema.json
 
 type: uri_folder
-name: taxi-data2
+name: taxi-data
 description: NYC Taxi Dataset
 path: azureml://datastores/mlops_datastore/paths/
