@@ -7,50 +7,68 @@ description: ML pipeline for NYC taxi analysis
 settings:
   default_compute: azureml:capstone
 
-inputs:
-  data_path:
-    type: uri_folder
-    path: azureml:taxi-data@latest
-
-jobs:
-  preprocess_data:
-    type: command
-    command: >-
-      python preprocess.py
-      --data-path ${{inputs.data_path}}
-      --output-dir ${{outputs.output_dir}}
-    inputs:
-      data_path: ${{parent.inputs.data_path}}
-    outputs:
-      output_dir:
+  inputs:
+    data_path:
         type: uri_folder
-    environment: azureml:taxi-ml-env:1
-    code: ./
+            path: azureml:taxi-data@latest
 
-  supervised_learning:
-    type: command
-    command: >-
-      python supervised_learning.py
-      --data-path ${{inputs.data_path}}
-      --output-dir ${{outputs.output_dir}}
-    inputs:
-      data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
-    outputs:
-      output_dir:
-        type: uri_folder
-    environment: azureml:taxi-ml-env:1
-    code: ./
+            jobs:
+              preprocess_data:
+                  type: command
+                      command: >-
+                            python preprocess.py
+                                  --data-path ${{inputs.data_path}}
+                                        --output-dir ${{outputs.output_dir}}
+                                            inputs:
+                                                  data_path: ${{parent.inputs.data_path}}
+                                                      outputs:
+                                                            output_dir:
+                                                                    type: uri_folder
+                                                                        environment: azureml:taxi-ml-env:1
+                                                                            code: ./
 
-  unsupervised_learning:
-    type: command
-    command: >-
-      python unsupervised_learning.py
-      --data-path ${{inputs.data_path}}
-      --output-dir ${{outputs.output_dir}}
-    inputs:
-      data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
-    outputs:
-      output_dir:
-        type: uri_folder
-    environment: azureml:taxi-ml-env:1
-    code: ./
+                                                                              supervised_learning:
+                                                                                  type: command
+                                                                                      command: >-
+                                                                                            python supervised_learning.py
+                                                                                                  --data-path ${{inputs.data_path}}
+                                                                                                        --output-dir ${{outputs.output_dir}}
+                                                                                                            inputs:
+                                                                                                                  data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
+                                                                                                                      outputs:
+                                                                                                                            output_dir:
+                                                                                                                                    type: uri_folder
+                                                                                                                                        environment: azureml:taxi-ml-env:1
+                                                                                                                                            code: ./
+                                                                                                                                            
+                                                                                                                                              unsupervised_learning:
+                                                                                                                                                  type: command
+                                                                                                                                                      command: >-
+                                                                                                                                                            python unsupervised_learning.py
+                                                                                                                                                                  --data-path ${{inputs.data_path}}
+                                                                                                                                                                        --output-dir ${{outputs.output_dir}}
+                                                                                                                                                                            inputs:
+                                                                                                                                                                                  data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
+                                                                                                                                                                                      outputs:
+                                                                                                                                                                                            output_dir:
+                                                                                                                                                                                                    type: uri_folder
+                                                                                                                                                                                                        environment: azureml:taxi-ml-env:1
+                                                                                                                                                                                                            code: ./
+                                                                                                                                                                                                            
+                                                                                                                                                                                                              monitoring:
+                                                                                                                                                                                                                  type: command
+                                                                                                                                                                                                                      command: >-
+                                                                                                                                                                                                                            python monitoring.py
+                                                                                                                                                                                                                                  --data-path ${{inputs.data_path}}
+                                                                                                                                                                                                                                        --supervised-output-dir ${{inputs.supervised_output_dir}}
+                                                                                                                                                                                                                                              --unsupervised-output-dir ${{inputs.unsupervised_output_dir}}
+                                                                                                                                                                                                                                                    --output-dir ${{outputs.output_dir}}
+                                                                                                                                                                                                                                                        inputs:
+                                                                                                                                                                                                                                                              data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
+                                                                                                                                                                                                                                                                    supervised_output_dir: ${{parent.jobs.supervised_learning.outputs.output_dir}}
+                                                                                                                                                                                                                                                                          unsupervised_output_dir: ${{parent.jobs.unsupervised_learning.outputs.output_dir}}
+                                                                                                                                                                                                                                                                              outputs:
+                                                                                                                                                                                                                                                                                    output_dir:
+                                                                                                                                                                                                                                                                                            type: uri_folder
+                                                                                                                                                                                                                                                                                                environment: azureml:taxi-ml-env:1
+                                                                                                                                                                                                                                                                                                    code: ./
