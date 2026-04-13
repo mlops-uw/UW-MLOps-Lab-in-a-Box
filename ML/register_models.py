@@ -60,6 +60,14 @@ def register_supervised_models(models_dir: Path, linear_model_name: str, ridge_m
 def register_unsupervised_model(models_dir: Path, model_name: str):
     metrics = load_json(models_dir / "unsupervised_metrics.json")
     model = load_model(models_dir / "kmeans" / "model.joblib")
+    log_params = {
+        "n_clusters": metrics["n_clusters"],
+    }
+
+    if "sample_size_used" in metrics:
+        log_params["sample_size_used"] = metrics["sample_size_used"]
+    if "num_zones" in metrics:
+        log_params["num_zones"] = metrics["num_zones"]
 
     with mlflow.start_run(run_name=f"register-{model_name}"):
         mlflow.set_tags(
@@ -69,12 +77,7 @@ def register_unsupervised_model(models_dir: Path, model_name: str):
                 "feature_columns": ",".join(metrics["features_used"]),
             }
         )
-        mlflow.log_params(
-            {
-                "n_clusters": metrics["n_clusters"],
-                "sample_size_used": metrics["sample_size_used"],
-            }
-        )
+        mlflow.log_params(log_params)
         mlflow.log_metric("inertia", metrics["inertia"])
         mlflow.log_dict(metrics, "unsupervised_metrics.json")
         mlflow.sklearn.log_model(
