@@ -15,7 +15,10 @@ inputs:
 jobs:
   preprocess_data:
     type: command
-    command: python preprocess.py --data-path ${{inputs.data_path}} --output-dir ${{outputs.output_dir}}
+    command: >-
+      python preprocess.py
+      --data-path ${{inputs.data_path}}
+      --output-dir ${{outputs.output_dir}}
     inputs:
       data_path: ${{parent.inputs.data_path}}
     outputs:
@@ -26,7 +29,10 @@ jobs:
 
   supervised_learning:
     type: command
-    command: python supervised_learning.py --data-path ${{inputs.data_path}} --output-dir ${{outputs.output_dir}}
+    command: >-
+      python supervised_learning.py
+      --data-path ${{inputs.data_path}}
+      --output-dir ${{outputs.output_dir}}
     inputs:
       data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
     outputs:
@@ -37,7 +43,10 @@ jobs:
 
   unsupervised_learning:
     type: command
-    command: python unsupervised_learning.py --data-path ${{inputs.data_path}} --output-dir ${{outputs.output_dir}}
+    command: >-
+      python unsupervised_learning.py
+      --data-path ${{inputs.data_path}}
+      --output-dir ${{outputs.output_dir}}
     inputs:
       data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
     outputs:
@@ -46,15 +55,14 @@ jobs:
     environment: azureml:taxi-ml-env:1
     code: ./
 
-  monitoring:
+  register_models:
     type: command
-    command: python monitoring.py --data-path ${{inputs.data_path}} --supervised-output-dir ${{inputs.supervised_output_dir}} --unsupervised-output-dir ${{inputs.unsupervised_output_dir}} --output-dir ${{outputs.output_dir}}
+    command: >-
+      python register_models.py
+      --supervised-dir ${{inputs.supervised_dir}}
+      --unsupervised-dir ${{inputs.unsupervised_dir}}
     inputs:
-      data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
-      supervised_output_dir: ${{parent.jobs.supervised_learning.outputs.output_dir}}
-      unsupervised_output_dir: ${{parent.jobs.unsupervised_learning.outputs.output_dir}}
-    outputs:
-      output_dir:
-        type: uri_folder
+      supervised_dir: ${{parent.jobs.supervised_learning.outputs.output_dir}}
+      unsupervised_dir: ${{parent.jobs.unsupervised_learning.outputs.output_dir}}
     environment: azureml:taxi-ml-env:1
     code: ./

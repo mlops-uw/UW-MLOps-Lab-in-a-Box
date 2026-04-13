@@ -20,3 +20,4 @@ conda_file:
         - seaborn==0.12.2
         - pyarrow==12.0.1
         - azureml-mlflow==1.51.0
+        - mlflow==2.14.3
