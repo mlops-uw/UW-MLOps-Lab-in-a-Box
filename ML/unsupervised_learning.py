@@ -1,3 +1,5 @@
+# Zone Segmentation by Fare Behavior
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import argparse
@@ -5,11 +7,18 @@ import json
 from pathlib import Path
 import glob
 import os
+<<<<<<< HEAD
+import joblib
+=======
+>>>>>>> origin/main
 
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
 
+# ---------------------------
+# Load Data
+# ---------------------------
 def load_data(data_path: str) -> pd.DataFrame:
     print(f"Loading preprocessed data from {data_path}")
 
@@ -31,27 +40,46 @@ def load_data(data_path: str) -> pd.DataFrame:
     return df
 
 
-def prepare_features(df: pd.DataFrame, sample_size: int = 50000):
-    features = ['trip_distance', 'trip_duration_min', 'pickup_hour', 'passenger_count', 'fare_amount']
+# ---------------------------
+# Prepare Features (ZONE LEVEL)
+# ---------------------------
+def prepare_features(df: pd.DataFrame):
+    # Ensure pickup_hour exists
+    if 'pickup_hour' not in df.columns:
+        df['pickup_hour'] = pd.to_datetime(df['tpep_pickup_datetime']).dt.hour
 
-    missing = [col for col in features if col not in df.columns]
-    if missing:
-        raise ValueError(f"Missing required columns in preprocessed dataset: {missing}")
+    # Aggregate by drop-off zone
+    zone_df = df.groupby('DOLocationID').agg({
+        'fare_amount': 'mean',
+        'trip_distance': 'mean',
+        'passenger_count': 'mean',
+        'pickup_hour': 'mean',
+        'DOLocationID': 'count'
+    }).rename(columns={
+        'DOLocationID': 'trip_count'
+    }).reset_index()
 
-    if len(df) > sample_size:
-        df = df.sample(n=sample_size, random_state=42)
-        print(f"Sampled {sample_size} rows for faster clustering")
-    else:
-        print(f"Using full dataset with {len(df)} rows")
+    print("Zone-level dataset shape:", zone_df.shape)
 
-    X = df[features].copy()
+    features = [
+        'fare_amount',
+        'trip_distance',
+        'passenger_count',
+        'pickup_hour',
+        'trip_count'
+    ]
+
+    X = zone_df[features]
 
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
-    return df, X, X_scaled, features
+    return zone_df, X_scaled, features
 
 
+# ---------------------------
+# Train KMeans
+# ---------------------------
 def train_kmeans(X_scaled, n_clusters: int = 5):
     print(f"Training KMeans with k={n_clusters}")
     model = KMeans(
@@ -65,6 +93,9 @@ def train_kmeans(X_scaled, n_clusters: int = 5):
     return model, labels
 
 
+# ---------------------------
+# Elbow Method
+# ---------------------------
 def compute_elbow(X_scaled, max_k: int = 8):
     print("Computing elbow curve")
     k_values = list(range(1, max_k + 1))
@@ -84,6 +115,9 @@ def compute_elbow(X_scaled, max_k: int = 8):
     return k_values, inertias
 
 
+# ---------------------------
+# Save Results
+# ---------------------------
 def save_results(metrics: dict, output_dir: str):
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -94,28 +128,45 @@ def save_results(metrics: dict, output_dir: str):
     print(f"Saved metrics to {output_path / 'unsupervised_metrics.json'}")
 
 
-def plot_clusters(df_features, labels, output_dir: str):
+<<<<<<< HEAD
+def save_model_artifact(model, output_dir: str, artifact_name: str = "kmeans"):
+    output_path = Path(output_dir) / artifact_name
+    output_path.mkdir(parents=True, exist_ok=True)
+    model_path = output_path / "model.joblib"
+    joblib.dump(model, model_path)
+    print(f"Saved model artifact to {model_path}")
+
+
+=======
+>>>>>>> origin/main
+# ---------------------------
+# Plot Clusters (ZONE LEVEL)
+# ---------------------------
+def plot_clusters(zone_df, output_dir: str):
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
     plt.figure(figsize=(8, 6))
     plt.scatter(
-        df_features['trip_distance'],
-        df_features['fare_amount'],
-        c=labels,
-        s=5,
-        alpha=0.4
+        zone_df['trip_count'],
+        zone_df['fare_amount'],
+        c=zone_df['cluster'],
+        s=100,
+        alpha=0.7
     )
-    plt.xlabel("Trip Distance")
-    plt.ylabel("Fare Amount")
-    plt.title("KMeans Clusters: Trip Distance vs Fare Amount")
+    plt.xlabel("Trip Count (Demand)")
+    plt.ylabel("Average Fare ($)")
+    plt.title("Zone Segmentation by Fare Behavior")
     plt.tight_layout()
-    plt.savefig(output_path / "unsupervised_clusters.png", dpi=150)
+    plt.savefig(output_path / "zone_clusters.png", dpi=150)
     plt.close()
 
-    print(f"Saved plot to {output_path / 'unsupervised_clusters.png'}")
+    print(f"Saved plot to {output_path / 'zone_clusters.png'}")
 
 
+# ---------------------------
+# Plot Elbow Curve
+# ---------------------------
 def plot_elbow(k_values, inertias, output_dir: str):
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -132,38 +183,61 @@ def plot_elbow(k_values, inertias, output_dir: str):
     print(f"Saved elbow plot to {output_path / 'elbow_curve.png'}")
 
 
+# ---------------------------
+# Main
+# ---------------------------
 def main():
-    parser = argparse.ArgumentParser(description="Run unsupervised learning on preprocessed taxi data")
-    parser.add_argument("--data-path", type=str, required=True, help="Path to preprocessed data")
-    parser.add_argument("--output-dir", type=str, default="outputs", help="Directory for results")
-    parser.add_argument("--n-clusters", type=int, default=5, help="Number of clusters for final KMeans model")
-    parser.add_argument("--max-k", type=int, default=8, help="Maximum k for elbow method")
-    parser.add_argument("--sample-size", type=int, default=50000, help="Sample size for faster clustering")
+    parser = argparse.ArgumentParser(description="Zone Segmentation using KMeans")
+    parser.add_argument("--data-path", type=str, required=True)
+    parser.add_argument("--output-dir", type=str, default="outputs")
+    parser.add_argument("--n-clusters", type=int, default=5)
+    parser.add_argument("--max-k", type=int, default=8)
 
     args = parser.parse_args()
 
+    # Load data
     df = load_data(args.data_path)
-    df_sampled, df_features, X_scaled, features = prepare_features(df, sample_size=args.sample_size)
 
-    k_values, inertias = compute_elbow(X_scaled, max_k=args.max_k)
+    # Prepare zone-level features
+    zone_df, X_scaled, features = prepare_features(df)
+
+    # Elbow method
+    k_values, inertias = compute_elbow(X_scaled, args.max_k)
     plot_elbow(k_values, inertias, args.output_dir)
 
+    # Train model
     model, labels = train_kmeans(X_scaled, args.n_clusters)
 
+    # Attach clusters
+    zone_df['cluster'] = labels
+
+    # Save zone-level results
+    output_path = Path(args.output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    zone_df.to_csv(output_path / "zone_clusters.csv", index=False)
+
+    # Metrics
     metrics = {
         "model": "KMeans",
         "n_clusters": args.n_clusters,
         "inertia": float(model.inertia_),
         "features_used": features,
-        "sample_size_used": len(df_sampled),
+        "num_zones": len(zone_df),
         "elbow_k_values": k_values,
         "elbow_inertias": [float(x) for x in inertias]
     }
 
     save_results(metrics, args.output_dir)
-    plot_clusters(df_features, labels, args.output_dir)
+    save_model_artifact(model, args.output_dir)
 
-    print("Unsupervised learning completed successfully")
+    # Plot clusters
+    plot_clusters(zone_df, args.output_dir)
+
+    # Print cluster summary (VERY useful)
+    print("\nCluster Summary:")
+    print(zone_df.groupby('cluster').mean())
+
+    print("\nUnsupervised learning completed successfully")
 
 
 if __name__ == "__main__":

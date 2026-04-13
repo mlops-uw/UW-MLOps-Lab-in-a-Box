@@ -54,3 +54,15 @@ jobs:
         type: uri_folder
     environment: azureml:taxi-ml-env:1
     code: ./
+
+  register_models:
+    type: command
+    command: >-
+      python register_models.py
+      --supervised-dir ${{inputs.supervised_dir}}
+      --unsupervised-dir ${{inputs.unsupervised_dir}}
+    inputs:
+      supervised_dir: ${{parent.jobs.supervised_learning.outputs.output_dir}}
+      unsupervised_dir: ${{parent.jobs.unsupervised_learning.outputs.output_dir}}
+    environment: azureml:taxi-ml-env:1
+    code: ./
