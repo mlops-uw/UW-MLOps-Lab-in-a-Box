@@ -1,6 +1,6 @@
 $schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
 name: taxi-ml-env
-version: 1
+version: 2
 description: Environment for NYC Taxi ML pipeline
 
 image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
@@ -22,3 +22,4 @@ conda_file:
         - azureml-mlflow==1.51.0
         - mlflow==2.14.3
         - flask==3.0.3
+        - azureml-inference-server-http
