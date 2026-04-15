@@ -158,6 +158,31 @@ def plot_clusters(zone_df, output_dir: str):
     print(f"Saved plot to {output_path / 'zone_clusters.png'}")
 
 
+def plot_clusters_distance(zone_df, output_dir: str):
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    plt.figure(figsize=(8, 6))
+
+    plt.scatter(
+        zone_df['trip_distance'],        # X-axis: demand
+        zone_df['fare_amount'],     # Y-axis: average trip distance
+        c=zone_df['cluster'],
+        s=100,
+        alpha=0.7
+    )
+
+    plt.xlabel("Trip Distance")
+    plt.ylabel("Average Trip Fare")
+    plt.title("Zone Segmentation by Trip Distance")
+
+    plt.tight_layout()
+    plt.savefig(output_path / "zone_clusters_trip_distance.png", dpi=150)
+    plt.close()
+
+    print(f"Saved plot to {output_path / 'zone_clusters_trip_distance.png'}")
+
+
 # ---------------------------
 # Plot Elbow Curve
 # ---------------------------
@@ -226,6 +251,7 @@ def main():
 
     # Plot clusters
     plot_clusters(zone_df, args.output_dir)
+    plot_clusters_distance(zone_df, args.output_dir)
 
     # Print cluster summary (VERY useful)
     print("\nCluster Summary:")
