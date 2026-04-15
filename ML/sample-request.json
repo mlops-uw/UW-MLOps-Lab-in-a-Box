@@ -1,0 +1,7 @@
+{
+  "model": "linear_regression",
+  "trip_distance": 3.5,
+  "trip_duration_min": 15.0,
+  "pickup_hour": 14,
+  "passenger_count": 2
+}
