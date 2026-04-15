@@ -66,3 +66,21 @@ jobs:
       unsupervised_dir: ${{parent.jobs.unsupervised_learning.outputs.output_dir}}
     environment: azureml:taxi-ml-env:1
     code: ./
+
+  monitoring:
+    type: command
+    command: >-
+      python monitoring.py
+      --data-path ${{inputs.data_path}}
+      --supervised-output-dir ${{inputs.supervised_dir}}
+      --unsupervised-output-dir ${{inputs.unsupervised_dir}}
+      --output-dir ${{outputs.output_dir}}
+    inputs:
+      data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
+      supervised_dir: ${{parent.jobs.supervised_learning.outputs.output_dir}}
+      unsupervised_dir: ${{parent.jobs.unsupervised_learning.outputs.output_dir}}
+    outputs:
+      output_dir:
+        type: uri_folder
+    environment: azureml:taxi-ml-env:1
+    code: ./
