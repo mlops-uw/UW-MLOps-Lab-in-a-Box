@@ -24,7 +24,7 @@ jobs:
     outputs:
       output_dir:
         type: uri_folder
-    environment: azureml:taxi-ml-env:1
+    environment: azureml:taxi-ml-env@latest
     code: ./
 
   supervised_learning:
@@ -38,7 +38,7 @@ jobs:
     outputs:
       output_dir:
         type: uri_folder
-    environment: azureml:taxi-ml-env:1
+    environment: azureml:taxi-ml-env@latest
     code: ./
 
   unsupervised_learning:
@@ -52,7 +52,7 @@ jobs:
     outputs:
       output_dir:
         type: uri_folder
-    environment: azureml:taxi-ml-env:1
+    environment: azureml:taxi-ml-env@latest
     code: ./
 
   register_models:
@@ -64,7 +64,7 @@ jobs:
     inputs:
       supervised_dir: ${{parent.jobs.supervised_learning.outputs.output_dir}}
       unsupervised_dir: ${{parent.jobs.unsupervised_learning.outputs.output_dir}}
-    environment: azureml:taxi-ml-env:1
+    environment: azureml:taxi-ml-env@latest
     code: ./
 
   monitoring:
@@ -82,5 +82,5 @@ jobs:
     outputs:
       output_dir:
         type: uri_folder
-    environment: azureml:taxi-ml-env:1
+    environment: azureml:taxi-ml-env@latest
     code: ./
