@@ -1,0 +1,84 @@
+name: Deploy KMeans Cluster Endpoint
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-config:
+    uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
+    with:
+      file_name: config-infra-prod.yml
+
+  deploy-endpoint:
+    needs: get-config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+
+      - name: Install Azure ML extension
+        run: az extension add -n ml -y
+
+      - name: Register environment
+        run: |
+          az ml environment create \
+            --file ML/environment.yaml \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+        continue-on-error: true
+
+      - name: Create endpoint (skip if exists)
+        run: |
+          az ml online-endpoint create \
+            --file ML/endpoint-kmeans.yaml \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}" \
+          || echo "Endpoint already exists, continuing..."
+
+      - name: Delete existing deployment (if any)
+        run: |
+          az ml online-deployment delete \
+            --name blue \
+            --endpoint-name taxi-cluster-endpoint \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}" \
+            --yes \
+          || echo "No existing deployment to delete, continuing..."
+
+      - name: Create deployment
+        run: |
+          az ml online-deployment create \
+            --file ML/deployment-kmeans.yaml \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}" \
+            --all-traffic
+
+      - name: Test endpoint
+        run: |
+          cat > /tmp/kmeans-request.json <<EOF
+          {
+            "DOLocationID": 161,
+            "fare_amount": 12.50,
+            "trip_distance": 2.1,
+            "passenger_count": 1,
+            "pickup_hour": 9
+          }
+          EOF
+          az ml online-endpoint invoke \
+            --name taxi-cluster-endpoint \
+            --request-file /tmp/kmeans-request.json \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+
+      - name: Show endpoint details
+        run: |
+          az ml online-endpoint show \
+            --name taxi-cluster-endpoint \
+            --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+            --workspace-name "${{ needs.get-config.outputs.aml_workspace }}" \
+            --query "{name: name, scoring_uri: scoring_uri, state: provisioning_state}" \
+            -o table
