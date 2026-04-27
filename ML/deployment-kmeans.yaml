@@ -6,7 +6,7 @@ code_configuration:
   code: ./
   scoring_script: score-kmeans.py
 environment: azureml:taxi-ml-env@latest
-instance_type: Standard_DS2_v2
+instance_type: Standard_F2s_v2
 instance_count: 1
 request_settings:
   request_timeout_ms: 5000
