@@ -18,7 +18,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Install Azure ML extension
         run: |
@@ -40,7 +40,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Install Azure ML extension
         run: |
@@ -89,7 +89,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_MLOPS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Install Azure ML extension
         run: |
