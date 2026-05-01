@@ -1,0 +1,171 @@
+---
+title: "Git Resources"
+subtitle: "Version control essentials for MLOps"
+---
+
+::: {.callout-note}
+## What You'll Learn
+This page introduces Git and GitHub as essential tools for MLOps workflows, covering the core concepts and commands you'll need to version-control your code, data pipelines, and infrastructure throughout this lab.
+:::
+
+## {{< fa lightbulb >}} Why Git for MLOps?
+
+In machine learning projects, reproducibility is everything. Git ensures that:
+
+- every change to your code, configs, and pipeline definitions is tracked
+- teammates can collaborate without overwriting each other's work
+- you can roll back to a previous version if a model or pipeline breaks
+- experiments are linked to specific code commits for full auditability
+
+::: {.callout-tip}
+## Key Insight
+MLOps without version control is like science without a lab notebook. Git is the foundation everything else is built on.
+:::
+
+## {{< fa book >}} Core Git Concepts
+
+**Repository (repo)**
+
+A repo is the project folder that Git tracks. In this lab, the entire MLOps project lives in one GitHub repository.
+
+**Commit**
+
+A commit is a snapshot of your changes. Every time you commit, you record what changed, who changed it, and why.
+
+**Branch**
+
+A branch is an isolated line of development. You work on a feature or fix in a branch without affecting the main codebase.
+
+**Pull Request (PR)**
+
+A PR is a proposal to merge your branch into the main branch. It enables code review before changes go to production.
+
+**Remote**
+
+The remote is the version of the repo hosted on GitHub (or Azure Repos). You push your local commits to the remote to share them.
+
+::: {.callout-important}
+## In This Lab
+We use GitHub as our remote repository. All pipeline definitions, model training scripts, and infrastructure code are version-controlled here.
+:::
+
+## {{< fa terminal >}} Essential Git Commands
+
+**Getting started**
+
+```bash
+# Clone the lab repository
+git clone https://github.com/shakshi-gandhi/UW-MLOps-Boeing-x-WIC.git
+
+# Check the status of your working directory
+git status
+
+# See the commit history
+git log --oneline
+```
+
+**Making changes**
+
+```bash
+# Stage all changes for commit
+git add .
+
+# Commit with a descriptive message
+git commit -m "feat: add data ingestion pipeline script"
+
+# Push your changes to the remote
+git push origin main
+```
+
+**Branching and merging**
+
+```bash
+# Create a new branch and switch to it
+git checkout -b feature/data-preprocessing
+
+# Switch back to main
+git checkout main
+
+# Merge a feature branch into main
+git merge feature/data-preprocessing
+```
+
+**Syncing with the remote**
+
+```bash
+# Pull the latest changes from the remote
+git pull origin main
+
+# Fetch updates without merging
+git fetch origin
+```
+
+::: {.callout-warning}
+## Common Mistake
+Never commit secrets, API keys, or connection strings to a Git repository. Use `.gitignore` to exclude sensitive files, and use Azure Key Vault to store secrets securely.
+:::
+
+## {{< fa file-lines >}} Setting Up .gitignore for ML Projects
+
+A `.gitignore` file tells Git which files to skip. For ML projects, always ignore:
+
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data and model files (use Azure Storage instead)
+*.csv
+*.parquet
+*.pkl
+*.joblib
+data/raw/
+data/processed/
+
+# Credentials
+.env
+*.key
+secrets.yaml
+
+# OS files
+.DS_Store
+Thumbs.db
+```
+
+::: {.callout-note}
+## Data in Git
+Never store large data files in Git. Use Azure Blob Storage for data and register datasets in Azure ML. Git tracks the code that processes the data, not the data itself.
+:::
+
+## {{< fa arrows-spin >}} Git Workflow for This Lab
+
+In this lab, we follow a simple feature-branch workflow:
+
+1. **Pull** the latest `main` branch before starting new work
+2. **Create a branch** for your feature or fix
+3. **Commit often** with clear messages describing what you changed and why
+4. **Open a pull request** when your work is ready for review
+5. **Merge** after review and CI checks pass
+
+::: {.callout-tip}
+## Commit Message Convention
+Use descriptive prefixes in commit messages:
+- `feat:` for new features
+- `fix:` for bug fixes
+- `docs:` for documentation updates
+- `chore:` for setup or maintenance tasks
+
+Example: `feat: add Azure ML pipeline YAML for model training`
+:::
+
+## {{< fa circle-arrow-right >}} Next Steps
+
+With Git set up, you're ready to connect your repository to Azure and start building the infrastructure for your ML system.
+
+Proceed to the **Infra Setup** section to learn how to push your code to Azure and provision your ML environment.
