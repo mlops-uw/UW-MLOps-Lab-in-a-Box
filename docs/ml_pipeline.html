@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>MLSecOps Lab: Boeing x WIC x UW - Data Engineering</title>
+<title>MLSecOps Lab: Boeing x WIC x UW - ML Pipeline</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -67,9 +101,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      MLSecOps Lab: Boeing x WIC x UW
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vc.html">{{&lt; fa server &gt;}} Infra Setup</a></li><li class="breadcrumb-item"><a href="./ml_pipeline.html">{{&lt; fa diagram-project &gt;}} ML Pipeline</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -147,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ml_pipeline.html" class="sidebar-item-text sidebar-link">
+  <a href="./ml_pipeline.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"> ML Pipeline</span></a>
   </div>
 </li>
@@ -264,10 +296,10 @@ ul.task-list li input[type="checkbox"] {
 <!-- Load Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vc.html">{{&lt; fa server &gt;}} Infra Setup</a></li><li class="breadcrumb-item"><a href="./ml_pipeline.html">{{&lt; fa diagram-project &gt;}} ML Pipeline</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Data Engineering</h1>
-<p class="subtitle lead">Building data pipelines</p>
+<h1 class="title">ML Pipeline</h1>
+<p class="subtitle lead">Orchestrating end-to-end ML workflows on Azure</p>
 </div>
 
 
@@ -284,9 +316,188 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="objective" class="level2">
-<h2 class="anchored" data-anchor-id="objective"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Objective</h2>
-<p>Content coming soon.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What You’ll Learn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This page covers how we build, configure, and run an automated ML pipeline on Azure Machine Learning, using the NYC Taxi dataset to walk through every stage from data preparation to model training.</p>
+</div>
+</div>
+<section id="what-is-an-ml-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-an-ml-pipeline"><i class="fa-solid fa-diagram-project" aria-label="diagram-project"></i> What Is an ML Pipeline?</h2>
+<p>An ML pipeline is a series of automated, reproducible steps that take raw data and produce a trained, registered model. Instead of running scripts manually in a notebook, a pipeline chains each step together so the entire workflow can be triggered, tracked, and repeated on demand.</p>
+<p>In this lab, our pipeline does the following:</p>
+<ul>
+<li>ingests raw NYC taxi trip data from Azure Blob Storage</li>
+<li>applies preprocessing and feature engineering</li>
+<li>trains a regression model to predict trip duration</li>
+<li>evaluates model performance against a validation set</li>
+<li>registers the best-performing model in the Azure ML Model Registry</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key Insight
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pipelines make your ML work reproducible. Anyone with access to the repo and the Azure workspace can re-run the exact same experiment and get the same results.</p>
+</div>
+</div>
+</section>
+<section id="pipeline-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline-architecture"><i class="fa-solid fa-cogs" aria-label="cogs"></i> Pipeline Architecture</h2>
+<p>Our ML pipeline consists of four sequential components, each defined as an Azure ML Component:</p>
+<p><strong>Component 1 — Data Preparation</strong></p>
+<ul>
+<li>Reads the raw Parquet files from Azure Blob Storage</li>
+<li>Validates schema and drops rows with missing critical fields</li>
+<li>Outputs a cleaned dataset to the pipeline’s scratch space</li>
+</ul>
+<p><strong>Component 2 — Feature Engineering</strong></p>
+<ul>
+<li>Computes derived features: trip distance bins, hour-of-day, day-of-week</li>
+<li>Scales numeric features using StandardScaler</li>
+<li>Encodes categorical variables</li>
+</ul>
+<p><strong>Component 3 — Model Training</strong></p>
+<ul>
+<li>Trains a LightGBM regressor on the processed training split</li>
+<li>Logs hyperparameters, training metrics (RMSE, MAE, R²) to Azure ML</li>
+<li>Saves the trained model artifact</li>
+</ul>
+<p><strong>Component 4 — Model Evaluation &amp; Registration</strong></p>
+<ul>
+<li>Evaluates the model on the held-out test split</li>
+<li>Compares performance to the currently registered production model</li>
+<li>Registers the new model only if it beats the baseline</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pipeline Component Philosophy
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Each component runs in its own isolated environment. This means you can update the feature engineering logic without touching the training code, and vice versa.</p>
+</div>
+</div>
+</section>
+<section id="pipeline-definition-yaml" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline-definition-yaml"><i class="fa-solid fa-file-code" aria-label="file-code"></i> Pipeline Definition (YAML)</h2>
+<p>Pipelines in Azure ML are defined as YAML jobs. Here is a simplified version of our pipeline configuration:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$schema</span><span class="kw">:</span><span class="at"> https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">type</span><span class="kw">:</span><span class="at"> pipeline</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">display_name</span><span class="kw">:</span><span class="at"> nyc-taxi-training-pipeline</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">settings</span><span class="kw">:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">default_compute</span><span class="kw">:</span><span class="at"> azureml:cpu-cluster</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">default_datastore</span><span class="kw">:</span><span class="at"> azureml:workspaceblobstore</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">inputs</span><span class="kw">:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">raw_data</span><span class="kw">:</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> uri_folder</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> azureml://datastores/workspaceblobstore/paths/nyc-taxi/raw/</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">data_prep</span><span class="kw">:</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> azureml:nyc_taxi_data_prep:1</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">inputs</span><span class="kw">:</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">raw_data</span><span class="kw">:</span><span class="at"> ${{parent.inputs.raw_data}}</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">outputs</span><span class="kw">:</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cleaned_data</span><span class="kw">:</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">mode</span><span class="kw">:</span><span class="at"> rw_mount</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">feature_engineering</span><span class="kw">:</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> azureml:nyc_taxi_features:1</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">inputs</span><span class="kw">:</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cleaned_data</span><span class="kw">:</span><span class="at"> ${{parent.jobs.data_prep.outputs.cleaned_data}}</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">outputs</span><span class="kw">:</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">feature_data</span><span class="kw">:</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">mode</span><span class="kw">:</span><span class="at"> rw_mount</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">model_training</span><span class="kw">:</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> azureml:nyc_taxi_train:1</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">inputs</span><span class="kw">:</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">feature_data</span><span class="kw">:</span><span class="at"> ${{parent.jobs.feature_engineering.outputs.feature_data}}</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">outputs</span><span class="kw">:</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">model_output</span><span class="kw">:</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">mode</span><span class="kw">:</span><span class="at"> rw_mount</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="running-the-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="running-the-pipeline"><i class="fa-solid fa-play" aria-label="play"></i> Running the Pipeline</h2>
+<p><strong>From the Azure ML CLI:</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Submit the pipeline job</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml job create <span class="at">-f</span> pipeline.yml <span class="at">--workspace-name</span> <span class="op">&lt;</span>your-workspace<span class="op">&gt;</span> --resource-group <span class="op">&lt;</span>your-rg<span class="op">&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Monitor job status</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml job show <span class="at">-n</span> <span class="op">&lt;</span>job-name<span class="op">&gt;</span> --workspace-name <span class="op">&lt;</span>your-workspace<span class="op">&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Stream logs</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml job stream <span class="at">-n</span> <span class="op">&lt;</span>job-name<span class="op">&gt;</span> --workspace-name <span class="op">&lt;</span>your-workspace<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>From the Azure ML Studio UI:</strong></p>
+<ol type="1">
+<li>Navigate to <strong>Jobs</strong> in the left sidebar</li>
+<li>Select your pipeline run to see the visual graph</li>
+<li>Click on individual steps to inspect logs and outputs</li>
+<li>View metrics tracked during training in the <strong>Metrics</strong> tab</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+GitHub Actions Integration
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In this lab, the pipeline is also triggered automatically via a GitHub Actions workflow when code is merged to <code>main</code>. This means every code change is tested end-to-end in Azure ML without manual intervention.</p>
+</div>
+</div>
+</section>
+<section id="what-gets-logged" class="level2">
+<h2 class="anchored" data-anchor-id="what-gets-logged"><i class="fa-solid fa-chart-bar" aria-label="chart-bar"></i> What Gets Logged</h2>
+<p>Every pipeline run captures the following to Azure ML:</p>
+<ul>
+<li><strong>Parameters:</strong> learning rate, max depth, number of estimators, feature list</li>
+<li><strong>Metrics:</strong> RMSE, MAE, R², training duration</li>
+<li><strong>Artifacts:</strong> trained model file, feature scaler, evaluation report</li>
+<li><strong>Lineage:</strong> which data version, which git commit SHA, which environment was used</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Why This Matters
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Full lineage means you can always trace a production model back to the exact data and code that produced it. This is critical for debugging, auditing, and reproducing results.</p>
+</div>
+</div>
+</section>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps"><i class="fa-solid fa-circle-arrow-right" aria-label="circle-arrow-right"></i> Next Steps</h2>
+<p>With the pipeline running, the next step is to retrieve the trained model from the Azure ML Model Registry and create a real-time endpoint for serving predictions.</p>
+<p>Proceed to the <strong>ML Foundations → Model Registry</strong> section to learn how trained models are versioned, staged, and promoted to production.</p>
 
 
 </section>

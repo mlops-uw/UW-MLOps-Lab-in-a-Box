@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>MLSecOps Lab: Boeing x WIC x UW - Data Engineering</title>
+<title>MLSecOps Lab: Boeing x WIC x UW - Going Forward &amp; Endnotes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -67,9 +67,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      MLSecOps Lab: Boeing x WIC x UW
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./going_forward.html">{{&lt; fa flag-checkered &gt;}} Going Forward &amp; Endnotes</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -231,7 +229,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./going_forward.html" class="sidebar-item-text sidebar-link">
+  <a href="./going_forward.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"> Going Forward &amp; Endnotes</span></a>
   </div>
 </li>
@@ -266,8 +264,8 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data Engineering</h1>
-<p class="subtitle lead">Building data pipelines</p>
+<h1 class="title">Going Forward &amp; Endnotes</h1>
+<p class="subtitle lead">What you’ve built, what comes next, and further resources</p>
 </div>
 
 
@@ -284,9 +282,116 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="objective" class="level2">
-<h2 class="anchored" data-anchor-id="objective"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Objective</h2>
-<p>Content coming soon.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+You Made It
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you’ve worked through this lab from start to finish, you have touched every major layer of a real MLOps system — from raw data all the way to a monitored, production endpoint. This final page reflects on what you’ve accomplished and points to where you can go from here.</p>
+</div>
+</div>
+<section id="what-youve-built" class="level2">
+<h2 class="anchored" data-anchor-id="what-youve-built"><i class="fa-solid fa-map-location-dot" aria-label="map-location-dot"></i> What You’ve Built</h2>
+<p>Over the course of this lab, you built a complete end-to-end MLOps system on Azure using the NYC Taxi dataset. Here is what that system looks like in full:</p>
+<p><strong>Data Layer</strong></p>
+<p>You loaded and explored the NYC Taxi dataset, understood its schema, cleaned and transformed it through a reproducible data processing pipeline, and ingested it into Azure Blob Storage in structured zones (raw → processed → features).</p>
+<p><strong>Infrastructure Layer</strong></p>
+<p>You used Terraform to provision a complete Azure ML workspace, including compute clusters, a blob storage datastore, and a Key Vault for secrets. You connected your GitHub repository to Azure via a Service Principal, enabling automated CI/CD workflows.</p>
+<p><strong>ML Foundations Layer</strong></p>
+<p>You understood the difference between supervised and unsupervised learning, trained regression models to predict taxi trip duration and fare, and tracked experiments in Azure ML. You learned how algorithms like Linear Regression, Random Forest, and Gradient Boosting compare on real data.</p>
+<p><strong>MLOps Pipeline Layer</strong></p>
+<p>You packaged your training workflow as a multi-step Azure ML Pipeline, registered the best model in the Azure ML Model Registry with full metadata, and created a managed online endpoint for real-time predictions.</p>
+<p><strong>Operations Layer</strong></p>
+<p>You set up monitoring to detect data drift and prediction drift, configured alerts to notify your team when thresholds are exceeded, and understood how to close the loop from monitoring back to retraining.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+The Full Picture
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What you’ve built is not a toy. The same patterns — Terraform for infra, GitHub Actions for CI/CD, Azure ML Pipelines for training, Model Registry for versioning, managed endpoints for serving, and monitoring for observability — are used in production MLOps systems at scale.</p>
+</div>
+</div>
+</section>
+<section id="where-to-go-from-here" class="level2">
+<h2 class="anchored" data-anchor-id="where-to-go-from-here"><i class="fa-solid fa-rocket" aria-label="rocket"></i> Where to Go From Here</h2>
+<p>This lab covered the foundations. There is much more to explore.</p>
+<p><strong>Automate the retraining loop</strong></p>
+<p>Add a GitHub Actions workflow that triggers retraining automatically when monitoring detects drift above your threshold. This is MLOps maturity level 2 — the fully automated ML lifecycle.</p>
+<p><strong>Experiment with advanced algorithms</strong></p>
+<p>The lab focused on regression. Explore other problem types using the same infrastructure: classification (predicting whether a trip gets tipped), clustering (finding neighborhood demand patterns), and time-series forecasting (predicting hourly demand by zone).</p>
+<p><strong>Explore LLM integration</strong></p>
+<p>Azure ML now supports deploying large language models alongside traditional ML models. Consider how an LLM could enhance a user-facing product built on top of your prediction service — for example, a natural language interface for querying trip statistics.</p>
+<p><strong>Deepen your Azure ML knowledge</strong></p>
+<p>Explore Azure ML features we didn’t cover in depth: Responsible AI dashboard for fairness and explainability, Prompt Flow for LLM application development, and Azure ML Managed Feature Store for shared feature definitions across teams.</p>
+<p><strong>Contribute back</strong></p>
+<p>This lab is open source. If you found an error, have a better explanation, or want to add a new module, submit a pull request to the repository. Real-world learning improves with real-world contributions.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Stay Curious
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The field of MLOps is evolving rapidly. What’s considered best practice today may be superseded by better tooling next year. The most important skill is not knowing any specific tool — it’s knowing how to reason about the problem: reliability, reproducibility, observability, and security.</p>
+</div>
+</div>
+</section>
+<section id="further-reading" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading"><i class="fa-solid fa-book-open" aria-label="book-open"></i> Further Reading</h2>
+<p><strong>MLOps Foundations</strong></p>
+<ul>
+<li><a href="https://developers.google.com/machine-learning/guides/rules-of-ml">Google ML Engineering Best Practices</a></li>
+<li><a href="https://proceedings.neurips.cc/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf">Sculley et al.&nbsp;(2015) — Hidden Technical Debt in Machine Learning Systems</a> (the paper that started the MLOps conversation)</li>
+<li><a href="https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/">Chip Huyen — Designing Machine Learning Systems</a></li>
+</ul>
+<p><strong>Azure ML Documentation</strong></p>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/machine-learning/">Azure Machine Learning documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/machine-learning/reference-yaml-job-pipeline">Azure ML Pipeline CLI v2 reference</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-monitoring">Azure ML Model Monitoring</a></li>
+</ul>
+<p><strong>Community Resources</strong></p>
+<ul>
+<li><a href="https://mlops.community/">MLOps Community</a> — Slack, podcasts, and meetups</li>
+<li><a href="https://madewithml.com/">Made With ML</a> — Practical MLOps courses</li>
+<li><a href="https://fullstackdeeplearning.com/">Full Stack Deep Learning</a> — End-to-end ML engineering</li>
+</ul>
+</section>
+<section id="acknowledgments" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgments"><i class="fa-solid fa-heart" aria-label="heart"></i> Acknowledgments</h2>
+<p>This lab was built as a capstone project by four graduate students in the University of Washington Master of Science in Information Management (MSIM) program, Class of 2026.</p>
+<p><strong>UW Team:</strong> Shakshi Gandhi, Vinod Kamat, Arohi Narang, Sneha Reddy</p>
+<p>We are deeply grateful to our Boeing industry mentors — <strong>Jared, Uzma, and Geetha</strong> — for their guidance, real-world perspective, and generous investment of time throughout this project.</p>
+<p>We also thank the <strong>Women in Cloud (WIC)</strong> team for sponsoring and supporting this collaboration, and for their mission to advance equity and opportunity in the cloud and AI industry.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A Note on the Dataset
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This lab uses the NYC Taxi and Limousine Commission (TLC) Trip Record Data, which is publicly available. All analysis is performed on this public dataset for educational purposes. We thank the TLC for making this data available to the public.</p>
+</div>
+</div>
+<hr>
+<p><em>MLSecOps Lab — University of Washington x Boeing x Women in Cloud</em><br>
+<em>Information Management Class of 2026</em></p>
 
 
 </section>
