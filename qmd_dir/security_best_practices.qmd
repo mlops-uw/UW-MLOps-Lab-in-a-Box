@@ -4,6 +4,12 @@ format: html
 toc: false
 ---
 
+::: {.callout-note}
+## What You'll Learn
+This page covers the security principles, access controls, and operational best practices that make MLOps systems on Azure safe, reproducible, and production-ready.
+:::
+
+
 ::: {.callout-important}
 ## Core Security Principles
 - Least privilege everywhere
