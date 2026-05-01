@@ -1,8 +1,152 @@
 ---
-title: "Version Control"
-subtitle: "Git and GitHub for MLOps"
+title: "Git to Azure"
+subtitle: "Connecting your repository to Azure ML workflows"
 ---
 
-## {{< fa bullseye >}} Objective
+::: {.callout-note}
+## What You'll Learn
+This page walks through how to connect your GitHub repository to Azure Machine Learning, enabling automated CI/CD pipelines that trigger model training, evaluation, and deployment whenever code is merged to `main`.
+:::
 
-Content coming soon.
+## {{< fa lightbulb >}} Why Connect Git to Azure?
+
+In a production MLOps system, every code change should be traceable. When you connect your GitHub repository to Azure, you get:
+
+- automatic pipeline triggers on code push or pull request merge
+- full lineage linking every model back to the git commit that produced it
+- a clear audit trail showing who changed what, when, and why
+- environment parity between development and production
+
+::: {.callout-tip}
+## Key Insight
+The connection between Git and Azure is the bridge between experimental notebooks and production-grade ML systems. Without it, deployment is a manual, error-prone process.
+:::
+
+## {{< fa key >}} Setting Up Azure Service Principal Authentication
+
+To allow GitHub Actions to interact with Azure, you need a Service Principal — a non-human identity that GitHub uses to authenticate to Azure.
+
+**Step 1: Create a Service Principal**
+
+```bash
+# Create a service principal with Contributor access to your resource group
+az ad sp create-for-rbac \
+  --name "github-mlops-sp" \
+  --role contributor \
+  --scopes /subscriptions/<subscription-id>/resourceGroups/<resource-group> \
+  --sdk-auth
+```
+
+This outputs a JSON credential block. Save it — you'll store it as a GitHub secret.
+
+**Step 2: Add the credential to GitHub Secrets**
+
+1. Go to your GitHub repository → **Settings** → **Secrets and variables** → **Actions**
+2. Click **New repository secret**
+3. Name it `AZURE_CREDENTIALS`
+4. Paste the JSON output from Step 1
+
+::: {.callout-warning}
+## Keep Credentials Secure
+Never paste the service principal JSON into a file in your repository. Always use GitHub Secrets. Rotate the service principal key every 90 days.
+:::
+
+## {{< fa code-branch >}} GitHub Actions Workflow
+
+Once the credential is stored, you can use it in a GitHub Actions workflow. Here is the workflow we use to trigger Azure ML pipeline runs:
+
+```yaml
+name: Run Azure ML Training Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Install Azure ML CLI
+        run: |
+          az extension add -n ml -y
+          az version
+
+      - name: Set Azure defaults
+        run: |
+          az configure --defaults group=${{ vars.RESOURCE_GROUP }}
+          az configure --defaults workspace=${{ vars.WORKSPACE_NAME }}
+
+      - name: Submit training pipeline
+        run: |
+          az ml job create -f pipeline/training_pipeline.yml \
+            --stream
+```
+
+::: {.callout-note}
+## Workflow Triggers
+The workflow above runs on every push to `main`. You can also add a `pull_request` trigger to run validation pipelines on PRs before they are merged.
+:::
+
+## {{< fa arrows-split-up-and-left >}} Branch Strategy for MLOps
+
+In this lab we follow a simple branch strategy:
+
+| Branch | Purpose |
+|--------|---------|
+| `main` | Production-ready code and configs |
+| `feature/*` | New features, experiments, model updates |
+| `fix/*` | Bug fixes in pipeline or scoring code |
+
+Pull requests from `feature/*` branches trigger a validation pipeline that checks code quality and runs lightweight tests before merging into `main`. Merging to `main` triggers the full training pipeline.
+
+::: {.callout-important}
+## Protect Your Main Branch
+Enable branch protection rules on `main` in GitHub Settings. Require at least one review and passing CI checks before any merge.
+:::
+
+## {{< fa cloud-arrow-up >}} Connecting to Azure ML Workspace
+
+After authenticating, you configure GitHub Actions with your workspace details using repository variables:
+
+| Variable | Description |
+|----------|-------------|
+| `RESOURCE_GROUP` | Azure Resource Group containing your workspace |
+| `WORKSPACE_NAME` | Azure ML Workspace name |
+| `SUBSCRIPTION_ID` | Your Azure subscription ID |
+
+Store these as **GitHub repository variables** (not secrets, since they are not sensitive).
+
+```bash
+# Verify connectivity from your local machine
+az ml workspace show --name <workspace-name> --resource-group <rg-name>
+```
+
+## {{< fa circle-check >}} Verifying the Connection
+
+After pushing the workflow file, check the **Actions** tab in your GitHub repository. You should see a workflow run appear within seconds of your push.
+
+A successful run will show:
+
+- Azure login with a green checkmark
+- Pipeline submission with a job name printed to logs
+- The Azure ML job URL where you can monitor training progress
+
+::: {.callout-tip}
+## Debugging Tip
+If the workflow fails at the Azure login step, check that the service principal has not expired and that the `AZURE_CREDENTIALS` secret is correctly formatted JSON.
+:::
+
+## {{< fa circle-arrow-right >}} Next Steps
+
+With GitHub connected to Azure, code changes automatically flow into the ML infrastructure. The next step is to understand how Terraform provisions that infrastructure in a repeatable, code-driven way.
+
+Proceed to the **Terraform** section to see how cloud resources are defined and deployed.
