@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>MLSecOps Lab: Boeing x WIC x UW - Testing &amp; Deployment</title>
+<title>MLSecOps Lab: Boeing x WIC x UW - Endpoint Creation (Testing &amp; Deployment)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -264,8 +298,8 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">{{&lt; fa brain &gt;}} ML Foundations</a></li><li class="breadcrumb-item"><a href="./Testing_deploying.html">{{&lt; fa flask &gt;}} Endpoint Creation (Testing &amp; Deployment)</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Testing &amp; Deployment</h1>
-<p class="subtitle lead">CI/CD for ML systems</p>
+<h1 class="title">Endpoint Creation (Testing &amp; Deployment)</h1>
+<p class="subtitle lead">Serving ML models as real-time REST APIs on Azure</p>
 </div>
 
 
@@ -282,9 +316,281 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="objective" class="level2">
-<h2 class="anchored" data-anchor-id="objective"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Objective</h2>
-<p>Content coming soon.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What You’ll Learn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This page covers how registered models become live REST API endpoints on Azure ML. You will see how the scoring script works, how the endpoint and deployment are configured, how to call the API with a real request, and how deployment is automated through GitHub Actions — all using the actual files from this lab.</p>
+</div>
+</div>
+<section id="from-registered-model-to-live-api" class="level2">
+<h2 class="anchored" data-anchor-id="from-registered-model-to-live-api"><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> From Registered Model to Live API</h2>
+<p>Registering a model in Azure ML gives it a version and a home in the model registry. But a registered model cannot do anything on its own — it is still just a file. To serve predictions, you need two additional things:</p>
+<ul>
+<li>an <strong>endpoint</strong>: a stable HTTPS URL that clients send requests to</li>
+<li>a <strong>deployment</strong>: the compute + model + scoring code that runs behind that URL</li>
+</ul>
+<p>In this lab, the endpoint is named <code>taxi-mlops-endpoint</code> and the deployment is named <code>blue</code>. The scoring script loaded by that deployment is <code>ML/score.py</code>, which handles both the Linear Regression fare prediction model and the KMeans zone clustering model in a single endpoint.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Key Insight
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A single endpoint can host multiple deployments (e.g., <code>blue</code> and <code>green</code>). This enables zero-downtime model updates: you deploy a new version as <code>green</code>, test it, then shift traffic over from <code>blue</code> to <code>green</code> — and roll back instantly if something goes wrong.</p>
+</div>
+</div>
+</section>
+<section id="the-endpoint-configuration-endpoint.yaml" class="level2">
+<h2 class="anchored" data-anchor-id="the-endpoint-configuration-endpoint.yaml"><i class="fa-solid fa-file-code" aria-label="file-code"></i> The Endpoint Configuration (<code>endpoint.yaml</code>)</h2>
+<p>The endpoint definition is minimal — it just names the endpoint and sets authentication mode:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$schema</span><span class="kw">:</span><span class="at"> https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> taxi-mlops-endpoint</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">auth_mode</span><span class="kw">:</span><span class="at"> key</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>auth_mode: key</code> means callers must include an API key in the request header. Azure ML generates this key automatically when the endpoint is created.</p>
+</section>
+<section id="the-deployment-configuration-deployment.yaml" class="level2">
+<h2 class="anchored" data-anchor-id="the-deployment-configuration-deployment.yaml"><i class="fa-solid fa-server" aria-label="server"></i> The Deployment Configuration (<code>deployment.yaml</code>)</h2>
+<p>The deployment wires together the model, scoring script, environment, and compute:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$schema</span><span class="kw">:</span><span class="at"> https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> blue</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">endpoint_name</span><span class="kw">:</span><span class="at"> taxi-mlops-endpoint</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span><span class="kw">:</span><span class="at"> azureml:taxi-fare-linear-regression@latest</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">code_configuration</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">code</span><span class="kw">:</span><span class="at"> ./</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">scoring_script</span><span class="kw">:</span><span class="at"> score.py</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span><span class="at"> azureml:taxi-ml-env@latest</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">instance_type</span><span class="kw">:</span><span class="at"> Standard_DS2_v2</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">instance_count</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">request_settings</span><span class="kw">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">request_timeout_ms</span><span class="kw">:</span><span class="at"> </span><span class="dv">5000</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">max_concurrent_requests_per_instance</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Key fields to understand:</p>
+<ul>
+<li><strong><code>model</code></strong>: references <code>taxi-fare-linear-regression@latest</code> — the most recently registered version. The scoring script also loads the KMeans model at startup using <code>AZUREML_MODEL_DIR</code>.</li>
+<li><strong><code>scoring_script</code></strong>: points to <code>score.py</code> in the same directory</li>
+<li><strong><code>instance_type</code></strong>: <code>Standard_DS2_v2</code> — 2 vCPUs, 7 GB RAM, cost-effective for inference</li>
+<li><strong><code>request_timeout_ms</code></strong>: 5 seconds max per request before Azure ML returns a timeout error</li>
+<li><strong><code>max_concurrent_requests_per_instance</code></strong>: 10 parallel requests per container instance</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Deployment Name Convention
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The deployment is named <code>blue</code> because this lab uses a blue/green deployment strategy. When you want to update the model, create a new <code>green</code> deployment alongside <code>blue</code>, test it, then shift 100% of traffic to <code>green</code>. This avoids downtime during model updates.</p>
+</div>
+</div>
+</section>
+<section id="the-scoring-script-score.py" class="level2">
+<h2 class="anchored" data-anchor-id="the-scoring-script-score.py"><i class="fa-solid fa-python" aria-label="python"></i> The Scoring Script (<code>score.py</code>)</h2>
+<p>Azure ML calls two functions in the scoring script: <code>init()</code> once when the container starts, and <code>run()</code> for every prediction request.</p>
+<p><strong><code>init()</code> — loading models at startup</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> init():</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> lr_model, lr_scaler, kmeans_model</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    model_dir <span class="op">=</span> os.environ[<span class="st">"AZUREML_MODEL_DIR"</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load Linear Regression model</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    lr_path <span class="op">=</span> find_model_file(model_dir, <span class="st">"linear_regression"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    lr_model <span class="op">=</span> load_model(lr_path)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load scaler if available</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        scaler_path <span class="op">=</span> find_model_file(model_dir, <span class="st">"feature_scaler"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        lr_scaler <span class="op">=</span> load_model(scaler_path)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">FileNotFoundError</span>:</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        lr_scaler <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load KMeans model</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    kmeans_path <span class="op">=</span> find_model_file(model_dir, <span class="st">"kmeans"</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    kmeans_model <span class="op">=</span> load_model(kmeans_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong><code>run()</code> — routing requests to the right model</strong></p>
+<p>The <code>run()</code> function reads the <code>"model"</code> field from the JSON request body and routes to either <code>predict_fare()</code> or <code>predict_cluster()</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run(data):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> json.loads(data) <span class="cf">if</span> <span class="bu">isinstance</span>(data, <span class="bu">str</span>) <span class="cf">else</span> data</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        model_type <span class="op">=</span> data.get(<span class="st">"model"</span>, <span class="st">"linear_regression"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> model_type <span class="op">==</span> <span class="st">"linear_regression"</span>:</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> predict_fare(data)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> model_type <span class="op">==</span> <span class="st">"kmeans"</span>:</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> predict_cluster(data)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> json.dumps({<span class="st">"error"</span>: <span class="ss">f"Unknown model: </span><span class="sc">{</span>model_type<span class="sc">}</span><span class="ss">"</span>})</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> json.dumps({<span class="st">"error"</span>: <span class="bu">str</span>(e)})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Single Endpoint, Two Models
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A single <code>score.py</code> serves both the fare prediction model and the KMeans clustering model. The caller decides which model to invoke by setting <code>"model": "linear_regression"</code> or <code>"model": "kmeans"</code> in the request JSON. This design reduces infrastructure cost and simplifies the deployment.</p>
+</div>
+</div>
+</section>
+<section id="deploying-step-by-step" class="level2">
+<h2 class="anchored" data-anchor-id="deploying-step-by-step"><i class="fa-solid fa-play" aria-label="play"></i> Deploying Step-by-Step</h2>
+<p><strong>Step 1: Create the endpoint</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml online-endpoint create <span class="dt">\</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--file</span> ML/endpoint.yaml <span class="dt">\</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--workspace-name</span> <span class="op">&lt;</span>your-workspace<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--resource-group</span> <span class="op">&lt;</span>your-rg<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This creates the HTTPS URL and generates the API key. The endpoint exists but has no model behind it yet.</p>
+<p><strong>Step 2: Create the deployment</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml online-deployment create <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--file</span> ML/deployment.yaml <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--all-traffic</span> <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--workspace-name</span> <span class="op">&lt;</span>your-workspace<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--resource-group</span> <span class="op">&lt;</span>your-rg<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>--all-traffic</code> flag routes 100% of requests to this <code>blue</code> deployment immediately. Deployment typically takes 3–5 minutes while Azure provisions the container and loads the models.</p>
+<p><strong>Step 3: Check endpoint status</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml online-endpoint show <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> taxi-mlops-endpoint <span class="dt">\</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--workspace-name</span> <span class="op">&lt;</span>your-workspace<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Wait until <code>provisioning_state</code> is <code>Succeeded</code> before testing.</p>
+</section>
+<section id="making-your-first-prediction" class="level2">
+<h2 class="anchored" data-anchor-id="making-your-first-prediction"><i class="fa-solid fa-paper-plane" aria-label="paper-plane"></i> Making Your First Prediction</h2>
+<p>The request format is defined in <code>ML/sample-request.json</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"model"</span><span class="fu">:</span> <span class="st">"linear_regression"</span><span class="fu">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"trip_distance"</span><span class="fu">:</span> <span class="fl">3.5</span><span class="fu">,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"trip_duration_min"</span><span class="fu">:</span> <span class="fl">15.0</span><span class="fu">,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"pickup_hour"</span><span class="fu">:</span> <span class="dv">14</span><span class="fu">,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"passenger_count"</span><span class="fu">:</span> <span class="dv">2</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Using the Azure ML CLI:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml online-endpoint invoke <span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> taxi-mlops-endpoint <span class="dt">\</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--request-file</span> ML/sample-request.json <span class="dt">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--workspace-name</span> <span class="op">&lt;</span>your-workspace<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Expected response:</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"predicted_fare_amount"</span><span class="fu">:</span> <span class="fl">12.47</span><span class="fu">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"model"</span><span class="fu">:</span> <span class="st">"linear_regression"</span><span class="fu">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"input_features"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"trip_distance"</span><span class="fu">:</span> <span class="fl">3.5</span><span class="fu">,</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"trip_duration_min"</span><span class="fu">:</span> <span class="fl">15.0</span><span class="fu">,</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"pickup_hour"</span><span class="fu">:</span> <span class="dv">14</span><span class="fu">,</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"passenger_count"</span><span class="fu">:</span> <span class="dv">2</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Using curl:</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the endpoint URL and key</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="va">ENDPOINT_URL</span><span class="op">=</span><span class="va">$(</span><span class="ex">az</span> ml online-endpoint show <span class="at">--name</span> taxi-mlops-endpoint <span class="at">--query</span> scoring_uri <span class="at">-o</span> tsv<span class="va">)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="va">API_KEY</span><span class="op">=</span><span class="va">$(</span><span class="ex">az</span> ml online-endpoint get-credentials <span class="at">--name</span> taxi-mlops-endpoint <span class="at">--query</span> primaryKey <span class="at">-o</span> tsv<span class="va">)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Send a prediction request</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST <span class="va">$ENDPOINT_URL</span> <span class="dt">\</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">"Authorization: Bearer </span><span class="va">$API_KEY</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">"Content-Type: application/json"</span> <span class="dt">\</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> @ML/sample-request.json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Testing the KMeans Model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To call the zone clustering model instead, change <code>"model"</code> to <code>"kmeans"</code> and provide <code>"pickup_longitude"</code>, <code>"pickup_latitude"</code>, <code>"dropoff_longitude"</code>, and <code>"dropoff_latitude"</code> in the request body. The endpoint returns the predicted zone cluster number.</p>
+</div>
+</div>
+</section>
+<section id="input-validation" class="level2">
+<h2 class="anchored" data-anchor-id="input-validation"><i class="fa-solid fa-triangle-exclamation" aria-label="triangle-exclamation"></i> Input Validation</h2>
+<p>The scoring script validates inputs before running inference. For the Linear Regression model, the required fields are:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>required <span class="op">=</span> [<span class="st">"trip_distance"</span>, <span class="st">"trip_duration_min"</span>, <span class="st">"pickup_hour"</span>, <span class="st">"passenger_count"</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>missing <span class="op">=</span> [f <span class="cf">for</span> f <span class="kw">in</span> required <span class="cf">if</span> f <span class="kw">not</span> <span class="kw">in</span> data]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> missing:</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> json.dumps({<span class="st">"error"</span>: <span class="ss">f"Missing fields: </span><span class="sc">{</span>missing<span class="sc">}</span><span class="ss">"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If any required field is absent, the endpoint returns an error JSON rather than crashing. This prevents silent failures and makes debugging straightforward.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Do Not Log Raw Payloads
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Never log the full request payload in production. Log request IDs, latency, error codes, and summary statistics instead. Raw payloads can contain sensitive user data and can fill storage quickly under high traffic.</p>
+</div>
+</div>
+</section>
+<section id="github-actions-automation" class="level2">
+<h2 class="anchored" data-anchor-id="github-actions-automation"><i class="fa-solid fa-robot" aria-label="robot"></i> GitHub Actions Automation</h2>
+<p>Endpoint deployment is automated via <code>.github/workflows/deploy-endpoint.yaml</code>. When a new model version is registered and the deployment workflow is triggered, it runs:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml online-deployment create <span class="dt">\</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--file</span> ML/deployment.yaml <span class="dt">\</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--all-traffic</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This means every successful pipeline run that registers a new model can automatically update the endpoint — no manual CLI commands required.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+The KMeans Endpoint
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In addition to the supervised model endpoint, this lab includes a separate endpoint for the KMeans clustering model: <code>endpoint-kmeans.yaml</code>, <code>deployment-kmeans.yaml</code>, and <code>score-kmeans.py</code>. It follows the same pattern but serves zone cluster predictions independently, with its own compute and traffic settings. See the <code>ML/</code> directory for the full configuration.</p>
+</div>
+</div>
+</section>
+<section id="deployment-checklist" class="level2">
+<h2 class="anchored" data-anchor-id="deployment-checklist"><i class="fa-solid fa-list-check" aria-label="list-check"></i> Deployment Checklist</h2>
+<p>Before declaring a deployment production-ready:</p>
+<ul class="task-list">
+<li><label><input type="checkbox">Endpoint status shows <code>Succeeded</code> in Azure ML Studio</label></li>
+<li><label><input type="checkbox">Test with <code>sample-request.json</code> and verify the response shape</label></li>
+<li><label><input type="checkbox">Confirm input validation returns descriptive errors for missing fields</label></li>
+<li><label><input type="checkbox">Check endpoint logs in Azure ML Studio under <strong>Deployments → Logs</strong></label></li>
+<li><label><input type="checkbox">Verify Application Insights telemetry is flowing (latency, error rate)</label></li>
+<li><label><input type="checkbox">Confirm the API key is stored in Azure Key Vault — not hardcoded anywhere</label></li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Enable Authentication
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The endpoint uses <code>auth_mode: key</code>. Always ensure the API key is treated as a secret — store it in Azure Key Vault and access it via Managed Identity. Rotate the key regularly and never commit it to Git.</p>
+</div>
+</div>
+</section>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps"><i class="fa-solid fa-circle-arrow-right" aria-label="circle-arrow-right"></i> Next Steps</h2>
+<p>With a live endpoint serving predictions, the system is deployed. The next challenge is keeping it healthy — detecting when predictions drift, setting up alerts, and knowing when to retrain.</p>
+<p>Proceed to <strong>Monitoring</strong> to learn how to observe and maintain your production ML endpoint.</p>
 
 
 </section>

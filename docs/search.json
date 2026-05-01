@@ -565,7 +565,7 @@
   {
     "objectID": "Testing_deploying.html",
     "href": "Testing_deploying.html",
-    "title": "Testing & Deployment",
+    "title": "Endpoint Creation (Testing & Deployment)",
     "section": "",
     "text": "MLOps Lab: Boeing x WIC x UW\n    \n\n    \n      \n        \n      \n      \n      \n        🌙",
     "crumbs": [
@@ -574,11 +574,110 @@
     ]
   },
   {
-    "objectID": "Testing_deploying.html#objective",
-    "href": "Testing_deploying.html#objective",
-    "title": "Testing & Deployment",
-    "section": " Objective",
-    "text": "Objective\nContent coming soon.",
+    "objectID": "Testing_deploying.html#from-registered-model-to-live-api",
+    "href": "Testing_deploying.html#from-registered-model-to-live-api",
+    "title": "Endpoint Creation (Testing & Deployment)",
+    "section": " From Registered Model to Live API",
+    "text": "From Registered Model to Live API\nRegistering a model in Azure ML gives it a version and a home in the model registry. But a registered model cannot do anything on its own — it is still just a file. To serve predictions, you need two additional things:\n\nan endpoint: a stable HTTPS URL that clients send requests to\na deployment: the compute + model + scoring code that runs behind that URL\n\nIn this lab, the endpoint is named taxi-mlops-endpoint and the deployment is named blue. The scoring script loaded by that deployment is ML/score.py, which handles both the Linear Regression fare prediction model and the KMeans zone clustering model in a single endpoint.\n\n\n\n\n\n\nKey Insight\n\n\n\nA single endpoint can host multiple deployments (e.g., blue and green). This enables zero-downtime model updates: you deploy a new version as green, test it, then shift traffic over from blue to green — and roll back instantly if something goes wrong.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html#the-endpoint-configuration-endpoint.yaml",
+    "href": "Testing_deploying.html#the-endpoint-configuration-endpoint.yaml",
+    "title": "Endpoint Creation (Testing & Deployment)",
+    "section": " The Endpoint Configuration (endpoint.yaml)",
+    "text": "The Endpoint Configuration (endpoint.yaml)\nThe endpoint definition is minimal — it just names the endpoint and sets authentication mode:\n$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json\nname: taxi-mlops-endpoint\nauth_mode: key\nauth_mode: key means callers must include an API key in the request header. Azure ML generates this key automatically when the endpoint is created.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html#the-deployment-configuration-deployment.yaml",
+    "href": "Testing_deploying.html#the-deployment-configuration-deployment.yaml",
+    "title": "Endpoint Creation (Testing & Deployment)",
+    "section": " The Deployment Configuration (deployment.yaml)",
+    "text": "The Deployment Configuration (deployment.yaml)\nThe deployment wires together the model, scoring script, environment, and compute:\n$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json\nname: blue\nendpoint_name: taxi-mlops-endpoint\nmodel: azureml:taxi-fare-linear-regression@latest\ncode_configuration:\n  code: ./\n  scoring_script: score.py\nenvironment: azureml:taxi-ml-env@latest\ninstance_type: Standard_DS2_v2\ninstance_count: 1\nrequest_settings:\n  request_timeout_ms: 5000\n  max_concurrent_requests_per_instance: 10\nKey fields to understand:\n\nmodel: references taxi-fare-linear-regression@latest — the most recently registered version. The scoring script also loads the KMeans model at startup using AZUREML_MODEL_DIR.\nscoring_script: points to score.py in the same directory\ninstance_type: Standard_DS2_v2 — 2 vCPUs, 7 GB RAM, cost-effective for inference\nrequest_timeout_ms: 5 seconds max per request before Azure ML returns a timeout error\nmax_concurrent_requests_per_instance: 10 parallel requests per container instance\n\n\n\n\n\n\n\nDeployment Name Convention\n\n\n\nThe deployment is named blue because this lab uses a blue/green deployment strategy. When you want to update the model, create a new green deployment alongside blue, test it, then shift 100% of traffic to green. This avoids downtime during model updates.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html#the-scoring-script-score.py",
+    "href": "Testing_deploying.html#the-scoring-script-score.py",
+    "title": "Endpoint Creation (Testing & Deployment)",
+    "section": " The Scoring Script (score.py)",
+    "text": "The Scoring Script (score.py)\nAzure ML calls two functions in the scoring script: init() once when the container starts, and run() for every prediction request.\ninit() — loading models at startup\ndef init():\n    global lr_model, lr_scaler, kmeans_model\n    model_dir = os.environ[\"AZUREML_MODEL_DIR\"]\n\n    # Load Linear Regression model\n    lr_path = find_model_file(model_dir, \"linear_regression\")\n    lr_model = load_model(lr_path)\n\n    # Load scaler if available\n    try:\n        scaler_path = find_model_file(model_dir, \"feature_scaler\")\n        lr_scaler = load_model(scaler_path)\n    except FileNotFoundError:\n        lr_scaler = None\n\n    # Load KMeans model\n    kmeans_path = find_model_file(model_dir, \"kmeans\")\n    kmeans_model = load_model(kmeans_path)\nrun() — routing requests to the right model\nThe run() function reads the \"model\" field from the JSON request body and routes to either predict_fare() or predict_cluster():\ndef run(data):\n    try:\n        data = json.loads(data) if isinstance(data, str) else data\n        model_type = data.get(\"model\", \"linear_regression\")\n\n        if model_type == \"linear_regression\":\n            return predict_fare(data)\n        elif model_type == \"kmeans\":\n            return predict_cluster(data)\n        else:\n            return json.dumps({\"error\": f\"Unknown model: {model_type}\"})\n    except Exception as e:\n        return json.dumps({\"error\": str(e)})\n\n\n\n\n\n\nSingle Endpoint, Two Models\n\n\n\nA single score.py serves both the fare prediction model and the KMeans clustering model. The caller decides which model to invoke by setting \"model\": \"linear_regression\" or \"model\": \"kmeans\" in the request JSON. This design reduces infrastructure cost and simplifies the deployment.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html#deploying-step-by-step",
+    "href": "Testing_deploying.html#deploying-step-by-step",
+    "title": "Endpoint Creation (Testing & Deployment)",
+    "section": " Deploying Step-by-Step",
+    "text": "Deploying Step-by-Step\nStep 1: Create the endpoint\naz ml online-endpoint create \\\n  --file ML/endpoint.yaml \\\n  --workspace-name &lt;your-workspace&gt; \\\n  --resource-group &lt;your-rg&gt;\nThis creates the HTTPS URL and generates the API key. The endpoint exists but has no model behind it yet.\nStep 2: Create the deployment\naz ml online-deployment create \\\n  --file ML/deployment.yaml \\\n  --all-traffic \\\n  --workspace-name &lt;your-workspace&gt; \\\n  --resource-group &lt;your-rg&gt;\nThe --all-traffic flag routes 100% of requests to this blue deployment immediately. Deployment typically takes 3–5 minutes while Azure provisions the container and loads the models.\nStep 3: Check endpoint status\naz ml online-endpoint show \\\n  --name taxi-mlops-endpoint \\\n  --workspace-name &lt;your-workspace&gt;\nWait until provisioning_state is Succeeded before testing.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html#making-your-first-prediction",
+    "href": "Testing_deploying.html#making-your-first-prediction",
+    "title": "Endpoint Creation (Testing & Deployment)",
+    "section": " Making Your First Prediction",
+    "text": "Making Your First Prediction\nThe request format is defined in ML/sample-request.json:\n{\n  \"model\": \"linear_regression\",\n  \"trip_distance\": 3.5,\n  \"trip_duration_min\": 15.0,\n  \"pickup_hour\": 14,\n  \"passenger_count\": 2\n}\nUsing the Azure ML CLI:\naz ml online-endpoint invoke \\\n  --name taxi-mlops-endpoint \\\n  --request-file ML/sample-request.json \\\n  --workspace-name &lt;your-workspace&gt;\nExpected response:\n{\n  \"predicted_fare_amount\": 12.47,\n  \"model\": \"linear_regression\",\n  \"input_features\": {\n    \"trip_distance\": 3.5,\n    \"trip_duration_min\": 15.0,\n    \"pickup_hour\": 14,\n    \"passenger_count\": 2\n  }\n}\nUsing curl:\n# Get the endpoint URL and key\nENDPOINT_URL=$(az ml online-endpoint show --name taxi-mlops-endpoint --query scoring_uri -o tsv)\nAPI_KEY=$(az ml online-endpoint get-credentials --name taxi-mlops-endpoint --query primaryKey -o tsv)\n\n# Send a prediction request\ncurl -X POST $ENDPOINT_URL \\\n  -H \"Authorization: Bearer $API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d @ML/sample-request.json\n\n\n\n\n\n\nTesting the KMeans Model\n\n\n\nTo call the zone clustering model instead, change \"model\" to \"kmeans\" and provide \"pickup_longitude\", \"pickup_latitude\", \"dropoff_longitude\", and \"dropoff_latitude\" in the request body. The endpoint returns the predicted zone cluster number.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html#input-validation",
+    "href": "Testing_deploying.html#input-validation",
+    "title": "Endpoint Creation (Testing & Deployment)",
+    "section": " Input Validation",
+    "text": "Input Validation\nThe scoring script validates inputs before running inference. For the Linear Regression model, the required fields are:\nrequired = [\"trip_distance\", \"trip_duration_min\", \"pickup_hour\", \"passenger_count\"]\nmissing = [f for f in required if f not in data]\nif missing:\n    return json.dumps({\"error\": f\"Missing fields: {missing}\"})\nIf any required field is absent, the endpoint returns an error JSON rather than crashing. This prevents silent failures and makes debugging straightforward.\n\n\n\n\n\n\nDo Not Log Raw Payloads\n\n\n\nNever log the full request payload in production. Log request IDs, latency, error codes, and summary statistics instead. Raw payloads can contain sensitive user data and can fill storage quickly under high traffic.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html#github-actions-automation",
+    "href": "Testing_deploying.html#github-actions-automation",
+    "title": "Endpoint Creation (Testing & Deployment)",
+    "section": " GitHub Actions Automation",
+    "text": "GitHub Actions Automation\nEndpoint deployment is automated via .github/workflows/deploy-endpoint.yaml. When a new model version is registered and the deployment workflow is triggered, it runs:\naz ml online-deployment create \\\n  --file ML/deployment.yaml \\\n  --all-traffic\nThis means every successful pipeline run that registers a new model can automatically update the endpoint — no manual CLI commands required.\n\n\n\n\n\n\nThe KMeans Endpoint\n\n\n\nIn addition to the supervised model endpoint, this lab includes a separate endpoint for the KMeans clustering model: endpoint-kmeans.yaml, deployment-kmeans.yaml, and score-kmeans.py. It follows the same pattern but serves zone cluster predictions independently, with its own compute and traffic settings. See the ML/ directory for the full configuration.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html#deployment-checklist",
+    "href": "Testing_deploying.html#deployment-checklist",
+    "title": "Endpoint Creation (Testing & Deployment)",
+    "section": " Deployment Checklist",
+    "text": "Deployment Checklist\nBefore declaring a deployment production-ready:\n\nEndpoint status shows Succeeded in Azure ML Studio\nTest with sample-request.json and verify the response shape\nConfirm input validation returns descriptive errors for missing fields\nCheck endpoint logs in Azure ML Studio under Deployments → Logs\nVerify Application Insights telemetry is flowing (latency, error rate)\nConfirm the API key is stored in Azure Key Vault — not hardcoded anywhere\n\n\n\n\n\n\n\nEnable Authentication\n\n\n\nThe endpoint uses auth_mode: key. Always ensure the API key is treated as a secret — store it in Azure Key Vault and access it via Managed Identity. Rotate the key regularly and never commit it to Git.",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
+    ]
+  },
+  {
+    "objectID": "Testing_deploying.html#next-steps",
+    "href": "Testing_deploying.html#next-steps",
+    "title": "Endpoint Creation (Testing & Deployment)",
+    "section": " Next Steps",
+    "text": "Next Steps\nWith a live endpoint serving predictions, the system is deployed. The next challenge is keeping it healthy — detecting when predictions drift, setting up alerts, and knowing when to retrain.\nProceed to Monitoring to learn how to observe and maintain your production ML endpoint.",
     "crumbs": [
       "{{< fa brain >}} ML Foundations",
       "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
