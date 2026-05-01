@@ -1,8 +1,188 @@
 ---
-title: "Monitoring & Maintenance"
-subtitle: "Keeping ML systems healthy"
+title: "Monitoring"
+subtitle: "Keeping ML systems healthy in production"
 ---
 
-## {{< fa bullseye >}} Objective
+::: {.callout-note}
+## What You'll Learn
+This page covers how to monitor a deployed ML system on Azure, detect model and data drift, set up alerts, and maintain prediction quality over time using the NYC Taxi model as a running example.
+:::
 
-Content coming soon.
+## {{< fa lightbulb >}} Why Monitoring Is Not Optional
+
+Training a model is the beginning, not the end. Once a model is deployed to production, the real challenge begins: the world keeps changing, but your model is frozen in time.
+
+For the NYC Taxi prediction system, consider what happens after deployment:
+
+- a new subway line opens, changing trip patterns across entire neighborhoods
+- surge pricing rules change, shifting the relationship between distance and fare
+- a major event brings an influx of riders to areas the model rarely saw in training
+- a data pipeline bug introduces null values that the model was never trained to handle
+
+In each of these cases, the model silently degrades. Without monitoring, users experience increasingly poor predictions while the engineering team has no idea anything is wrong.
+
+::: {.callout-warning}
+## The Silent Failure Pattern
+Model degradation in production rarely causes crashes. Predictions keep returning — they just become less and less accurate. Monitoring is the only way to catch this before it becomes a serious problem.
+:::
+
+## {{< fa chart-line >}} Types of Monitoring
+
+**Service health monitoring** tracks whether your endpoint is running correctly:
+
+- latency: how long each prediction request takes
+- error rate: what fraction of requests return errors or exceptions
+- throughput: how many requests per second the endpoint handles
+- availability: is the endpoint reachable and responding?
+
+**Data quality monitoring** checks whether incoming prediction requests look like the training data:
+
+- schema validation: are all required features present and of the correct type?
+- range checks: are feature values within expected bounds?
+- null / missing value rate: is the fraction of nulls higher than at training time?
+
+**Model performance monitoring** tracks whether predictions are still accurate:
+
+- if ground truth labels become available (e.g., actual trip durations after the fact), compute live RMSE and compare it to training performance
+- if labels are not available, use proxy metrics and statistical tests on prediction distributions
+
+**Drift detection** compares the statistical properties of live input data to the training data distribution:
+
+- feature drift: individual features shifting in mean, variance, or distribution shape
+- concept drift: the relationship between inputs and outputs changing over time
+- prediction drift: the distribution of model outputs shifting significantly
+
+::: {.callout-important}
+## Drift Does Not Always Mean Retraining
+Not all drift requires an immediate response. Assess whether drift is causing measurable performance degradation before triggering a full retraining cycle.
+:::
+
+## {{< fa gears >}} Monitoring in Azure ML
+
+Azure ML provides built-in monitoring through a combination of Application Insights and the Azure ML monitoring toolkit.
+
+**Application Insights** collects telemetry from your managed online endpoint automatically:
+
+```python
+# In your scoring script, you can log custom metrics
+import logging
+logger = logging.getLogger(__name__)
+
+def run(data):
+    # Log latency and request info
+    logger.info("Prediction request received")
+    result = model.predict(data)
+    logger.info(f"Prediction complete: {result}")
+    return result
+```
+
+**Azure ML Model Monitoring** (preview feature) provides automated drift detection:
+
+```yaml
+# monitor_config.yml
+$schema: https://azuremlschemas.azureedge.net/latest/monitor.schema.json
+name: nyc-taxi-monitor
+
+target:
+  ml_task: regression
+  endpoint_deployment_id: azureml:nyc-taxi-endpoint:nyc-taxi-deployment
+  
+monitoring_signals:
+  data_drift:
+    type: data_drift
+    reference_data:
+      input_data:
+        path: azureml://datastores/workspaceblobstore/paths/nyc-taxi/training/
+        type: uri_folder
+    features:
+      top_n_feature_importance: 10
+    metric_thresholds:
+      numerical:
+        - metric_name: normalized_wasserstein_distance
+          threshold: 0.2
+  
+  prediction_drift:
+    type: prediction_drift
+    reference_data:
+      input_data:
+        path: azureml://datastores/workspaceblobstore/paths/nyc-taxi/training/
+        type: uri_folder
+    metric_thresholds:
+      numerical:
+        - metric_name: normalized_wasserstein_distance
+          threshold: 0.2
+
+alert_notification:
+  emails:
+    - your-team@company.com
+```
+
+## {{< fa bell >}} Setting Up Alerts
+
+Alerts ensure your team is notified before small problems become large ones.
+
+**In Azure Monitor, set up alerts for:**
+
+- endpoint latency exceeding 500ms p99
+- error rate exceeding 1% of requests
+- data drift score exceeding your threshold for any key feature
+- prediction distribution shift exceeding threshold
+
+**Creating an alert via the Azure CLI:**
+
+```bash
+# Create an alert rule for high endpoint latency
+az monitor metrics alert create \
+  --name "high-endpoint-latency" \
+  --resource-group <rg-name> \
+  --scopes /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.MachineLearningServices/workspaces/<ws>/onlineEndpoints/nyc-taxi-endpoint \
+  --condition "avg RequestLatency_P99 > 500" \
+  --window-size 5m \
+  --evaluation-frequency 1m \
+  --action <action-group-id>
+```
+
+::: {.callout-tip}
+## Start Conservative with Thresholds
+Set initial alert thresholds conservatively so you get notified early. You can always tune them after seeing real production traffic patterns.
+:::
+
+## {{< fa rotate >}} The Monitor → Retrain Loop
+
+Monitoring feeds directly into the retraining workflow. Here is the cycle:
+
+1. **Drift detected** — the monitoring job flags that a key feature (e.g., `trip_distance`) has drifted beyond the threshold
+2. **Alert triggered** — the team is notified via email or a Teams channel
+3. **Investigation** — engineers inspect the drift dashboard to understand what changed
+4. **Decision** — if performance has degraded, schedule a retraining run
+5. **Retrain** — submit the training pipeline with fresh data
+6. **Evaluate** — compare the new model to the current production model on a held-out evaluation set
+7. **Promote** — if the new model is better, promote it through the model registry and redeploy
+8. **Monitor again** — the cycle continues
+
+::: {.callout-note}
+## Automated vs. Manual Retraining
+You can automate the entire loop by adding a drift-triggered GitHub Actions workflow. This is MLOps maturity level 2. For this lab, we focus on the monitoring and detection pieces; you can add automated retraining as a next step.
+:::
+
+## {{< fa list-check >}} Monitoring Checklist
+
+Before declaring a deployed model production-ready, verify that:
+
+- [ ] Application Insights is enabled on the managed online endpoint
+- [ ] A drift monitoring job is scheduled (daily or weekly)
+- [ ] Alert rules are configured for latency, error rate, and drift thresholds
+- [ ] The team has reviewed alert notification destinations
+- [ ] A runbook exists describing how to respond to each alert type
+- [ ] The retraining pipeline has been tested end-to-end at least once
+
+::: {.callout-important}
+## Monitoring Is an Ongoing Commitment
+Setting up monitoring once is not enough. Review monitoring dashboards regularly, tune thresholds as traffic patterns stabilize, and update reference datasets as the data distribution evolves.
+:::
+
+## {{< fa circle-arrow-right >}} Next Steps
+
+With monitoring in place, the system is observable and maintainable. The next section covers the security practices that keep your entire MLOps stack safe and auditable.
+
+Proceed to **Security & Best Practices** to learn about RBAC, secrets management, and production-grade safeguards.
