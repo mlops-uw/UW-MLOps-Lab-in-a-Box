@@ -3,7 +3,7 @@ project:
   output-dir: _site
 
 website:
-  title: "MLOps Lab: Boeing x WIC x UW"
+  title: "MLSecOps Lab: Boeing x WIC x UW"
   favicon: favicon.svg
   search: false
   back-to-top-navigation: true
@@ -20,15 +20,28 @@ website:
       - text: "{{< fa rocket >}} Need for MLOps"
         href: MLOps.qmd
 
-      - text: "{{< fa python >}} Python resources"
-        href: Python.qmd
+      - section: "{{< fa toolbox >}} Resources"
+        contents:
+          - text: "{{< fa python >}} Python Resources"
+            href: Python.qmd
+          - text: "{{< fa code-branch >}} Git Resources"
+            href: git_resources.qmd
+
+      - section: "{{< fa server >}} Infra Setup"
+        contents:
+          - text: "{{< fa cloud-arrow-up >}} Git to Azure"
+            href: vc.qmd
+          - text: "{{< fa cube >}} Terraform"
+            href: terraform_modules.qmd
+          - text: "{{< fa diagram-project >}} ML Pipeline"
+            href: ml_pipeline.qmd
+          - text: "{{< fa download >}} Data Ingestion"
+            href: data_ingestion.qmd
 
       - section: "{{< fa brain >}} ML Foundations"
         contents:
-          - text: "{{< fa database >}} Understanding dataset"
+          - text: "{{< fa database >}} Understanding Dataset"
             href: dataset.qmd
-          - text: "{{< fa download >}} Data Ingestion"
-            href: data_ingestion.qmd
           - text: "{{< fa gears >}} Data Processing"
             href: data_processing.qmd
           - section: "{{< fa chart-line >}} Algorithms"
@@ -37,37 +50,19 @@ website:
                 href: supervised.qmd
               - text: "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
                 href: unsupervised.qmd
+          - text: "{{< fa folder-open >}} Model Registry"
+            href: Registry.qmd
+          - text: "{{< fa flask >}} Endpoint Creation (Testing & Deployment)"
+            href: Testing_deploying.qmd
 
-      - section: "{{< fa cube >}} Terraform Infrastructure"
-        contents:
-          - text: "{{< fa folder-tree >}} Module Structure"
-            href: terraform_modules.qmd
-          - text: "{{< fa file-code >}} Root Module"
-            href: terraform_root.qmd
-
-      - text: "{{< fa code-branch >}} Version Control"
-        href: vc.qmd
-
-      - text: "{{< fa cloud >}} Azure Cloud"
-        href: azure.qmd
-
-      - text: "{{< fa box >}} Containerization"
-        href: containers.qmd
-
-      - text: "{{< fa diagram-project >}} Data Engineering"
-        href: DE.qmd
-
-      - text: "{{< fa folder-open >}} Model Registry"
-        href: Registry.qmd
-
-      - text: "{{< fa flask >}} Testing & Deployment"
-        href: Testing_deploying.qmd
-
-      - text: "{{< fa chart-simple >}} Monitoring & Maintainance"
+      - text: "{{< fa chart-simple >}} Monitoring"
         href: monitoring_maintainance.qmd
 
       - text: "{{< fa shield-halved >}} Security & Best Practices"
         href: security_best_practices.qmd
+
+      - text: "{{< fa flag-checkered >}} Going Forward & Endnotes"
+        href: going_forward.qmd
 
 format:
   html:
