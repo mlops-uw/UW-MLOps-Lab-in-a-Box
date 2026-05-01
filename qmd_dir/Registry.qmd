@@ -1,8 +1,166 @@
 ---
 title: "Model Registry"
-subtitle: "Managing ML models"
+subtitle: "Versioning, tracking, and promoting ML models on Azure"
 ---
 
-## {{< fa bullseye >}} Objective
+::: {.callout-note}
+## What You'll Learn
+This page walks through how trained models are registered in the Azure ML Model Registry — what metadata gets captured, how versioning works, and how the registry connects training outputs to deployment. All examples come directly from the code in this lab.
+:::
 
-Content coming soon.
+## {{< fa lightbulb >}} Why a Model Registry?
+
+After a training pipeline runs, you end up with model artifact files on disk — `model.joblib` files in an output directory. Without a registry, these are just files. There is no history, no way to compare two runs, and no safe path back to a previous version if a deployment goes wrong.
+
+The Azure ML Model Registry solves this by giving every model:
+
+- a unique name and auto-incremented version number
+- a permanent link to the MLflow run that produced it (including all logged metrics and parameters)
+- tags for team ownership, dataset version, task type, and training framework
+- a promotion path from training output to candidate to validated to production
+
+::: {.callout-tip}
+## Key Insight
+The registry is the handoff point between training and deployment. Nothing gets deployed that hasn't been registered. This makes every deployment traceable back to its training run and the data that produced it.
+:::
+
+## {{< fa folder-open >}} What Gets Registered in This Lab
+
+The NYC Taxi pipeline registers three models at the end of every training run. Two come from supervised learning on fare prediction, and one from unsupervised learning on trip zone clustering.
+
+| Registered Model Name | Algorithm | Task |
+|-----------------------|-----------|------|
+| `taxi-fare-linear-regression` | Linear Regression | Predict fare amount |
+| `taxi-fare-ridge-regression` | Ridge Regression | Predict fare amount |
+| `taxi-trip-kmeans` | KMeans Clustering | Assign trips to zone clusters |
+
+Each model is registered with its performance metrics and tags logged to the same MLflow run, so you can compare all three in a single view in Azure ML Studio.
+
+## {{< fa code >}} The `register_models.py` Script
+
+Registration is handled by `ML/register_models.py`, which is the final step in the pipeline. It loads each trained model artifact, wraps it in an MLflow run, and calls `mlflow.sklearn.log_model()` with a `registered_model_name` to push it into the registry.
+
+Here is the core registration logic for the supervised models:
+
+```python
+for artifact_name, display_name, registered_name in model_specs:
+    model = load_model(models_dir / artifact_name / "model.joblib")
+    model_metrics = metrics[artifact_name]
+
+    with mlflow.start_run(run_name=f"register-{registered_name}"):
+        mlflow.set_tags({
+            "task_type": "regression",
+            "dataset": "nyc-taxi",
+            "framework": "scikit-learn",
+            "model_type": display_name,
+        })
+        mlflow.log_metrics({
+            f"{artifact_name}_rmse": model_metrics["rmse"],
+            f"{artifact_name}_mae":  model_metrics["mae"],
+            f"{artifact_name}_r2":   model_metrics["r2"],
+        })
+        mlflow.log_dict(model_metrics, f"{artifact_name}_metrics.json")
+        mlflow.sklearn.log_model(
+            sk_model=model,
+            artifact_path=artifact_name,
+            registered_model_name=registered_name,
+        )
+```
+
+And the unsupervised model follows the same pattern:
+
+```python
+with mlflow.start_run(run_name=f"register-{model_name}"):
+    mlflow.set_tags({
+        "task_type": "clustering",
+        "dataset": "nyc-taxi",
+        "framework": "scikit-learn",
+    })
+    mlflow.log_params({
+        "n_clusters": metrics["n_clusters"],
+    })
+    mlflow.sklearn.log_model(
+        sk_model=model,
+        artifact_path="kmeans",
+        registered_model_name=model_name,
+    )
+```
+
+::: {.callout-note}
+## What Gets Captured
+Every registered model carries: RMSE, MAE, R² (supervised) or n_clusters (unsupervised), the features used in training, and tags for task type, dataset, and framework. This metadata is searchable and filterable in Azure ML Studio.
+:::
+
+## {{< fa diagram-project >}} Where Registration Fits in the Pipeline
+
+Registration is the last step in `ML/pipeline.yaml`, running after both supervised and unsupervised training have completed:
+
+```yaml
+  register_models:
+    type: command
+    command: >-
+      python register_models.py
+      --supervised-dir ${{inputs.supervised_dir}}
+      --unsupervised-dir ${{inputs.unsupervised_dir}}
+    inputs:
+      supervised_dir: ${{parent.jobs.supervised_learning.outputs.output_dir}}
+      unsupervised_dir: ${{parent.jobs.unsupervised_learning.outputs.output_dir}}
+    environment: azureml:taxi-ml-env@latest
+    code: ./
+```
+
+This means registration only happens if both training steps succeed. If either fails, the pipeline stops early and no partial models get registered.
+
+## {{< fa desktop >}} Viewing Registered Models in Azure ML Studio
+
+Once the pipeline completes, you can inspect registered models in the Studio UI:
+
+1. Navigate to your Azure ML workspace in the Azure portal
+2. Click **Models** in the left sidebar
+3. You will see all three registered models: `taxi-fare-linear-regression`, `taxi-fare-ridge-regression`, and `taxi-trip-kmeans`
+4. Click any model to see its full version history, metrics, tags, and linked training runs
+5. Use the **Compare** button to view RMSE and R² side-by-side across runs
+
+::: {.callout-tip}
+## Comparing Runs
+Click into a model version and then navigate to the linked Run to see all logged metrics, parameters, and artifacts from that specific training execution. This is the full lineage trail — dataset version → training code → model artifact.
+:::
+
+## {{< fa tag >}} Model Versioning and the `@latest` Reference
+
+Every time `register_models.py` runs for the same `registered_model_name`, Azure ML automatically increments the version number: v1, v2, v3, and so on. Older versions are never overwritten — they stay available for rollback.
+
+In the deployment configuration, models are referenced as:
+
+```yaml
+model: azureml:taxi-fare-linear-regression@latest
+```
+
+The `@latest` tag always resolves to the highest version number at deploy time.
+
+::: {.callout-warning}
+## `@latest` in Production
+Using `@latest` for production deployments is convenient but risky — if a new model version is registered with a performance regression and you redeploy, `@latest` picks it up automatically. For production deployments, pin a specific version (e.g., `azureml:taxi-fare-linear-regression@3`) once the model has been validated. Use `@latest` for staging and testing only.
+:::
+
+## {{< fa shield-halved >}} Minimum Metadata Tags
+
+Before promoting any model to production in this lab, ensure the registered version includes these tags (all logged automatically by `register_models.py`):
+
+| Tag | Value | Purpose |
+|-----|-------|---------|
+| `task_type` | `regression` or `clustering` | Filter by model type |
+| `dataset` | `nyc-taxi` | Trace which dataset was used |
+| `framework` | `scikit-learn` | Environment compatibility |
+| Metrics | RMSE, MAE, R² | Performance baseline for comparison |
+
+::: {.callout-important}
+## Reproducibility Rule
+Every registered model version should be fully reproducible: given the version number, you should be able to find the exact git commit, data version, and training parameters that produced it. If you cannot, the registration metadata is incomplete.
+:::
+
+## {{< fa circle-arrow-right >}} Next Steps
+
+With models registered and versioned in Azure ML, the next step is to create a managed online endpoint that serves real-time predictions from those registered models.
+
+Proceed to **Endpoint Creation (Testing & Deployment)** to see how the registered models become a live REST API.
