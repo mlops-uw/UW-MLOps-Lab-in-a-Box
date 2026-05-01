@@ -1,0 +1,153 @@
+---
+title: "ML Pipeline"
+subtitle: "Orchestrating end-to-end ML workflows on Azure"
+---
+
+::: {.callout-note}
+## What You'll Learn
+This page covers how we build, configure, and run an automated ML pipeline on Azure Machine Learning, using the NYC Taxi dataset to walk through every stage from data preparation to model training.
+:::
+
+## {{< fa diagram-project >}} What Is an ML Pipeline?
+
+An ML pipeline is a series of automated, reproducible steps that take raw data and produce a trained, registered model. Instead of running scripts manually in a notebook, a pipeline chains each step together so the entire workflow can be triggered, tracked, and repeated on demand.
+
+In this lab, our pipeline does the following:
+
+- ingests raw NYC taxi trip data from Azure Blob Storage
+- applies preprocessing and feature engineering
+- trains a regression model to predict trip duration
+- evaluates model performance against a validation set
+- registers the best-performing model in the Azure ML Model Registry
+
+::: {.callout-tip}
+## Key Insight
+Pipelines make your ML work reproducible. Anyone with access to the repo and the Azure workspace can re-run the exact same experiment and get the same results.
+:::
+
+## {{< fa cogs >}} Pipeline Architecture
+
+Our ML pipeline consists of four sequential components, each defined as an Azure ML Component:
+
+**Component 1 — Data Preparation**
+
+- Reads the raw Parquet files from Azure Blob Storage
+- Validates schema and drops rows with missing critical fields
+- Outputs a cleaned dataset to the pipeline's scratch space
+
+**Component 2 — Feature Engineering**
+
+- Computes derived features: trip distance bins, hour-of-day, day-of-week
+- Scales numeric features using StandardScaler
+- Encodes categorical variables
+
+**Component 3 — Model Training**
+
+- Trains a LightGBM regressor on the processed training split
+- Logs hyperparameters, training metrics (RMSE, MAE, R²) to Azure ML
+- Saves the trained model artifact
+
+**Component 4 — Model Evaluation & Registration**
+
+- Evaluates the model on the held-out test split
+- Compares performance to the currently registered production model
+- Registers the new model only if it beats the baseline
+
+::: {.callout-important}
+## Pipeline Component Philosophy
+Each component runs in its own isolated environment. This means you can update the feature engineering logic without touching the training code, and vice versa.
+:::
+
+## {{< fa file-code >}} Pipeline Definition (YAML)
+
+Pipelines in Azure ML are defined as YAML jobs. Here is a simplified version of our pipeline configuration:
+
+```yaml
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: nyc-taxi-training-pipeline
+
+settings:
+  default_compute: azureml:cpu-cluster
+  default_datastore: azureml:workspaceblobstore
+
+inputs:
+  raw_data:
+    type: uri_folder
+    path: azureml://datastores/workspaceblobstore/paths/nyc-taxi/raw/
+
+jobs:
+  data_prep:
+    type: command
+    component: azureml:nyc_taxi_data_prep:1
+    inputs:
+      raw_data: ${{parent.inputs.raw_data}}
+    outputs:
+      cleaned_data:
+        mode: rw_mount
+
+  feature_engineering:
+    type: command
+    component: azureml:nyc_taxi_features:1
+    inputs:
+      cleaned_data: ${{parent.jobs.data_prep.outputs.cleaned_data}}
+    outputs:
+      feature_data:
+        mode: rw_mount
+
+  model_training:
+    type: command
+    component: azureml:nyc_taxi_train:1
+    inputs:
+      feature_data: ${{parent.jobs.feature_engineering.outputs.feature_data}}
+    outputs:
+      model_output:
+        mode: rw_mount
+```
+
+## {{< fa play >}} Running the Pipeline
+
+**From the Azure ML CLI:**
+
+```bash
+# Submit the pipeline job
+az ml job create -f pipeline.yml --workspace-name <your-workspace> --resource-group <your-rg>
+
+# Monitor job status
+az ml job show -n <job-name> --workspace-name <your-workspace>
+
+# Stream logs
+az ml job stream -n <job-name> --workspace-name <your-workspace>
+```
+
+**From the Azure ML Studio UI:**
+
+1. Navigate to **Jobs** in the left sidebar
+2. Select your pipeline run to see the visual graph
+3. Click on individual steps to inspect logs and outputs
+4. View metrics tracked during training in the **Metrics** tab
+
+::: {.callout-note}
+## GitHub Actions Integration
+In this lab, the pipeline is also triggered automatically via a GitHub Actions workflow when code is merged to `main`. This means every code change is tested end-to-end in Azure ML without manual intervention.
+:::
+
+## {{< fa chart-bar >}} What Gets Logged
+
+Every pipeline run captures the following to Azure ML:
+
+- **Parameters:** learning rate, max depth, number of estimators, feature list
+- **Metrics:** RMSE, MAE, R², training duration
+- **Artifacts:** trained model file, feature scaler, evaluation report
+- **Lineage:** which data version, which git commit SHA, which environment was used
+
+::: {.callout-tip}
+## Why This Matters
+Full lineage means you can always trace a production model back to the exact data and code that produced it. This is critical for debugging, auditing, and reproducing results.
+:::
+
+## {{< fa circle-arrow-right >}} Next Steps
+
+With the pipeline running, the next step is to retrieve the trained model from the Azure ML Model Registry and create a real-time endpoint for serving predictions.
+
+Proceed to the **ML Foundations → Model Registry** section to learn how trained models are versioned, staged, and promoted to production.
