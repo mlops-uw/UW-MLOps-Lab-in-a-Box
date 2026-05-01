@@ -1,9 +1,9 @@
 ---
-title: "MLOps Lab: Boeing x WIC x UW"
+title: "MLSecOps Lab: Boeing x WIC x UW"
 ---
 
 ::: {.hero-section}
-## Welcome to the MLOps Lab
+## Welcome to the MLSecOps Lab
 
 We are a group of four graduate students from the University of Washington, Information Management Class of 2026, and this lab is designed to guide you through the core concepts and practical applications of MLOps.
 
@@ -23,15 +23,48 @@ Explore the topics below to build your MLOps expertise from foundations to produ
 ::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
 ::: {.card .h-100}
 ::: {.card-body}
+### {{< fa rocket >}} Need for MLOps
+
+Understand why production ML systems need more than just accurate models — and why the gap between a notebook and a production service is wider than it looks.
+
+[Get started →](MLOps.qmd){.btn .btn-primary .btn-sm}
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-body}
+### {{< fa toolbox >}} Resources
+
+Essential resources for Python and Git — the two tools you'll use throughout every part of this lab.
+
+[Python Resources →](Python.qmd){.btn .btn-primary .btn-sm}
+[Git Resources →](git_resources.qmd){.btn .btn-outline-secondary .btn-sm}
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-body}
+### {{< fa server >}} Infra Setup
+
+Provision and connect your cloud infrastructure: push code from GitHub to Azure, define resources with Terraform, build your ML pipeline, and ingest data.
+
+[Git to Azure →](vc.qmd){.btn .btn-primary .btn-sm}
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
+::: {.card .h-100}
+::: {.card-body}
 ### {{< fa brain >}} ML Foundations
 
-Learn the fundamentals of machine learning, datasets, and algorithms.
+Learn the fundamentals: understand and process the NYC Taxi dataset, train supervised and unsupervised models, register them in the Model Registry, and create a real-time endpoint.
 
-- [Understanding Dataset](dataset.qmd)
-- [Data Ingestion](data_ingestion.qmd)
-- [Data Processing](data_processing.qmd)
-- [Supervised Learning](supervised.qmd)
-- [Unsupervised Learning](unsupervised.qmd)
+[Understanding Dataset →](dataset.qmd){.btn .btn-primary .btn-sm}
 :::
 :::
 :::
@@ -39,15 +72,11 @@ Learn the fundamentals of machine learning, datasets, and algorithms.
 ::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
 ::: {.card .h-100}
 ::: {.card-body}
-### {{< fa diagram-project >}} MLOps Pipeline
+### {{< fa chart-simple >}} Monitoring
 
-Build production-ready ML workflows with versioning, testing, and deployment.
+Keep your ML system healthy after deployment. Detect data drift and model drift, set up alerts, and close the loop back to retraining when performance degrades.
 
-- [Need for MLOps](MLOps.qmd)
-- [Version Control](vc.qmd)
-- [Model Registry](Registry.qmd)
-- [Testing & Deployment](Testing_deploying.qmd)
-- [Monitoring & Maintenance](monitoring_maintainance.qmd)
+[Start monitoring →](monitoring_maintainance.qmd){.btn .btn-primary .btn-sm}
 :::
 :::
 :::
@@ -55,56 +84,11 @@ Build production-ready ML workflows with versioning, testing, and deployment.
 ::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
 ::: {.card .h-100}
 ::: {.card-body}
-### {{< fa cloud >}} Cloud & Infrastructure
+### {{< fa shield-halved >}} Security & Best Practices
 
-Deploy and scale ML systems on Azure with containers and data engineering.
+Learn RBAC, secrets management, reproducible pipelines, and production-grade safeguards to keep your MLOps stack secure and auditable.
 
-- [Azure Cloud](azure.qmd)
-- [Containerization](containers.qmd)
-- [Data Engineering](DE.qmd)
-- [Security & Best Practices](security_best_practices.qmd)
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
-::: {.card .h-100}
-::: {.card-body}
-### {{< fa python >}} Python Resources
-
-Essential Python learning resources for data science and ML.
-
-- [Python Learning Resources](Python.qmd)
-
-Master Python fundamentals, Pandas, NumPy, and Scikit-learn for MLOps workflows.
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
-::: {.card .h-100}
-::: {.card-body}
-### {{< fa rocket >}} Getting Started
-
-New to MLOps? Start here to understand why it matters.
-
-- [Need for MLOps](MLOps.qmd)
-
-Learn why production ML systems need more than just accurate models.
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
-::: {.card .h-100}
-::: {.card-body}
-### {{< fa shield-halved >}} Best Practices
-
-Security, reproducibility, and production-grade workflows.
-
-- [Security & Best Practices](security_best_practices.qmd)
-
-Learn RBAC, secrets management, monitoring, and cost optimization on Azure.
+[Learn more →](security_best_practices.qmd){.btn .btn-primary .btn-sm}
 :::
 :::
 :::
@@ -113,23 +97,59 @@ Learn RBAC, secrets management, monitoring, and cost optimization on Azure.
 
 ---
 
-## {{< fa users >}} Our Team
+::: {.grid}
 
-**UW Team:**
+::: {.g-col-12 .g-col-md-6}
+### {{< fa circle-info >}} Getting Started
 
-- [Shakshi Gandhi](https://www.linkedin.com/in/shakshigandhi/)
-- [Vinod Kamat](https://www.linkedin.com/in/vinodkamat2607/)
-- [Arohi Narang](https://www.linkedin.com/in/arohi-narang-77b90519a/)
-- [Sneha Reddy](https://www.linkedin.com/in/sneha8/)
+New to MLOps? Start with the **Need for MLOps** page to understand why production ML systems fail without proper engineering practices. Then work through the modules in order — each one builds on the last.
 
-**Boeing Mentors:** Jared, Uzma, Geetha
+[Need for MLOps →](MLOps.qmd)
+:::
 
-**Supported by:** Women in Cloud (WIC)
+::: {.g-col-12 .g-col-md-6}
+### {{< fa flag-checkered >}} Going Forward
+
+Finished the lab? The **Going Forward & Endnotes** page reflects on everything you've built, points to advanced topics, and provides further reading for deepening your MLOps expertise.
+
+[Going Forward →](going_forward.qmd)
+:::
+
+:::
 
 ---
 
 ::: {.callout-note}
 ## About This Lab
+This lab uses the NYC Taxi dataset as a real-world example throughout all modules. You'll learn how to build, deploy, monitor, and maintain ML systems that predict trip duration and fare amounts — just like production systems at scale.
+:::
 
-This lab uses the **NYC Taxi dataset** as a real-world example throughout all modules. You'll learn how to build, deploy, monitor, and maintain ML systems that predict trip duration and fare amounts—just like production systems at scale.
+## {{< fa users >}} Our Team
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-4}
+**UW Team**
+
+- Shakshi Gandhi
+- Vinod Kamat
+- Arohi Narang
+- Sneha Reddy
+:::
+
+::: {.g-col-12 .g-col-md-4}
+**Boeing Mentors**
+
+- Jared
+- Uzma
+- Geetha
+:::
+
+::: {.g-col-12 .g-col-md-4}
+**Supported by**
+
+- Women in Cloud (WIC)
+- University of Washington MSIM Program
+:::
+
 :::
