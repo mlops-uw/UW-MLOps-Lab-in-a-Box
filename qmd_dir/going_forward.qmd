@@ -1,0 +1,107 @@
+---
+title: "Going Forward & Endnotes"
+subtitle: "What you've built, what comes next, and further resources"
+---
+
+::: {.callout-note}
+## You Made It
+If you've worked through this lab from start to finish, you have touched every major layer of a real MLOps system — from raw data all the way to a monitored, production endpoint. This final page reflects on what you've accomplished and points to where you can go from here.
+:::
+
+## {{< fa map-location-dot >}} What You've Built
+
+Over the course of this lab, you built a complete end-to-end MLOps system on Azure using the NYC Taxi dataset. Here is what that system looks like in full:
+
+**Data Layer**
+
+You loaded and explored the NYC Taxi dataset, understood its schema, cleaned and transformed it through a reproducible data processing pipeline, and ingested it into Azure Blob Storage in structured zones (raw → processed → features).
+
+**Infrastructure Layer**
+
+You used Terraform to provision a complete Azure ML workspace, including compute clusters, a blob storage datastore, and a Key Vault for secrets. You connected your GitHub repository to Azure via a Service Principal, enabling automated CI/CD workflows.
+
+**ML Foundations Layer**
+
+You understood the difference between supervised and unsupervised learning, trained regression models to predict taxi trip duration and fare, and tracked experiments in Azure ML. You learned how algorithms like Linear Regression, Random Forest, and Gradient Boosting compare on real data.
+
+**MLOps Pipeline Layer**
+
+You packaged your training workflow as a multi-step Azure ML Pipeline, registered the best model in the Azure ML Model Registry with full metadata, and created a managed online endpoint for real-time predictions.
+
+**Operations Layer**
+
+You set up monitoring to detect data drift and prediction drift, configured alerts to notify your team when thresholds are exceeded, and understood how to close the loop from monitoring back to retraining.
+
+::: {.callout-tip}
+## The Full Picture
+What you've built is not a toy. The same patterns — Terraform for infra, GitHub Actions for CI/CD, Azure ML Pipelines for training, Model Registry for versioning, managed endpoints for serving, and monitoring for observability — are used in production MLOps systems at scale.
+:::
+
+## {{< fa rocket >}} Where to Go From Here
+
+This lab covered the foundations. There is much more to explore.
+
+**Automate the retraining loop**
+
+Add a GitHub Actions workflow that triggers retraining automatically when monitoring detects drift above your threshold. This is MLOps maturity level 2 — the fully automated ML lifecycle.
+
+**Experiment with advanced algorithms**
+
+The lab focused on regression. Explore other problem types using the same infrastructure: classification (predicting whether a trip gets tipped), clustering (finding neighborhood demand patterns), and time-series forecasting (predicting hourly demand by zone).
+
+**Explore LLM integration**
+
+Azure ML now supports deploying large language models alongside traditional ML models. Consider how an LLM could enhance a user-facing product built on top of your prediction service — for example, a natural language interface for querying trip statistics.
+
+**Deepen your Azure ML knowledge**
+
+Explore Azure ML features we didn't cover in depth: Responsible AI dashboard for fairness and explainability, Prompt Flow for LLM application development, and Azure ML Managed Feature Store for shared feature definitions across teams.
+
+**Contribute back**
+
+This lab is open source. If you found an error, have a better explanation, or want to add a new module, submit a pull request to the repository. Real-world learning improves with real-world contributions.
+
+::: {.callout-important}
+## Stay Curious
+The field of MLOps is evolving rapidly. What's considered best practice today may be superseded by better tooling next year. The most important skill is not knowing any specific tool — it's knowing how to reason about the problem: reliability, reproducibility, observability, and security.
+:::
+
+## {{< fa book-open >}} Further Reading
+
+**MLOps Foundations**
+
+- [Google ML Engineering Best Practices](https://developers.google.com/machine-learning/guides/rules-of-ml)
+- [Sculley et al. (2015) — Hidden Technical Debt in Machine Learning Systems](https://proceedings.neurips.cc/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf) (the paper that started the MLOps conversation)
+- [Chip Huyen — Designing Machine Learning Systems](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/)
+
+**Azure ML Documentation**
+
+- [Azure Machine Learning documentation](https://learn.microsoft.com/en-us/azure/machine-learning/)
+- [Azure ML Pipeline CLI v2 reference](https://learn.microsoft.com/en-us/azure/machine-learning/reference-yaml-job-pipeline)
+- [Azure ML Model Monitoring](https://learn.microsoft.com/en-us/azure/machine-learning/concept-model-monitoring)
+
+**Community Resources**
+
+- [MLOps Community](https://mlops.community/) — Slack, podcasts, and meetups
+- [Made With ML](https://madewithml.com/) — Practical MLOps courses
+- [Full Stack Deep Learning](https://fullstackdeeplearning.com/) — End-to-end ML engineering
+
+## {{< fa heart >}} Acknowledgments
+
+This lab was built as a capstone project by four graduate students in the University of Washington Master of Science in Information Management (MSIM) program, Class of 2026.
+
+**UW Team:** Shakshi Gandhi, Vinod Kamat, Arohi Narang, Sneha Reddy
+
+We are deeply grateful to our Boeing industry mentors — **Jared, Uzma, and Geetha** — for their guidance, real-world perspective, and generous investment of time throughout this project.
+
+We also thank the **Women in Cloud (WIC)** team for sponsoring and supporting this collaboration, and for their mission to advance equity and opportunity in the cloud and AI industry.
+
+::: {.callout-note}
+## A Note on the Dataset
+This lab uses the NYC Taxi and Limousine Commission (TLC) Trip Record Data, which is publicly available. All analysis is performed on this public dataset for educational purposes. We thank the TLC for making this data available to the public.
+:::
+
+---
+
+*MLSecOps Lab — University of Washington x Boeing x Women in Cloud*  
+*Information Management Class of 2026*
