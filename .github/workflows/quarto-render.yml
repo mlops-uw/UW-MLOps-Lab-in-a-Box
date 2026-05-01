@@ -1,0 +1,36 @@
+name: Render Quarto Site
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'qmd_dir/**'
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.4.550
+
+      - name: Render Quarto site
+        run: quarto render qmd_dir
+
+      - name: Copy rendered site to docs/
+        run: |
+          rm -rf docs/
+          cp -r qmd_dir/_site/ docs/
+
+      - name: Commit and push rendered docs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs: re-render Quarto site [skip ci]"
+          file_pattern: "docs/**"
