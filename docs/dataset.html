@@ -962,47 +962,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-</div> <!-- /content -->
 
-
-
-
-
+<div style="margin: 3rem 1rem 1rem;" id="quiz-section">
 <link rel="stylesheet" href="site_libs/quiz/quiz.css"/>
 <script src="site_libs/quiz/quiz.js"></script>
 <script>
 MLOpsQuiz.register("dataset", [
-  {
-    question: "Which dataset is used throughout this MLOps lab?",
-    options: ["Uber Rides Dataset (San Francisco)","NYC Taxi & Limousine Commission (TLC) Trip Record Data","Chicago Divvy Bike Share Data","Kaggle House Prices Dataset"],
-    correct: 1,
-    explanation: "The lab uses NYC Yellow Taxi trip records from the NYC TLC. It is a real-world large-scale dataset with timestamps, locations, distance, passenger count, and fare information."
-  },
-  {
-    question: "The column 'tpep_pickup_datetime' represents:",
-    options: ["The total payment timestamp","The taxi driver clock-in time","The timestamp when the passenger was picked up","The time elapsed since the previous trip"],
-    correct: 2,
-    explanation: "tpep_pickup_datetime is the timestamp when the passenger was picked up - one of the two key time columns used to compute trip duration."
-  },
-  {
-    question: "Why is the NYC Taxi dataset suitable for BOTH supervised AND unsupervised learning?",
-    options: ["It has labeled images and unlabeled text","It has numeric targets (fare/duration) for regression AND rich location data for clustering","It contains both categorical and continuous features only","The dataset has two separate files, one for each task"],
-    correct: 1,
-    explanation: "The dataset supports supervised learning (predicting trip duration or fare) AND unsupervised learning (identifying taxi demand hotspots via clustering of pickup/dropoff locations)."
-  },
-  {
-    question: "What is the difference between 'fare_amount' and 'total_amount'?",
-    options: ["They are identical - just different column names","fare_amount is the base fare; total_amount includes taxes, tolls, tips, and surcharges","total_amount is only the tip, fare_amount is everything else","fare_amount is in dollars, total_amount is in cents"],
-    correct: 1,
-    explanation: "fare_amount is the base metered fare. total_amount is the full charge including taxes, tolls, tips, and surcharges - always greater than or equal to fare_amount."
-  },
-  {
-    question: "What do PULocationID and DOLocationID represent?",
-    options: ["GPS coordinates (latitude/longitude) of pickup and dropoff","Taxi Zone IDs where the trip started and ended","Payment terminal IDs at pickup and dropoff locations","Driver and passenger unique identifiers"],
-    correct: 1,
-    explanation: "PULocationID and DOLocationID are Taxi Zone IDs - integer codes that map to specific geographic zones in NYC, not raw GPS coordinates."
-  }
+  {question:"Which dataset is used throughout this MLOps lab?",options:["Uber Rides Dataset (San Francisco)","NYC Taxi & Limousine Commission (TLC) Trip Record Data","Chicago Divvy Bike Share Data","Kaggle House Prices Dataset"],correct:1,explanation:"The lab uses NYC Yellow Taxi trip records from the NYC TLC. It is a real-world large-scale dataset with timestamps, locations, distance, passenger count, and fare information."},
+  {question:"The column tpep_pickup_datetime represents:",options:["The total payment timestamp","The taxi driver clock-in time","The timestamp when the passenger was picked up","The time elapsed since the previous trip"],correct:2,explanation:"tpep_pickup_datetime is the timestamp when the passenger was picked up - one of the two key time columns used to compute trip duration."},
+  {question:"Why is the NYC Taxi dataset suitable for BOTH supervised AND unsupervised learning?",options:["It has labeled images and unlabeled text","It has numeric targets (fare/duration) for regression AND rich location data for clustering","It contains both categorical and continuous features only","The dataset has two separate files, one for each task"],correct:1,explanation:"The dataset supports supervised learning (predicting trip duration or fare) AND unsupervised learning (identifying taxi demand hotspots via clustering)."},
+  {question:"What is the difference between fare_amount and total_amount?",options:["They are identical - just different column names","fare_amount is the base fare; total_amount includes taxes, tolls, tips, and surcharges","total_amount is only the tip, fare_amount is everything else","fare_amount is in dollars, total_amount is in cents"],correct:1,explanation:"fare_amount is the base metered fare. total_amount is the full charge including taxes, tolls, tips, and surcharges - always greater than or equal to fare_amount."},
+  {question:"What do PULocationID and DOLocationID represent?",options:["GPS coordinates (latitude/longitude) of pickup and dropoff","Taxi Zone IDs where the trip started and ended","Payment terminal IDs at pickup and dropoff locations","Driver and passenger unique identifiers"],correct:1,explanation:"PULocationID and DOLocationID are Taxi Zone IDs - integer codes that map to specific geographic zones in NYC, not raw GPS coordinates."}
 ]);
 </script>
-<div class="knowledge-check" data-quiz-id="dataset" style="max-width:900px;margin:3rem auto 2rem;padding:0 1rem;"></div>
-</body></html>
+<div class="knowledge-check" data-quiz-id="dataset"></div>
+</div></div> <!-- /content -->
+
+
+
+
+</body></html></body></html>
