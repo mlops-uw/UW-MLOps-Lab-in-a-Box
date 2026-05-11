@@ -1151,4 +1151,48 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
+
+<link rel="stylesheet" href="site_libs/quiz/quiz.css"/>
+<script src="site_libs/quiz/quiz.js"></script>
+<script>
+MLOpsQuiz.register("monitoring", [
+  {
+    question: "What is the 'Silent Failure Pattern' in ML production systems?",
+    options: ["The endpoint crashes but sends no error logs","Predictions keep returning but become increasingly inaccurate without triggering alerts","The model fails to load at startup","CI/CD pipelines run silently without deploying"],
+    correct: 1,
+    explanation: "Silent failure: the endpoint does not crash, requests succeed, but predictions slowly degrade. Without monitoring, nobody notices until users complain."
+  },
+  {
+    question: "Which type of drift describes the relationship between INPUTS and OUTPUTS changing over time?",
+    options: ["Feature drift","Data drift","Concept drift","Prediction drift"],
+    correct: 2,
+    explanation: "Concept drift is when the underlying relationship between inputs and outputs changes (e.g., a new surge pricing rule changes how distance maps to fare). Feature drift is individual input distributions shifting."
+  },
+  {
+    question: "In the Monitor to Retrain loop, what happens IMMEDIATELY after drift is detected?",
+    options: ["The model is automatically retrained and redeployed","The endpoint is shut down to prevent bad predictions","An alert is triggered and the team investigates the drift dashboard","The old model is rolled back to v1"],
+    correct: 2,
+    explanation: "Drift detection triggers an alert, then the team investigates. If performance has degraded, a retrain is scheduled. Drift alone does not automatically retrain."
+  },
+  {
+    question: "Which Azure service collects telemetry (latency, error rate, throughput) from managed online endpoints?",
+    options: ["Azure Data Factory","Azure Application Insights","Azure Synapse Analytics","Azure DevOps Pipelines"],
+    correct: 1,
+    explanation: "Azure Application Insights automatically collects telemetry from managed online endpoints. You can also log custom metrics in your scoring script."
+  },
+  {
+    question: "What alert condition is recommended for endpoint latency?",
+    options: ["Alert when avg latency exceeds 5 seconds","Alert when p99 latency exceeds 500ms","Alert when any single request exceeds 100ms","Alert when median latency exceeds 1 second"],
+    correct: 1,
+    explanation: "The lab recommends alerting when p99 latency exceeds 500ms. Using p99 catches tail latency problems affecting the slowest requests without false-alerting on occasional spikes."
+  },
+  {
+    question: "Does all detected drift require an immediate retraining cycle?",
+    options: ["Yes - any drift means the model is invalid and must be retrained immediately","No - assess whether drift is actually causing measurable performance degradation first","Yes - Azure ML automatically triggers retraining when drift exceeds the threshold","No - drift monitoring is optional and only needed for regulated industries"],
+    correct: 1,
+    explanation: "Not all drift causes measurable harm. Assess whether performance has actually degraded before triggering a costly full retraining cycle. Start conservative with thresholds, then tune."
+  }
+]);
+</script>
+<div class="knowledge-check" data-quiz-id="monitoring" style="max-width:900px;margin:3rem auto 2rem;padding:0 1rem;"></div>
 </body></html>
