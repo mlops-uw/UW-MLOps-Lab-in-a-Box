@@ -1166,47 +1166,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-</div> <!-- /content -->
 
-
-
-
-
+<div style="margin: 3rem 1rem 1rem;" id="quiz-section">
 <link rel="stylesheet" href="site_libs/quiz/quiz.css"/>
 <script src="site_libs/quiz/quiz.js"></script>
 <script>
 MLOpsQuiz.register("model-registry", [
-  {
-    question: "What problem does the Azure ML Model Registry solve?",
-    options: ["It speeds up model training by caching intermediate results","It replaces MLflow for experiment tracking","It gives model artifacts a version history, metrics linkage, and a safe path to rollback","It automatically deploys models to production without human approval"],
-    correct: 2,
-    explanation: "Without a registry, model files are just files on disk with no history. The registry adds versioning, metric lineage, tags, and a promotion path - making every deployment traceable."
-  },
-  {
-    question: "How many models does the NYC Taxi pipeline register at the end of each run?",
-    options: ["1","2","3","5"],
-    correct: 2,
-    explanation: "Three models are registered: taxi-fare-linear-regression, taxi-fare-ridge-regression (both supervised/regression), and taxi-trip-kmeans (unsupervised/clustering)."
-  },
-  {
-    question: "What happens to old model versions when register_models.py runs again for the same registered_model_name?",
-    options: ["The old version is overwritten with the new one","The new version gets a random name to avoid conflicts","Azure ML auto-increments the version number; old versions are never overwritten","The pipeline fails because duplicate names are not allowed"],
-    correct: 2,
-    explanation: "Azure ML auto-increments: v1 to v2 to v3, etc. Old versions remain fully available for rollback. Nothing is ever overwritten."
-  },
-  {
-    question: "Why should you AVOID using @latest for production deployments?",
-    options: ["The @latest tag is deprecated in Azure ML","It resolves to the lowest version number, which may be untested","A newly registered model with a regression may be auto-picked up, causing silent quality degradation in prod","@latest only works in staging environments"],
-    correct: 2,
-    explanation: "@latest always resolves to the highest version at deploy time. If a bad model gets registered and you redeploy, @latest silently promotes it. Pin specific versions for production."
-  },
-  {
-    question: "Registration is the LAST step in the pipeline. What happens if the unsupervised_learning step fails?",
-    options: ["Registration still runs, but skips the K-Means model","Only the supervised models get registered","The pipeline stops early and NO models get registered at all","The pipeline retries unsupervised learning 3 times before registering"],
-    correct: 2,
-    explanation: "register_models receives outputs from both training steps. If either fails, the pipeline halts and register_models never executes - no partial models get into the registry."
-  }
+  {question:"What problem does the Azure ML Model Registry solve?",options:["It speeds up model training by caching intermediate results","It replaces MLflow for experiment tracking","It gives model artifacts a version history, metrics linkage, and a safe path to rollback","It automatically deploys models to production without human approval"],correct:2,explanation:"Without a registry, model files are just files on disk with no history. The registry adds versioning, metric lineage, tags, and a promotion path."},
+  {question:"How many models does the NYC Taxi pipeline register at the end of each run?",options:["1","2","3","5"],correct:2,explanation:"Three models: taxi-fare-linear-regression, taxi-fare-ridge-regression (supervised/regression), and taxi-trip-kmeans (unsupervised/clustering)."},
+  {question:"What happens to old versions when register_models.py runs again for the same registered_model_name?",options:["The old version is overwritten with the new one","The new version gets a random name to avoid conflicts","Azure ML auto-increments the version number; old versions are never overwritten","The pipeline fails because duplicate names are not allowed"],correct:2,explanation:"Azure ML auto-increments: v1 to v2 to v3. Old versions remain fully available for rollback. Nothing is ever overwritten."},
+  {question:"Why should you AVOID using @latest for production deployments?",options:["The @latest tag is deprecated in Azure ML","It resolves to the lowest version number","A newly registered model with a regression may be auto-picked up, causing silent quality degradation","@latest only works in staging environments"],correct:2,explanation:"@latest always resolves to the highest version at deploy time. If a bad model gets registered and you redeploy, @latest silently promotes it. Pin specific versions for production."},
+  {question:"If the unsupervised_learning step fails, what happens to model registration?",options:["Registration still runs, but skips the K-Means model","Only the supervised models get registered","The pipeline stops early and NO models get registered at all","The pipeline retries unsupervised learning 3 times before registering"],correct:2,explanation:"register_models receives outputs from both training steps. If either fails, the pipeline halts and register_models never executes."}
 ]);
 </script>
-<div class="knowledge-check" data-quiz-id="model-registry" style="max-width:900px;margin:3rem auto 2rem;padding:0 1rem;"></div>
-</body></html>
+<div class="knowledge-check" data-quiz-id="model-registry"></div>
+</div></div> <!-- /content -->
+
+
+
+
+</body></html></body></html>
