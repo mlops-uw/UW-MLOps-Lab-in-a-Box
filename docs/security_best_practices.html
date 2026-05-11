@@ -1192,4 +1192,48 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
+
+<link rel="stylesheet" href="site_libs/quiz/quiz.css"/>
+<script src="site_libs/quiz/quiz.js"></script>
+<script>
+MLOpsQuiz.register("security", [
+  {
+    question: "What is the principle of Least Privilege in Azure MLOps?",
+    options: ["Give all team members Contributor access to the subscription for speed","Assign roles at the smallest possible scope and only the permissions needed for the task","Use a single shared admin account so everyone can collaborate","Disable all RBAC and rely on network firewalls instead"],
+    correct: 1,
+    explanation: "Least privilege means assigning roles at the smallest scope (resource group, workspace, storage container) and only the exact permissions required. This limits blast radius if credentials are compromised."
+  },
+  {
+    question: "Where should secrets like Blob Storage connection strings be stored?",
+    options: ["In a .env file committed alongside the code","Hardcoded in the Jupyter notebook for easy access","In environment variables in the Azure ML compute YAML","In Azure Key Vault, accessed via Managed Identity"],
+    correct: 3,
+    explanation: "Secrets must never appear in code, notebooks, or YAML files committed to Git. Azure Key Vault + Managed Identity is the recommended pattern - no connection strings in your codebase."
+  },
+  {
+    question: "Which approach correctly pins dependencies for a reproducible MLOps pipeline?",
+    options: ["Use pandas>=2.0 to always get the latest compatible version","Install packages at runtime from PyPI with no version constraints","Pin exact versions in requirements.txt (e.g., pandas==2.0.3)","Let Azure ML choose the latest stable versions automatically"],
+    correct: 2,
+    explanation: "Pinning exact versions (pandas==2.0.3, not pandas>=2.0) prevents unexpected breaking changes from new package releases. This is critical for reproducibility and pipeline stability."
+  },
+  {
+    question: "What is the correct model promotion stage order?",
+    options: ["production to validated to candidate to training output","training output to candidate to validated to production","candidate to production to validated to archived","validated to candidate to production to staging"],
+    correct: 1,
+    explanation: "The promotion pipeline is: training output to candidate (registered) to validated (tested) to production (live). This ensures no model reaches prod without passing validation gates."
+  },
+  {
+    question: "What should a deployment scoring script log to avoid leaking sensitive data?",
+    options: ["Full raw request payloads for debugging","User IP addresses and request timestamps only","Request IDs, latency, error codes, and summary stats - NOT raw payloads","Nothing - logging should be disabled in production for security"],
+    correct: 2,
+    explanation: "Log request IDs, latency, error codes, and summary stats. Raw payloads may contain PII or sensitive business data. Never log personally identifiable information from prediction requests."
+  },
+  {
+    question: "What is the cost risk of NOT following compute hygiene best practices?",
+    options: ["Models will be slower to train","Idle compute instances continue to consume Azure credits, draining budgets","Azure will automatically delete your workspace","Your model registry will be wiped after 30 days of inactivity"],
+    correct: 1,
+    explanation: "Unused compute instances run 24/7 and silently drain Azure credits. Always stop or delete instances when not in use, and set up budget alerts per resource group to catch runaway costs."
+  }
+]);
+</script>
+<div class="knowledge-check" data-quiz-id="security" style="max-width:900px;margin:3rem auto 2rem;padding:0 1rem;"></div>
 </body></html>
