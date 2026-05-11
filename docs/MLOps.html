@@ -1106,47 +1106,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-</div> <!-- /content -->
 
-
-
-
-
+<div style="margin: 3rem 1rem 1rem;" id="quiz-section">
 <link rel="stylesheet" href="site_libs/quiz/quiz.css"/>
 <script src="site_libs/quiz/quiz.js"></script>
 <script>
 MLOpsQuiz.register("mlops-intro", [
-  {
-    question: "What does MLOps stand for?",
-    options: ["Machine Learning Operations","Model Lifecycle Optimization System","Multi-Layer Output Processing","Managed Learning Ops Pipeline"],
-    correct: 0,
-    explanation: "MLOps = ML + Ops. It combines machine learning engineering with operations practices to reliably deploy, monitor, and maintain ML systems in production."
-  },
-  {
-    question: "A trained model works perfectly in a notebook but degrades after deployment. What is the MOST likely root cause?",
-    options: ["The notebook used the wrong Python version","The model was overfitted to training data","The production environment changed (data drift) and there was no monitoring","The model was too large for the cloud"],
-    correct: 2,
-    explanation: "This is the classic silent failure pattern. The model did not break - the world changed. Without drift detection and monitoring, degradation goes unnoticed until users complain."
-  },
-  {
-    question: "Which of the following is an 'Ops' concern rather than an 'ML' concern?",
-    options: ["Choosing between Linear Regression and Ridge Regression","Ensuring predictions return in under 200ms with 99.9% uptime","Selecting which features to include in the model","Tuning the learning rate hyperparameter"],
-    correct: 1,
-    explanation: "Operations focuses on reliability, latency, availability, and uptime. Feature selection, model choice, and hyperparameter tuning are all ML concerns."
-  },
-  {
-    question: "Which is NOT listed as a common pitfall without MLOps?",
-    options: ["Accuracy drops silently","Retraining is manual and risky","Model is too slow during training","Results are hard to reproduce"],
-    correct: 2,
-    explanation: "The common pitfalls are silent accuracy drops, no visibility into data changes, risky manual retraining, and poor reproducibility. Training speed is not listed."
-  },
-  {
-    question: "What core question does MLOps answer?",
-    options: ["How do we build the most accurate model?","How do we keep ML systems reliable in the real world?","How do we collect the most data?","How do we choose the best algorithm?"],
-    correct: 1,
-    explanation: "MLOps answers: How do we keep ML systems reliable in the real world? - covering deployment, monitoring, versioning, drift detection, and automated retraining."
-  }
+  {question:"What does MLOps stand for?",options:["Machine Learning Operations","Model Lifecycle Optimization System","Multi-Layer Output Processing","Managed Learning Ops Pipeline"],correct:0,explanation:"MLOps = ML + Ops. It combines machine learning engineering with operations practices to reliably deploy, monitor, and maintain ML systems in production."},
+  {question:"A trained model works perfectly in a notebook but degrades after deployment. What is the MOST likely root cause?",options:["The notebook used the wrong Python version","The model was overfitted to training data","The production environment changed (data drift) and there was no monitoring","The model was too large for the cloud"],correct:2,explanation:"This is the classic silent failure pattern. The model did not break - the world changed. Without drift detection and monitoring, degradation goes unnoticed until users complain."},
+  {question:"Which of the following is an Ops concern rather than an ML concern?",options:["Choosing between Linear Regression and Ridge Regression","Ensuring predictions return in under 200ms with 99.9% uptime","Selecting which features to include in the model","Tuning the learning rate hyperparameter"],correct:1,explanation:"Operations focuses on reliability, latency, availability, and uptime. Feature selection, model choice, and hyperparameter tuning are all ML concerns."},
+  {question:"Which is NOT listed as a common pitfall without MLOps?",options:["Accuracy drops silently","Retraining is manual and risky","Model is too slow during training","Results are hard to reproduce"],correct:2,explanation:"The common pitfalls are silent accuracy drops, no visibility into data changes, risky manual retraining, and poor reproducibility. Training speed is not listed."},
+  {question:"What core question does MLOps answer?",options:["How do we build the most accurate model?","How do we keep ML systems reliable in the real world?","How do we collect the most data?","How do we choose the best algorithm?"],correct:1,explanation:"MLOps answers: How do we keep ML systems reliable in the real world? - covering deployment, monitoring, versioning, drift detection, and automated retraining."}
 ]);
 </script>
-<div class="knowledge-check" data-quiz-id="mlops-intro" style="max-width:900px;margin:3rem auto 2rem;padding:0 1rem;"></div>
-</body></html>
+<div class="knowledge-check" data-quiz-id="mlops-intro"></div>
+</div></div> <!-- /content -->
+
+
+
+
+</body></html></body></html>
