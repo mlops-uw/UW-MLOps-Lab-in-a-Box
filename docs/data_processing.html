@@ -932,21 +932,6 @@ Next Steps
 
 </section>
 </section>
-<div style="margin: 3rem 0 2rem;" id="quiz-section">
-<link rel="stylesheet" href="site_libs/quiz/quiz.css"/>
-<script src="site_libs/quiz/quiz.js"></script>
-<script>
-MLOpsQuiz.register("data-processing", [
-  {question:"Why fill null passenger_count with MEDIAN instead of dropping rows?",options:["Median is always more accurate than dropping rows","The median (1.0) better represents a typical taxi ride, and dropping 3M rows would reduce the dataset by ~24%","The mean is not available in pandas","Dropping rows is not allowed in Azure ML"],correct:1,explanation:"Dropping ~3M rows would eliminate ~24% of the dataset. The median (1.0) is a sensible imputation for a discrete, positively-skewed count variable."},
-  {question:"Which filter condition removes invalid trip data?",options:["fare_amount > 0 AND trip_distance > 0 AND passenger_count > 0","fare_amount > 10 AND trip_distance > 1","passenger_count == 1 AND fare_amount < 100","trip_distance > 5 AND fare_amount > 5"],correct:0,explanation:"The lab filters: fare_amount > 0, trip_distance > 0, passenger_count > 0. Zero or negative values indicate data entry errors."},
-  {question:"What new column is created during Feature Engineering?",options:["trip_speed_mph - computed as trip_distance / trip_duration_min * 60","trip_duration_min - computed from (dropoff - pickup datetime).total_seconds() / 60","fare_per_mile - computed as fare_amount / trip_distance","zone_cluster - assigned by running K-Means on the location IDs"],correct:1,explanation:"trip_duration_min is derived by subtracting pickup from dropoff datetime and converting to minutes. It becomes a key feature and target variable."},
-  {question:"After all cleaning steps, approximately how many rows remain from ~12.86M?",options:["~1 million","~8 million","~11.3 million","~12.8 million (nearly unchanged)"],correct:2,explanation:"After dropping columns, filling nulls, removing outliers, and feature engineering, ~11.32M rows remain."},
-  {question:"From the EDA correlation heatmap, which pair has the STRONGEST positive correlation?",options:["passenger_count and fare_amount (0.95)","trip_distance and fare_amount (0.90)","pickup_hour and trip_duration_min (0.85)","fare_amount and tip_amount (0.88)"],correct:1,explanation:"trip_distance and fare_amount show the strongest correlation at 0.90. passenger_count has near-zero correlation with all other features."},
-  {question:"Why use Azure Key Vault to retrieve the Blob Storage connection string?",options:["It is faster than hardcoding the string","Azure Key Vault automatically rotates credentials every hour","To avoid hardcoding secrets in code or notebooks committed to Git","Because blob storage only accepts Key Vault credentials"],correct:2,explanation:"Secrets in code or YAML files get committed to Git, potentially leaking credentials. Key Vault + Managed Identity is the secure pattern."}
-]);
-</script>
-<div class="knowledge-check" data-quiz-id="data-processing"></div>
-</div>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <footer class="footer">
@@ -1554,4 +1539,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-</body></html></body></html>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
