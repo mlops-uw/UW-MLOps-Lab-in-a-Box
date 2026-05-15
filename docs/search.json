@@ -348,6 +348,18 @@
     ]
   },
   {
+    "objectID": "supervised.html#knowledge-check",
+    "href": "supervised.html#knowledge-check",
+    "title": "Supervised Learning",
+    "section": "Knowledge Check",
+    "text": "Knowledge Check\n\n\n🎯 Knowledge Check: Supervised Learning\n\n1. What algorithm is used in this lab to predict taxi fare amounts?\n Decision Tree\n Linear Regression / Ridge Regression\n K-Means Clustering\n Neural Network\n\n2. What is the R² score achieved by the Ridge Regression model?\n 0.500\n 0.650\n 0.826\n 0.999\n\n3. Which feature is the strongest predictor of taxi fare?\n Passenger count\n Pickup hour\n Trip distance\n Day of week\n\n4. What does Ridge Regression (L2) add to prevent overfitting?\n More training data\n A penalty term proportional to the sum of squared coefficients\n Additional hidden layers\n Dropout regularization\n\nCheck Answers",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa graduation-cap >}} Supervised Learning"
+    ]
+  },
+  {
     "objectID": "git_resources.html",
     "href": "git_resources.html",
     "title": "Git Resources",

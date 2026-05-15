@@ -723,6 +723,74 @@ Potential Improvements
 </ul>
 </div>
 </div>
+<hr>
+</section>
+<section id="knowledge-check" class="level2">
+<h2 class="anchored" data-anchor-id="knowledge-check">Knowledge Check</h2>
+<div style="background:#f0f4ff;border:2px solid #0b3d91;border-radius:10px;padding:20px 24px;margin:24px 0">
+<style>
+.kc2-q{margin-bottom:16px}.kc2-q p{font-weight:700;margin:0 0 8px;font-size:.95rem}
+.kc2-opts label{display:block;padding:7px 12px;margin:3px 0;background:#fff;border:1.5px solid #d0d7de;border-radius:6px;cursor:pointer;font-size:.9rem}
+.kc2-opts label:hover{border-color:#0b3d91}
+.kc2-opts input{margin-right:8px}
+.kc2-btn{margin-top:12px;background:#0b3d91;color:#fff;border:none;border-radius:6px;padding:9px 22px;cursor:pointer;font-size:.9rem;font-weight:600}
+.kc2-btn:hover{background:#093080}
+.kc2-score-box{margin-top:12px;padding:12px 16px;border-radius:6px;font-weight:600;font-size:.95rem;display:none}
+</style>
+<h4 style="margin:0 0 16px;color:#0b3d91;font-size:1.1rem" class="anchored">🎯 Knowledge Check: Supervised Learning</h4>
+<form id="kcf2">
+<div class="kc2-q"><p>1. What algorithm is used in this lab to predict taxi fare amounts?</p><div class="kc2-opts">
+<label><input type="radio" name="q1" value="a"> Decision Tree</label>
+<label><input type="radio" name="q1" value="b"> Linear Regression / Ridge Regression</label>
+<label><input type="radio" name="q1" value="c"> K-Means Clustering</label>
+<label><input type="radio" name="q1" value="d"> Neural Network</label>
+</div></div>
+<div class="kc2-q"><p>2. What is the R² score achieved by the Ridge Regression model?</p><div class="kc2-opts">
+<label><input type="radio" name="q2" value="a"> 0.500</label>
+<label><input type="radio" name="q2" value="b"> 0.650</label>
+<label><input type="radio" name="q2" value="c"> 0.826</label>
+<label><input type="radio" name="q2" value="d"> 0.999</label>
+</div></div>
+<div class="kc2-q"><p>3. Which feature is the strongest predictor of taxi fare?</p><div class="kc2-opts">
+<label><input type="radio" name="q3" value="a"> Passenger count</label>
+<label><input type="radio" name="q3" value="b"> Pickup hour</label>
+<label><input type="radio" name="q3" value="c"> Trip distance</label>
+<label><input type="radio" name="q3" value="d"> Day of week</label>
+</div></div>
+<div class="kc2-q"><p>4. What does Ridge Regression (L2) add to prevent overfitting?</p><div class="kc2-opts">
+<label><input type="radio" name="q4" value="a"> More training data</label>
+<label><input type="radio" name="q4" value="b"> A penalty term proportional to the sum of squared coefficients</label>
+<label><input type="radio" name="q4" value="c"> Additional hidden layers</label>
+<label><input type="radio" name="q4" value="d"> Dropout regularization</label>
+</div></div>
+<button type="button" class="kc2-btn" onclick="gradeKC2()">Check Answers</button>
+</form>
+<div class="kc2-score-box" id="kcs2"></div>
+</div>
+<script>
+function gradeKC2(){
+  var ans={q1:'b',q2:'c',q3:'c',q4:'b'},score=0,total=4;
+  var form=document.getElementById('kcf2');
+  ['q1','q2','q3','q4'].forEach(function(q){
+    var sel=form.querySelector('input[name="'+q+'"]:checked');
+    form.querySelectorAll('input[name="'+q+'"]').forEach(function(o){
+      var l=o.parentElement;l.style.background='#fff';l.style.borderColor='#d0d7de';
+    });
+    if(sel){
+      if(sel.value===ans[q]){sel.parentElement.style.background='#d1fae5';sel.parentElement.style.borderColor='#34d399';score++;}
+      else{sel.parentElement.style.background='#fee2e2';sel.parentElement.style.borderColor='#f87171';
+        form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]').parentElement.style.background='#d1fae5';
+        form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]').parentElement.style.borderColor='#34d399';
+      }
+    }
+  });
+  var pct=Math.round(score/total*100);
+  var box=document.getElementById('kcs2');box.style.display='block';
+  box.style.background=pct===100?'#d1fae5':pct>=75?'#e0f2fe':'#fef9c3';
+  box.style.border='1.5px solid '+(pct===100?'#34d399':pct>=75?'#38bdf8':'#fbbf24');
+  box.innerHTML='📊 Score: '+score+'/'+total+' ('+pct+'%) '+(pct===100?'🎉 Perfect!':pct>=75?'✅ Good job!':'📚 Review the page and try again.');
+}
+</script>
 
 
 </section>
