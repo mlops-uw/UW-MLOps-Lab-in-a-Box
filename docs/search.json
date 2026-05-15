@@ -1187,6 +1187,16 @@
     ]
   },
   {
+    "objectID": "security_best_practices.html#knowledge-check",
+    "href": "security_best_practices.html#knowledge-check",
+    "title": "Security and best practices for MLOps on Azure",
+    "section": "Knowledge Check",
+    "text": "Knowledge Check\n\n\n🎯 Knowledge Check: Security & Best Practices\n\n1. Where should secrets and credentials be stored in an MLOps system?\n Hardcoded in the Python script\n In a .env file committed to git\n In Azure Key Vault or a secrets manager\n In a README file\n\n2. What does RBAC stand for in Azure?\n Random Binary Access Control\n Role-Based Access Control\n Restricted Binary Authentication Code\n Remote Backup and Control\n\n3. Why should you pin exact package versions (e.g., pandas==2.0.3) in requirements.txt?\n To make the file look more professional\n To save disk space\n To ensure reproducibility and prevent unexpected breaking changes\n It is required by Azure\n\n4. What is the \"principle of least privilege\" in security?\n Give all users admin access for convenience\n Grant users and services only the minimum permissions needed to do their job\n Restrict all access and require manual approval for every action\n Share all credentials openly within the team\n\nCheck Answers",
+    "crumbs": [
+      "{{< fa shield-halved >}} Security & Best Practices"
+    ]
+  },
+  {
     "objectID": "MLOps.html",
     "href": "MLOps.html",
     "title": "Need for MLOps",

@@ -577,6 +577,74 @@ Cost Management
 <p>Unused compute instances can drain your Azure credits quickly. Always stop or delete them when not in use, and set up budget alerts.</p>
 </div>
 </div>
+<hr>
+</section>
+<section id="knowledge-check" class="level2">
+<h2 class="anchored" data-anchor-id="knowledge-check">Knowledge Check</h2>
+<div style="background:#f0f4ff;border:2px solid #0b3d91;border-radius:10px;padding:20px 24px;margin:24px 0">
+<style>
+.kc4-q{margin-bottom:16px}.kc4-q p{font-weight:700;margin:0 0 8px;font-size:.95rem}
+.kc4-opts label{display:block;padding:7px 12px;margin:3px 0;background:#fff;border:1.5px solid #d0d7de;border-radius:6px;cursor:pointer;font-size:.9rem}
+.kc4-opts label:hover{border-color:#0b3d91}
+.kc4-opts input{margin-right:8px}
+.kc4-btn{margin-top:12px;background:#0b3d91;color:#fff;border:none;border-radius:6px;padding:9px 22px;cursor:pointer;font-size:.9rem;font-weight:600}
+.kc4-btn:hover{background:#093080}
+.kc4-score-box{margin-top:12px;padding:12px 16px;border-radius:6px;font-weight:600;font-size:.95rem;display:none}
+</style>
+<h4 style="margin:0 0 16px;color:#0b3d91;font-size:1.1rem" class="anchored">🎯 Knowledge Check: Security &amp; Best Practices</h4>
+<form id="kcf4">
+<div class="kc4-q"><p>1. Where should secrets and credentials be stored in an MLOps system?</p><div class="kc4-opts">
+<label><input type="radio" name="q1" value="a"> Hardcoded in the Python script</label>
+<label><input type="radio" name="q1" value="b"> In a .env file committed to git</label>
+<label><input type="radio" name="q1" value="c"> In Azure Key Vault or a secrets manager</label>
+<label><input type="radio" name="q1" value="d"> In a README file</label>
+</div></div>
+<div class="kc4-q"><p>2. What does RBAC stand for in Azure?</p><div class="kc4-opts">
+<label><input type="radio" name="q2" value="a"> Random Binary Access Control</label>
+<label><input type="radio" name="q2" value="b"> Role-Based Access Control</label>
+<label><input type="radio" name="q2" value="c"> Restricted Binary Authentication Code</label>
+<label><input type="radio" name="q2" value="d"> Remote Backup and Control</label>
+</div></div>
+<div class="kc4-q"><p>3. Why should you pin exact package versions (e.g., pandas==2.0.3) in requirements.txt?</p><div class="kc4-opts">
+<label><input type="radio" name="q3" value="a"> To make the file look more professional</label>
+<label><input type="radio" name="q3" value="b"> To save disk space</label>
+<label><input type="radio" name="q3" value="c"> To ensure reproducibility and prevent unexpected breaking changes</label>
+<label><input type="radio" name="q3" value="d"> It is required by Azure</label>
+</div></div>
+<div class="kc4-q"><p>4. What is the "principle of least privilege" in security?</p><div class="kc4-opts">
+<label><input type="radio" name="q4" value="a"> Give all users admin access for convenience</label>
+<label><input type="radio" name="q4" value="b"> Grant users and services only the minimum permissions needed to do their job</label>
+<label><input type="radio" name="q4" value="c"> Restrict all access and require manual approval for every action</label>
+<label><input type="radio" name="q4" value="d"> Share all credentials openly within the team</label>
+</div></div>
+<button type="button" class="kc4-btn" onclick="gradeKC4()">Check Answers</button>
+</form>
+<div class="kc4-score-box" id="kcs4"></div>
+</div>
+<script>
+function gradeKC4(){
+  var ans={q1:'c',q2:'b',q3:'c',q4:'b'},score=0,total=4;
+  var form=document.getElementById('kcf4');
+  ['q1','q2','q3','q4'].forEach(function(q){
+    var sel=form.querySelector('input[name="'+q+'"]:checked');
+    form.querySelectorAll('input[name="'+q+'"]').forEach(function(o){
+      var l=o.parentElement;l.style.background='#fff';l.style.borderColor='#d0d7de';
+    });
+    if(sel){
+      if(sel.value===ans[q]){sel.parentElement.style.background='#d1fae5';sel.parentElement.style.borderColor='#34d399';score++;}
+      else{sel.parentElement.style.background='#fee2e2';sel.parentElement.style.borderColor='#f87171';
+        form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]').parentElement.style.background='#d1fae5';
+        form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]').parentElement.style.borderColor='#34d399';
+      }
+    }
+  });
+  var pct=Math.round(score/total*100);
+  var box=document.getElementById('kcs4');box.style.display='block';
+  box.style.background=pct===100?'#d1fae5':pct>=75?'#e0f2fe':'#fef9c3';
+  box.style.border='1.5px solid '+(pct===100?'#34d399':pct>=75?'#38bdf8':'#fbbf24');
+  box.innerHTML='📊 Score: '+score+'/'+total+' ('+pct+'%) '+(pct===100?'🎉 Perfect!':pct>=75?'✅ Good job!':'📚 Review the page and try again.');
+}
+</script>
 
 
 </section>
