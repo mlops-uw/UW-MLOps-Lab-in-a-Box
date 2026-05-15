@@ -293,25 +293,28 @@ ul.task-list li input[type="checkbox"] {
 <p>Explore the topics below to build your MLOps expertise from foundations to production deployment. Pick a tile to start that mission — or work through them in order.</p>
 <!-- MLSecOps Lab Gameboard -->
 <div id="mlsecops-gameboard" class="msl-board">
-<div class="msl-board-header">
-<pre><code>&lt;h2&gt;🎲 Your MLSecOps Lab Journey&lt;/h2&gt;
-&lt;p&gt;Roll through 8 stops to ship a secure, production-grade ML system. Click any tile to start that mission. Your progress is saved on this device.&lt;/p&gt;
-&lt;div class="msl-progress-wrap"&gt;
-  &lt;div class="msl-progress-bar"&gt;&lt;div class="msl-progress-fill" id="msl-fill"&gt;&lt;/div&gt;&lt;/div&gt;
-  &lt;span id="msl-progress-label"&gt;0 / 8 missions complete&lt;/span&gt;
-  &lt;button class="msl-reset" id="msl-reset" title="Reset progress"&gt;↺ Reset&lt;/button&gt;
-&lt;/div&gt;</code></pre>
+  <div class="msl-board-header">
+    <h2 class="anchored">🎲 Your MLSecOps Lab Journey</h2>
+    <p>Roll through 8 stops to ship a secure, production-grade ML system. Click any tile to start that mission. Your progress is saved on this device.</p>
+    <div class="msl-progress-wrap">
+      <div class="msl-progress-bar"><div class="msl-progress-fill" id="msl-fill"></div></div>
+      <span id="msl-progress-label">0 / 8 missions complete</span>
+      <button class="msl-reset" id="msl-reset" title="Reset progress">↺ Reset</button>
+    </div>
+  </div>
+
+  <ol class="msl-track" id="msl-track">
+    <!-- tiles injected by JS -->
+  </ol>
+
+  <div class="msl-legend">
+    <span class="msl-chip msl-chip-start">START</span>
+    <span class="msl-chip msl-chip-core">Core Mission</span>
+    <span class="msl-chip msl-chip-bonus">Side Quest</span>
+    <span class="msl-chip msl-chip-finish">FINISH</span>
+  </div>
 </div>
-<ol class="msl-track" id="msl-track">
-<!-- tiles injected by JS -->
-</ol>
-<div class="msl-legend">
-<pre><code>&lt;span class="msl-chip msl-chip-start"&gt;START&lt;/span&gt;
-&lt;span class="msl-chip msl-chip-core"&gt;Core Mission&lt;/span&gt;
-&lt;span class="msl-chip msl-chip-bonus"&gt;Side Quest&lt;/span&gt;
-&lt;span class="msl-chip msl-chip-finish"&gt;FINISH&lt;/span&gt;</code></pre>
-</div>
-</div>
+
 <script>
 (function () {
   const TILES = [
@@ -377,6 +380,7 @@ ul.task-list li input[type="checkbox"] {
   render();
 })();
 </script>
+
 <style>
 .msl-board {
   --msl-bg: #0b1f3a;
@@ -457,6 +461,7 @@ ul.task-list li input[type="checkbox"] {
 .msl-chip-bonus  { color: #c5a3ff;           border-color: var(--msl-bonus);  }
 .msl-chip-finish { color: #ffb1b8;           border-color: var(--msl-finish); }
 </style>
+
 <hr>
 <div class="grid">
 <section id="getting-started" class="level3 g-col-12 g-col-md-6">
