@@ -181,6 +181,77 @@ Before declaring a deployed model production-ready, verify that:
 Setting up monitoring once is not enough. Review monitoring dashboards regularly, tune thresholds as traffic patterns stabilize, and update reference datasets as the data distribution evolves.
 :::
 
+---
+
+## Knowledge Check
+
+```{=html}
+<div style="background:#f0f4ff;border:2px solid #0b3d91;border-radius:10px;padding:20px 24px;margin:24px 0">
+<style>
+.kc3-q{margin-bottom:16px}.kc3-q p{font-weight:700;margin:0 0 8px;font-size:.95rem}
+.kc3-opts label{display:block;padding:7px 12px;margin:3px 0;background:#fff;border:1.5px solid #d0d7de;border-radius:6px;cursor:pointer;font-size:.9rem}
+.kc3-opts label:hover{border-color:#0b3d91}
+.kc3-opts input{margin-right:8px}
+.kc3-btn{margin-top:12px;background:#0b3d91;color:#fff;border:none;border-radius:6px;padding:9px 22px;cursor:pointer;font-size:.9rem;font-weight:600}
+.kc3-btn:hover{background:#093080}
+.kc3-score-box{margin-top:12px;padding:12px 16px;border-radius:6px;font-weight:600;font-size:.95rem;display:none}
+</style>
+<h4 style="margin:0 0 16px;color:#0b3d91;font-size:1.1rem">🎯 Knowledge Check: Monitoring & Maintenance</h4>
+<form id="kcf3">
+<div class="kc3-q"><p>1. What is "data drift" in the context of ML monitoring?</p><div class="kc3-opts">
+<label><input type="radio" name="q1" value="a"> A bug in the model code</label>
+<label><input type="radio" name="q1" value="b"> A change in the statistical properties of input data over time</label>
+<label><input type="radio" name="q1" value="c"> The model running too slowly</label>
+<label><input type="radio" name="q1" value="d"> Loss of training data</label>
+</div></div>
+<div class="kc3-q"><p>2. Which Azure service is used for ML model monitoring in this lab?</p><div class="kc3-opts">
+<label><input type="radio" name="q2" value="a"> Azure DevOps</label>
+<label><input type="radio" name="q2" value="b"> Azure Functions</label>
+<label><input type="radio" name="q2" value="c"> Azure Machine Learning + Application Insights</label>
+<label><input type="radio" name="q2" value="d"> Azure Blob Storage</label>
+</div></div>
+<div class="kc3-q"><p>3. What triggers automated retraining in a well-designed MLOps system?</p><div class="kc3-opts">
+<label><input type="radio" name="q3" value="a"> A scheduled calendar event only</label>
+<label><input type="radio" name="q3" value="b"> Manual requests from developers</label>
+<label><input type="radio" name="q3" value="c"> Performance degradation or drift exceeding defined thresholds</label>
+<label><input type="radio" name="q3" value="d"> When the server restarts</label>
+</div></div>
+<div class="kc3-q"><p>4. What is a "reference dataset" used for in drift monitoring?</p><div class="kc3-opts">
+<label><input type="radio" name="q4" value="a"> Storing model weights</label>
+<label><input type="radio" name="q4" value="b"> A baseline of the training data distribution to compare against production data</label>
+<label><input type="radio" name="q4" value="c"> A backup of model predictions</label>
+<label><input type="radio" name="q4" value="d"> The test dataset from model evaluation</label>
+</div></div>
+<button type="button" class="kc3-btn" onclick="gradeKC3()">Check Answers</button>
+</form>
+<div class="kc3-score-box" id="kcs3"></div>
+</div>
+<script>
+function gradeKC3(){
+  var ans={q1:'b',q2:'c',q3:'c',q4:'b'},score=0,total=4;
+  var form=document.getElementById('kcf3');
+  ['q1','q2','q3','q4'].forEach(function(q){
+    var sel=form.querySelector('input[name="'+q+'"]:checked');
+    form.querySelectorAll('input[name="'+q+'"]').forEach(function(o){
+      var l=o.parentElement;l.style.background='#fff';l.style.borderColor='#d0d7de';
+    });
+    if(sel){
+      if(sel.value===ans[q]){sel.parentElement.style.background='#d1fae5';sel.parentElement.style.borderColor='#34d399';score++;}
+      else{sel.parentElement.style.background='#fee2e2';sel.parentElement.style.borderColor='#f87171';
+        form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]').parentElement.style.background='#d1fae5';
+        form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]').parentElement.style.borderColor='#34d399';
+      }
+    }
+  });
+  var pct=Math.round(score/total*100);
+  var box=document.getElementById('kcs3');box.style.display='block';
+  box.style.background=pct===100?'#d1fae5':pct>=75?'#e0f2fe':'#fef9c3';
+  box.style.border='1.5px solid '+(pct===100?'#34d399':pct>=75?'#38bdf8':'#fbbf24');
+  box.innerHTML='📊 Score: '+score+'/'+total+' ('+pct+'%) '+(pct===100?'🎉 Perfect!':pct>=75?'✅ Good job!':'📚 Review the page and try again.');
+}
+</script>
+```
+
 ## {{< fa circle-arrow-right >}} Next Steps
 
 With monitoring in place, the system is observable and maintainable. The next section covers the security practices that keep your entire MLOps stack safe and auditable.
