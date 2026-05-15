@@ -837,6 +837,16 @@
     ]
   },
   {
+    "objectID": "monitoring_maintainance.html#knowledge-check",
+    "href": "monitoring_maintainance.html#knowledge-check",
+    "title": "Monitoring",
+    "section": "Knowledge Check",
+    "text": "Knowledge Check\n\n\n🎯 Knowledge Check: Monitoring & Maintenance\n\n1. What is \"data drift\" in the context of ML monitoring?\n A bug in the model code\n A change in the statistical properties of input data over time\n The model running too slowly\n Loss of training data\n\n2. Which Azure service is used for ML model monitoring in this lab?\n Azure DevOps\n Azure Functions\n Azure Machine Learning + Application Insights\n Azure Blob Storage\n\n3. What triggers automated retraining in a well-designed MLOps system?\n A scheduled calendar event only\n Manual requests from developers\n Performance degradation or drift exceeding defined thresholds\n When the server restarts\n\n4. What is a \"reference dataset\" used for in drift monitoring?\n Storing model weights\n A baseline of the training data distribution to compare against production data\n A backup of model predictions\n The test dataset from model evaluation\n\nCheck Answers",
+    "crumbs": [
+      "{{< fa chart-simple >}} Monitoring"
+    ]
+  },
+  {
     "objectID": "monitoring_maintainance.html#next-steps",
     "href": "monitoring_maintainance.html#next-steps",
     "title": "Monitoring",
