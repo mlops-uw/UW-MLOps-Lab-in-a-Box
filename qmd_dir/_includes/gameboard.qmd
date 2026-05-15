@@ -1,0 +1,247 @@
+```{=html}
+<!-- MLSecOps Lab Gameboard (Monopoly-style, mirrors DevSecOps Lab in the Box aesthetic) -->
+<style>
+  .msl-hero { text-align:center; padding:8px 4px 4px; }
+  .msl-hero h2 { margin:0 0 6px; font-size: clamp(22px, 3vw, 32px); color:#0b3d91; letter-spacing:-.02em; }
+  .msl-hero p { margin:0 auto; max-width:780px; color:#555; font-size:.95rem; }
+  .msl-progress-wrap { max-width:900px; margin:14px auto 0; display:flex; gap:12px; align-items:center; flex-wrap:wrap; padding:0 4px; }
+  .msl-progress-bar { flex:1 1 240px; height:10px; background:#e6e6e6; border-radius:999px; overflow:hidden; border:1px solid #d0d0d0; }
+  .msl-progress-fill { height:100%; width:0%; background:linear-gradient(90deg,#0b3d91,#4b2e83); transition:width .4s ease; }
+  #msl-progress-label { font-size:.9rem; color:#666; }
+  .msl-reset { background:transparent; border:1px solid #bbb; border-radius:8px; padding:4px 10px; cursor:pointer; color:#666; font-size:.85rem; }
+  .msl-reset:hover { color:#111; border-color:#111; }
+
+  /* Board */
+  .msl-board { max-width:1180px; margin:18px auto; padding:0 4px; }
+  .msl-grid {
+    position:relative; background:#f7e479; border:3px solid #1a1a1a; border-radius:6px;
+    padding:14px; box-shadow:0 10px 30px rgba(0,0,0,.12);
+    display:grid;
+    grid-template-columns: 1.1fr repeat(6, 1fr) 1.1fr;
+    grid-template-rows: 1.1fr repeat(4, 1fr) 1.1fr;
+    gap:7px; min-height:620px;
+  }
+  .msl-tile {
+    background:#fff; border:2px solid #1a1a1a; border-radius:4px;
+    padding:9px 7px; font-size:.78rem;
+    display:flex; flex-direction:column; cursor:pointer;
+    text-decoration:none; color:inherit; position:relative;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .msl-tile:hover { transform:translateY(-3px); box-shadow:0 8px 18px rgba(0,0,0,.18); border-color:#0b3d91; z-index:3; }
+  .msl-tile .step { font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; color:#4b2e83; font-weight:700; margin-bottom:3px; }
+  .msl-tile .title { font-weight:800; font-size:.82rem; margin-bottom:3px; line-height:1.2; }
+  .msl-tile .blurb { font-size:.68rem; color:#555; line-height:1.3; flex:1; }
+  .msl-tile .icon { font-size:1.05rem; margin-bottom:2px; }
+  .msl-tile.bonus { background:#e8dcff; }
+  .msl-tile.start, .msl-tile.finish { align-items:center; justify-content:center; text-align:center; font-weight:900; }
+  .msl-tile.start { background:#ffd1dc; }
+  .msl-tile.finish { background:#bfe3ff; }
+  .msl-tile.filler { cursor:default; }
+  .msl-tile.filler:hover { transform:none; box-shadow:none; border-color:#1a1a1a; }
+  .msl-tile.done { outline:3px solid #2a9d8f; outline-offset:-3px; }
+  .msl-tile.done .cta::before { content:"✓ "; color:#2a9d8f; }
+  .msl-tile .cta { font-size:.66rem; color:#0b3d91; font-weight:700; margin-top:4px; }
+  .msl-check { position:absolute; top:4px; right:4px; font-size:.6rem; padding:2px 6px; border-radius:999px;
+    background:rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.15); cursor:pointer; color:#111; line-height:1; }
+  .msl-check:hover { background:rgba(0,0,0,.18); }
+
+  /* Center panel */
+  .msl-center { grid-column: 2 / 8; grid-row: 2 / 6;
+    display:grid; grid-template-columns: 1fr 1.2fr; gap:14px; align-items:center; padding:8px; }
+  .msl-keyuse { background:#fff; border:2px solid #1a1a1a; border-radius:6px; padding:12px 14px; }
+  .msl-keyuse h3 { margin:0 0 8px; font-size:.95rem; letter-spacing:.06em; text-transform:uppercase; color:#1a1a1a; }
+  .msl-keyuse ol { margin:0; padding-left:18px; font-size:.82rem; color:#222; }
+  .msl-keyuse ol li { margin-bottom:4px; }
+  .msl-center-title { text-align:center; }
+  .msl-badges { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+  .msl-badges span { background:#fff; border:2px solid #4b2e83; border-radius:999px; padding:4px 10px; font-size:.7rem; font-weight:700; color:#4b2e83; }
+  .msl-center-title h2 { margin:0; font-size:clamp(26px,3.4vw,40px); line-height:1; color:#1a1a1a; letter-spacing:-.02em; }
+  .msl-center-title p { margin:10px 0 0; color:#555; font-size:.88rem; }
+
+  /* Grid placement: Monopoly perimeter */
+  .pos-bl   { grid-column:1; grid-row:6; background:#d8f3dc; }
+  .pos-b1   { grid-column:2; grid-row:6; }
+  .pos-b2   { grid-column:3; grid-row:6; }
+  .pos-b3   { grid-column:4; grid-row:6; }
+  .pos-b4   { grid-column:5; grid-row:6; }
+  .pos-b5   { grid-column:6; grid-row:6; }
+  .pos-b6   { grid-column:7; grid-row:6; }
+  .pos-start{ grid-column:8; grid-row:6; }
+  .pos-r1   { grid-column:8; grid-row:5; }
+  .pos-r2   { grid-column:8; grid-row:4; }
+  .pos-r3   { grid-column:8; grid-row:3; }
+  .pos-r4   { grid-column:8; grid-row:2; }
+  .pos-tr   { grid-column:8; grid-row:1; background:#ffe5b4; }
+  .pos-t1   { grid-column:7; grid-row:1; }
+  .pos-t2   { grid-column:6; grid-row:1; }
+  .pos-t3   { grid-column:5; grid-row:1; }
+  .pos-t4   { grid-column:4; grid-row:1; }
+  .pos-t5   { grid-column:3; grid-row:1; }
+  .pos-t6   { grid-column:2; grid-row:1; }
+  .pos-tl   { grid-column:1; grid-row:1; background:#cdb4db; }
+  .pos-l1   { grid-column:1; grid-row:2; }
+  .pos-l2   { grid-column:1; grid-row:3; }
+  .pos-l3   { grid-column:1; grid-row:4; }
+  .pos-l4   { grid-column:1; grid-row:5; }
+
+  .msl-legend { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:12px 0 0; font-size:.8rem; }
+  .msl-chip { padding:4px 10px; border-radius:999px; border:1px solid #999; background:#fff; }
+  .msl-chip-start { background:#ffd1dc; border-color:#c98499; }
+  .msl-chip-bonus { background:#e8dcff; border-color:#a98ed8; }
+  .msl-chip-finish { background:#bfe3ff; border-color:#7eaecb; }
+
+  @media (max-width:900px) {
+    .msl-grid { display:flex; flex-direction:column; min-height:auto; }
+    .msl-center { order:-1; grid-template-columns:1fr; }
+    .msl-tile { min-height:70px; }
+  }
+</style>
+
+<div class="msl-board" id="mlsecops-gameboard">
+  <div class="msl-hero">
+    <h2>🎲 Your MLSecOps Lab Journey</h2>
+    <p>Roll through 8 stops to ship a secure, production-grade ML system. Click any tile to start that mission. Your progress is saved on this device.</p>
+    <div class="msl-progress-wrap">
+      <div class="msl-progress-bar"><div class="msl-progress-fill" id="msl-fill"></div></div>
+      <span id="msl-progress-label">0 / 8 missions complete</span>
+      <button class="msl-reset" id="msl-reset" title="Reset progress">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="msl-grid" id="msl-grid">
+    <div class="msl-center">
+      <div class="msl-keyuse">
+        <h3>🎯 Key Missions</h3>
+        <ol>
+          <li>Infrastructure &amp; Pipeline Setup (Azure + Terraform)</li>
+          <li>Dataset Exploration with NYC Taxi Data</li>
+          <li>Supervised &amp; Unsupervised ML Foundations</li>
+          <li>Monitoring, Drift Detection &amp; Retraining</li>
+          <li>Security, RBAC &amp; Reproducibility</li>
+        </ol>
+      </div>
+      <div class="msl-center-title">
+        <div class="msl-badges">
+          <span>UW</span><span>Boeing</span><span>Women in Cloud</span>
+        </div>
+        <h2>MLSecOps<br/>BOARD GAME</h2>
+        <p>Choose any mission and begin your practice. Tiles marked ★ are hands-on labs.</p>
+      </div>
+    </div>
+    <!-- tiles injected by JS -->
+  </div>
+
+  <div class="msl-legend">
+    <span class="msl-chip msl-chip-start">START</span>
+    <span class="msl-chip">Core Mission</span>
+    <span class="msl-chip msl-chip-bonus">★ Side Quest / Lab</span>
+    <span class="msl-chip msl-chip-finish">FINISH</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  const TILES = [
+    { pos:"pos-start",  type:"start",  step:"Start",  icon:"🚀", title:"Need for MLOps",
+      blurb:"Why notebooks ≠ production. Mind the gap.", href:"MLOps.html", id:"start" },
+    { pos:"pos-r2",     type:"bonus",  step:"Stop 2", icon:"🧰", title:"★ Resources",
+      blurb:"Python & Git — your everyday tools.", href:"Python.html", id:"resources" },
+    { pos:"pos-tr",     type:"core",   step:"Stop 3", icon:"🖥️", title:"Infra Setup",
+      blurb:"GitHub → Azure, Terraform, ingestion.", href:"vc.html", id:"infra" },
+    { pos:"pos-t3",     type:"core",   step:"Stop 4", icon:"📊", title:"Understand Dataset",
+      blurb:"Get to know NYC Taxi data.", href:"dataset.html", id:"data" },
+    { pos:"pos-tl",     type:"core",   step:"Stop 5", icon:"🧠", title:"ML Foundations",
+      blurb:"Supervised + unsupervised, registry, endpoint.", href:"supervised.html", id:"ml" },
+    { pos:"pos-l3",     type:"core",   step:"Stop 6", icon:"📈", title:"Monitoring",
+      blurb:"Drift, alerts, retraining loop.", href:"monitoring_maintainance.html", id:"monitor" },
+    { pos:"pos-bl",     type:"core",   step:"Stop 7", icon:"🛡️", title:"Security & Best Practices",
+      blurb:"RBAC, secrets, reproducibility.", href:"security_best_practices.html", id:"secure" },
+    { pos:"pos-b3",     type:"finish", step:"Finish", icon:"🏁", title:"Going Forward",
+      blurb:"Reflect, level up, advanced topics.", href:"going_forward.html", id:"finish" }
+  ];
+  const FILLER = [
+    { pos:"pos-r1", text:"💡 Pin Python with <code>uv</code> or <code>pyenv</code>." },
+    { pos:"pos-r3", text:"💡 Tag every model run with a git SHA." },
+    { pos:"pos-r4", text:"💡 Secrets belong in Key Vault, never in code." },
+    { pos:"pos-t1", text:"💡 Treat data like code — version it." },
+    { pos:"pos-t2", text:"💡 CI for notebooks via <code>nbqa</code>." },
+    { pos:"pos-t4", text:"💡 Profile data before modeling." },
+    { pos:"pos-t5", text:"💡 Log to MLflow from day one." },
+    { pos:"pos-t6", text:"💡 Document assumptions in a model card." },
+    { pos:"pos-l1", text:"💡 Monitor inputs, not just outputs." },
+    { pos:"pos-l2", text:"💡 Shadow deploy before going live." },
+    { pos:"pos-l4", text:"💡 Audit access quarterly." },
+    { pos:"pos-b1", text:"💡 Cost guardrails ≠ optional." },
+    { pos:"pos-b2", text:"💡 Automate retraining triggers." },
+    { pos:"pos-b4", text:"💡 Practice incident response drills." },
+    { pos:"pos-b5", text:"💡 Share a runbook with on-call." },
+    { pos:"pos-b6", text:"💡 Celebrate small ships." }
+  ];
+
+  const KEY = "msl_progress_v1";
+  const state = JSON.parse(localStorage.getItem(KEY) || "{}");
+  const grid = document.getElementById("msl-grid");
+  const fill = document.getElementById("msl-fill");
+  const label = document.getElementById("msl-progress-label");
+
+  function render(){
+    [...grid.querySelectorAll(".msl-tile")].forEach(n => n.remove());
+
+    TILES.forEach(t => {
+      const done = !!state[t.id];
+      const el = document.createElement("a");
+      el.className = `msl-tile ${t.type} ${t.pos}${done ? " done" : ""}`;
+      el.href = t.href;
+      if (t.type === "start" || t.type === "finish") {
+        el.innerHTML = `
+          <div style="font-size:1.4rem">${t.icon}</div>
+          <div style="font-size:1.1rem;letter-spacing:.05em">${t.type === "start" ? "START" : "FINISH"}</div>
+          <div style="font-size:.66rem;font-weight:700;margin-top:4px">${t.title}</div>
+          <button class="msl-check" data-id="${t.id}" aria-label="Toggle complete">${done ? "✓" : "○"}</button>
+        `;
+      } else {
+        el.innerHTML = `
+          <div class="step">${t.step}</div>
+          <div class="icon">${t.icon}</div>
+          <div class="title">${t.title}</div>
+          <div class="blurb">${t.blurb}</div>
+          <div class="cta">${done ? "Revisit →" : "Start mission →"}</div>
+          <button class="msl-check" data-id="${t.id}" aria-label="Toggle complete">${done ? "✓" : "○"}</button>
+        `;
+      }
+      grid.appendChild(el);
+    });
+
+    FILLER.forEach(f => {
+      const el = document.createElement("div");
+      el.className = `msl-tile filler ${f.pos}`;
+      el.innerHTML = `<div class="blurb" style="font-size:.7rem">${f.text}</div>`;
+      grid.appendChild(el);
+    });
+
+    const done = TILES.filter(t => state[t.id]).length;
+    fill.style.width = (done / TILES.length * 100) + "%";
+    label.textContent = `${done} / ${TILES.length} missions complete`;
+  }
+
+  grid.addEventListener("click", (e) => {
+    const btn = e.target.closest(".msl-check");
+    if (!btn) return;
+    e.preventDefault();
+    const id = btn.dataset.id;
+    state[id] = !state[id];
+    localStorage.setItem(KEY, JSON.stringify(state));
+    render();
+  });
+
+  document.getElementById("msl-reset").addEventListener("click", () => {
+    for (const k of Object.keys(state)) delete state[k];
+    localStorage.setItem(KEY, JSON.stringify(state));
+    render();
+  });
+
+  render();
+})();
+</script>
+```
