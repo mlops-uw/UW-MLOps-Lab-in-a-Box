@@ -1255,6 +1255,16 @@
     ]
   },
   {
+    "objectID": "MLOps.html#knowledge-check",
+    "href": "MLOps.html#knowledge-check",
+    "title": "Need for MLOps",
+    "section": "Knowledge Check",
+    "text": "Knowledge Check\n\n\n🎯 Knowledge Check: Need for MLOps\n\n1. MLOps stands for:\n Machine Learning + Operations\n Model + Logging + Operations\n Multiple Learning Objectives\n Managed Learning Ops Platform\n\n2. In the NYC Taxi example, what causes predictions to degrade over time?\n The model code has bugs\n The server goes offline\n Traffic patterns and environment change (data drift)\n The dataset is too small\n\n3. Which is NOT a pitfall without MLOps?\n Accuracy drops silently\n Automated retraining triggers\n No one knows when data changes\n Results are hard to reproduce\n\n4. What does the \"Ops\" in MLOps primarily focus on?\n Training better models\n Collecting more data\n Deploying systems reliably and monitoring performance\n Writing Python code\n\nCheck Answers",
+    "crumbs": [
+      "{{< fa rocket >}} Need for MLOps"
+    ]
+  },
+  {
     "objectID": "azure.html",
     "href": "azure.html",
     "title": "Azure Cloud",
