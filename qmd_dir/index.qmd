@@ -16,84 +16,9 @@ Our goal is to provide a hands-on, structured learning experience that bridges a
 
 ## {{< fa map >}} Learning Path
 
-Explore the topics below to build your MLOps expertise from foundations to production deployment.
+Explore the topics below to build your MLOps expertise from foundations to production deployment. Pick a tile to start that mission — or work through them in order.
 
-::: {.grid}
-
-::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
-::: {.card .h-100}
-::: {.card-body}
-### {{< fa rocket >}} Need for MLOps
-
-Understand why production ML systems need more than just accurate models — and why the gap between a notebook and a production service is wider than it looks.
-
-[Get started →](MLOps.qmd){.btn .btn-primary .btn-sm}
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
-::: {.card .h-100}
-::: {.card-body}
-### {{< fa toolbox >}} Resources
-
-Essential resources for Python and Git — the two tools you'll use throughout every part of this lab.
-
-[Python Resources →](Python.qmd){.btn .btn-primary .btn-sm}
-[Git Resources →](git_resources.qmd){.btn .btn-outline-secondary .btn-sm}
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
-::: {.card .h-100}
-::: {.card-body}
-### {{< fa server >}} Infra Setup
-
-Provision and connect your cloud infrastructure: push code from GitHub to Azure, define resources with Terraform, build your ML pipeline, and ingest data.
-
-[Git to Azure →](vc.qmd){.btn .btn-primary .btn-sm}
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
-::: {.card .h-100}
-::: {.card-body}
-### {{< fa brain >}} ML Foundations
-
-Learn the fundamentals: understand and process the NYC Taxi dataset, train supervised and unsupervised models, register them in the Model Registry, and create a real-time endpoint.
-
-[Understanding Dataset →](dataset.qmd){.btn .btn-primary .btn-sm}
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
-::: {.card .h-100}
-::: {.card-body}
-### {{< fa chart-simple >}} Monitoring
-
-Keep your ML system healthy after deployment. Detect data drift and model drift, set up alerts, and close the loop back to retraining when performance degrades.
-
-[Start monitoring →](monitoring_maintainance.qmd){.btn .btn-primary .btn-sm}
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-lg-4}
-::: {.card .h-100}
-::: {.card-body}
-### {{< fa shield-halved >}} Security & Best Practices
-
-Learn RBAC, secrets management, reproducible pipelines, and production-grade safeguards to keep your MLOps stack secure and auditable.
-
-[Learn more →](security_best_practices.qmd){.btn .btn-primary .btn-sm}
-:::
-:::
-:::
-
-:::
+{{< include _includes/gameboard.html >}}
 
 ---
 
