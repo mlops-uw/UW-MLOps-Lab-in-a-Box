@@ -18,7 +18,7 @@ Our goal is to provide a hands-on, structured learning experience that bridges a
 
 Explore the topics below to build your MLOps expertise from foundations to production deployment. Pick a tile to start that mission — or work through them in order.
 
-{{< include _includes/gameboard.html >}}
+{{< include _includes/gameboard.qmd >}}
 
 ---
 
