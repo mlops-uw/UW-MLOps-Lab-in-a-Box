@@ -108,6 +108,18 @@
     ]
   },
   {
+    "objectID": "unsupervised.html#knowledge-check",
+    "href": "unsupervised.html#knowledge-check",
+    "title": "Unsupervised Learning",
+    "section": "Knowledge Check",
+    "text": "Knowledge Check\n\n\n🎯 Knowledge Check: Unsupervised Learning\n\n1. What is the key difference between supervised and unsupervised learning?\n Supervised learning uses Python; unsupervised uses R\n Supervised learning uses labeled data with a target variable; unsupervised finds patterns without labels\n Unsupervised learning is always faster\n Supervised learning only works on images\n\n2. What algorithm is used in this lab for clustering NYC taxi trips?\n K-Nearest Neighbors (KNN)\n Linear Regression\n MiniBatchKMeans\n Random Forest\n\n3. What method is used to determine the optimal number of clusters (K)?\n Trial and error\n The Elbow Method (plotting inertia vs K)\n The R² score\n Cross-validation\n\n4. What was the key finding of the clustering analysis in this lab?\n All taxi trips are identical\n The model failed to find any clusters\n Clear separation between airport/long-distance trips and urban trips\n Passenger count is the most important feature\n\nCheck Answers",
+    "crumbs": [
+      "{{< fa brain >}} ML Foundations",
+      "{{< fa chart-line >}} Algorithms",
+      "{{< fa magnifying-glass-chart >}} Unsupervised Learning"
+    ]
+  },
+  {
     "objectID": "vc.html",
     "href": "vc.html",
     "title": "Git to Azure",
