@@ -5,14 +5,19 @@ on:
 
 jobs:
   get-config:
-    uses: Azure/mlops-templates/.github/workflows/read-yaml.yml@main
-    with:
-      file_name: config-infra-prod.yml
+    runs-on: ubuntu-latest
+    outputs:
+      resource_group: ${{ steps.config.outputs.resource_group }}
+      aml_workspace: ${{ steps.config.outputs.aml_workspace }}
+    steps:
+      - id: config
+        run: |
+          echo "resource_group=mlops" >> "$GITHUB_OUTPUT"
+          echo "aml_workspace=finalworkspacemlopscapstone26" >> "$GITHUB_OUTPUT"
 
   deploy-endpoint:
     needs: get-config
     runs-on: ubuntu-latest
-    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
