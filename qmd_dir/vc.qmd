@@ -24,9 +24,23 @@ The connection between Git and Azure is the bridge between experimental notebook
 
 ## {{< fa key >}} Setting Up Azure Service Principal Authentication
 
+Before GitHub can communicate with Azure, Azure must know:
+
+“Is this workflow allowed to access cloud resources?”
+
+To solve this, we create a Service Principal.
+
 To allow GitHub Actions to interact with Azure, you need a Service Principal — a non-human identity that GitHub uses to authenticate to Azure.
 
+Think of it as:
+
+a robot account that GitHub uses to securely log into Azure.
+
+Instead of a human entering a username and password, GitHub Actions authenticates using this machine identity.
+
 **Step 1: Create a Service Principal**
+
+On Azure CLI (https://portal.azure.com/), run this command and replace subscription-id and resource-group with the details you see on Azure under subscription and resource group respectively.
 
 ```bash
 # Create a service principal with Contributor access to your resource group
@@ -54,6 +68,7 @@ Never paste the service principal JSON into a file in your repository. Always us
 ## {{< fa code-branch >}} GitHub Actions Workflow
 
 Once the credential is stored, you can use it in a GitHub Actions workflow. Here is the workflow we use to trigger Azure ML pipeline runs:
+Save this in your new repo under .github/workflows/ file in a file called azure-ml-training.yml
 
 ```yaml
 name: Run Azure ML Training Pipeline
