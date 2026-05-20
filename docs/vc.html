@@ -354,8 +354,15 @@ Key Insight
 </section>
 <section id="setting-up-azure-service-principal-authentication" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-azure-service-principal-authentication"><i class="fa-solid fa-key" aria-label="key"></i> Setting Up Azure Service Principal Authentication</h2>
+<p>Before GitHub can communicate with Azure, Azure must know:</p>
+<p>“Is this workflow allowed to access cloud resources?”</p>
+<p>To solve this, we create a Service Principal.</p>
 <p>To allow GitHub Actions to interact with Azure, you need a Service Principal — a non-human identity that GitHub uses to authenticate to Azure.</p>
+<p>Think of it as:</p>
+<p>a robot account that GitHub uses to securely log into Azure.</p>
+<p>Instead of a human entering a username and password, GitHub Actions authenticates using this machine identity.</p>
 <p><strong>Step 1: Create a Service Principal</strong></p>
+<p>On Azure CLI (https://portal.azure.com/), run this command and replace subscription-id and resource-group with the details you see on Azure under subscription and resource group respectively.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a service principal with Contributor access to your resource group</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ad sp create-for-rbac <span class="dt">\</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> <span class="st">"github-mlops-sp"</span> <span class="dt">\</span></span>
@@ -386,7 +393,7 @@ Keep Credentials Secure
 </section>
 <section id="github-actions-workflow" class="level2">
 <h2 class="anchored" data-anchor-id="github-actions-workflow"><i class="fa-solid fa-code-branch" aria-label="code-branch"></i> GitHub Actions Workflow</h2>
-<p>Once the credential is stored, you can use it in a GitHub Actions workflow. Here is the workflow we use to trigger Azure ML pipeline runs:</p>
+<p>Once the credential is stored, you can use it in a GitHub Actions workflow. Here is the workflow we use to trigger Azure ML pipeline runs: Save this in your new repo under .github/workflows/ file in a file called azure-ml-training.yml</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Run Azure ML Training Pipeline</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
