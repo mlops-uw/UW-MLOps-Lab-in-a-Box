@@ -1,6 +1,3 @@
-# user_object_id = "2e45ddbe-50e2-4849-89c6-152bb08e956f"
-# tenant_id = "f6b6dd5b-f02f-441a-99a0-162ac5060bd2"
-
 resource_group_name = "mlops"
 name = "taxizonelookup"
 account_tier = "Standard"
@@ -22,8 +19,6 @@ datastore_name = "mlops_datastore"
 ml_instance_name = "capstone"
 machine_size = "STANDARD_DS2_V2"
 authorization_type = "personal"
-# object_id = "2e45ddbe-50e2-4849-89c6-152bb08e956f"
-# object_id = "7c09db03-1363-4db0-9018-4261264b576a"
 tenant_id = "f6b6dd5b-f02f-441a-99a0-162ac5060bd2"
 description        = "The Jupyter Notebook VM for MLOps Capstone project"
 tags = {name = "mlops-captone"}

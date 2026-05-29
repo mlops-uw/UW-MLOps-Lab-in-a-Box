@@ -19,11 +19,6 @@ variable sku_name{
     description = "The Name of the SKU used for this Key Vault"
 }
 
-
-# variable object_id{
-#     type = string
-#     description = "User's AAD Object Id"
-# }
   
 variable object_id_sp{
     type = string

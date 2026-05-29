@@ -103,15 +103,6 @@ variable authorization_type{
     description = "The Compute Instance Authorization type"
 }
 
-# variable object_id{
-#     type = string
-#     description = "User's AAD Object Id"
-# }
-  
-# variable tenant_id{
-#     type = string
-#     description = "User's AAD Tenant Id"
-# }
 
 variable description{
     type = string

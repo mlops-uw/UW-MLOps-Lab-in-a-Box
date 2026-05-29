@@ -29,8 +29,3 @@ output "key_id"{
     value = module.keyvault.key_id
     description = "The Key Vault Secret ID."
 }
-
-# output "instance_id"{
-#     value = module.machinelearning.instance_id
-#     description = "The Machine Learning Compute Instance ID."
-# }

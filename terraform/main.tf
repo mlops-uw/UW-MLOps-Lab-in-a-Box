@@ -81,6 +81,5 @@ module "keyvault" {
   secret_value = module.storage.primary_connection_string
   sku_name = var.sku_name
   object_id_sp = data.azurerm_client_config.current.object_id
-  # object_id = var.object_id  
   tenant_id =  data.azurerm_client_config.current.tenant_id
 }
