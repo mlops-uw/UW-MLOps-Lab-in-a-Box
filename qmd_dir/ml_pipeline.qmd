@@ -3,151 +3,453 @@ title: "ML Pipeline"
 subtitle: "Orchestrating end-to-end ML workflows on Azure"
 ---
 
-::: {.callout-note}
-## What You'll Learn
-This page covers how we build, configure, and run an automated ML pipeline on Azure Machine Learning, using the NYC Taxi dataset to walk through every stage from data preparation to model training.
-:::
+---
 
-## {{< fa diagram-project >}} What Is an ML Pipeline?
+title: "Machine Learning Pipeline"
+subtitle: "End-to-End MLOps Workflow"
+-------------------------------------
 
-An ML pipeline is a series of automated, reproducible steps that take raw data and produce a trained, registered model. Instead of running scripts manually in a notebook, a pipeline chains each step together so the entire workflow can be triggered, tracked, and repeated on demand.
+## {{< fa project-diagram >}} What Is an ML Pipeline?
 
-In this lab, our pipeline does the following:
+A Machine Learning (ML) Pipeline is a series of automated and reproducible steps that transform raw data into trained, evaluated, monitored, and registered machine learning models.
 
-- ingests raw NYC taxi trip data from Azure Blob Storage
-- applies preprocessing and feature engineering
-- trains a regression model to predict trip duration
-- evaluates model performance against a validation set
-- registers the best-performing model in the Azure ML Model Registry
+Instead of executing individual scripts manually, a pipeline connects all stages of the machine learning workflow together, allowing the entire process to be triggered, tracked, and repeated consistently.
 
-::: {.callout-tip}
-## Key Insight
-Pipelines make your ML work reproducible. Anyone with access to the repo and the Azure workspace can re-run the exact same experiment and get the same results.
-:::
+In this project, the ML pipeline uses the NYC Taxi dataset stored in Azure and performs:
 
-## {{< fa cogs >}} Pipeline Architecture
+* Data preprocessing
+* Supervised learning
+* Unsupervised learning
+* Model registration
+* Monitoring and artifact generation
 
-Our ML pipeline consists of four sequential components, each defined as an Azure ML Component:
+This approach follows MLOps best practices by ensuring that model training and evaluation can be executed repeatedly in a controlled and automated manner.
 
-**Component 1 — Data Preparation**
+---
 
-- Reads the raw Parquet files from Azure Blob Storage
-- Validates schema and drops rows with missing critical fields
-- Outputs a cleaned dataset to the pipeline's scratch space
+## {{< fa sitemap >}} Pipeline Architecture
 
-**Component 2 — Feature Engineering**
+This project uses two layers of automation:
 
-- Computes derived features: trip distance bins, hour-of-day, day-of-week
-- Scales numeric features using StandardScaler
-- Encodes categorical variables
+1. **GitHub Actions CI/CD Pipeline**
+2. **Azure Machine Learning Pipeline**
 
-**Component 3 — Model Training**
+Together, these components automate the workflow from source code execution in GitHub to model training and tracking in Azure Machine Learning.
 
-- Trains a LightGBM regressor on the processed training split
-- Logs hyperparameters, training metrics (RMSE, MAE, R²) to Azure ML
-- Saves the trained model artifact
+```{mermaid}
+flowchart TD
 
-**Component 4 — Model Evaluation & Registration**
+A[User Triggers Workflow] --> B[GitHub Actions Pipeline]
 
-- Evaluates the model on the held-out test split
-- Compares performance to the currently registered production model
-- Registers the new model only if it beats the baseline
+B --> C[Get Configuration]
+C --> D[Register Environment]
+D --> E[Register Dataset]
+E --> F[Run Azure ML Pipeline]
 
-::: {.callout-important}
-## Pipeline Component Philosophy
-Each component runs in its own isolated environment. This means you can update the feature engineering logic without touching the training code, and vice versa.
-:::
+F --> G[Preprocess Data]
+G --> H[Supervised Learning]
+G --> I[Unsupervised Learning]
 
-## {{< fa file-code >}} Pipeline Definition (YAML)
+H --> J[Register Models]
+I --> J
 
-Pipelines in Azure ML are defined as YAML jobs. Here is a simplified version of our pipeline configuration:
+J --> K[Monitoring]
+K --> L[Azure ML Model Registry & Artifacts]
+```
+
+---
+
+# GitHub Actions CI/CD Pipeline
+
+The GitHub Actions workflow acts as the automation layer responsible for triggering and managing the Azure Machine Learning workflow.
+
+The workflow is started manually using GitHub's `workflow_dispatch` trigger.
+
+```yaml
+name: deploy-model-training-pipeline
+
+on:
+  workflow_dispatch:
+```
+
+This allows users to execute the machine learning workflow on demand from the GitHub Actions interface.
+
+The workflow runs on:
+
+```yaml
+runs-on: ubuntu-latest
+```
+
+and uses Azure CLI commands to communicate with Azure Machine Learning resources.
+
+---
+
+## GitHub Actions Pipeline Components
+
+### 1. Get Config
+
+The first job retrieves shared configuration values used throughout the workflow.
+
+```yaml
+get-config:
+  runs-on: ubuntu-latest
+  outputs:
+    resource_group: ${{ steps.config.outputs.resource_group }}
+    aml_workspace: ${{ steps.config.outputs.aml_workspace }}
+```
+
+### Purpose
+
+* Defines common configuration values.
+* Retrieves the Azure Resource Group name.
+* Retrieves the Azure Machine Learning Workspace name.
+* Exposes these values as outputs for downstream jobs.
+
+This prevents configuration values from being duplicated throughout the workflow.
+
+---
+
+### 2. Register Environment
+
+This job registers the Azure Machine Learning environment.
+
+```bash
+az ml environment create \
+  --file ML/environment.yaml \
+  --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+  --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+```
+
+### Purpose
+
+The environment defines the runtime configuration used by all machine learning jobs, including:
+
+* Python version
+* Required packages
+* Library dependencies
+* Runtime settings
+
+Registering the environment ensures that all jobs execute in a consistent and reproducible environment.
+
+---
+
+### 3. Register Dataset
+
+This job registers the dataset inside Azure Machine Learning.
+
+```bash
+az ml data create \
+  --file ML/data.yml \
+  --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+  --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+```
+
+### Purpose
+
+* Registers the NYC Taxi dataset.
+* Creates a reusable dataset reference.
+* Makes the dataset available to Azure ML jobs.
+
+After registration, the dataset can be accessed consistently across multiple pipeline executions.
+
+---
+
+### 4. Run Pipeline
+
+This job starts the Azure Machine Learning Pipeline.
+
+```bash
+az ml job create \
+  --file ML/pipeline.yaml \
+  --resource-group "${{ needs.get-config.outputs.resource_group }}" \
+  --workspace-name "${{ needs.get-config.outputs.aml_workspace }}"
+```
+
+### Purpose
+
+This is the primary workflow step that initiates the end-to-end machine learning process inside Azure Machine Learning.
+
+---
+
+# Azure Machine Learning Pipeline
+
+The Azure Machine Learning Pipeline is defined in the `pipeline.yaml` file.
 
 ```yaml
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
 type: pipeline
-display_name: nyc-taxi-training-pipeline
 
+display_name: NYC_Taxi_ML_Pipeline
+description: ML pipeline for NYC taxi analysis
+```
+
+The pipeline runs inside the Azure Machine Learning Workspace and executes multiple machine learning jobs in sequence.
+
+---
+
+## Compute Target
+
+All jobs run on the Azure Machine Learning compute target named **capstone**.
+
+```yaml
 settings:
-  default_compute: azureml:cpu-cluster
-  default_datastore: azureml:workspaceblobstore
+  default_compute: azureml:capstone
+```
 
+### Purpose
+
+The compute target provides:
+
+* CPU resources
+* GPU resources (if configured)
+* Managed execution environment
+* Scalable compute for ML workloads
+
+All stages of the pipeline execute using this compute resource.
+
+---
+
+## Pipeline Input
+
+The pipeline uses the latest registered NYC Taxi dataset.
+
+```yaml
 inputs:
-  raw_data:
+  data_path:
     type: uri_folder
-    path: azureml://datastores/workspaceblobstore/paths/nyc-taxi/raw/
-
-jobs:
-  data_prep:
-    type: command
-    component: azureml:nyc_taxi_data_prep:1
-    inputs:
-      raw_data: ${{parent.inputs.raw_data}}
-    outputs:
-      cleaned_data:
-        mode: rw_mount
-
-  feature_engineering:
-    type: command
-    component: azureml:nyc_taxi_features:1
-    inputs:
-      cleaned_data: ${{parent.jobs.data_prep.outputs.cleaned_data}}
-    outputs:
-      feature_data:
-        mode: rw_mount
-
-  model_training:
-    type: command
-    component: azureml:nyc_taxi_train:1
-    inputs:
-      feature_data: ${{parent.jobs.feature_engineering.outputs.feature_data}}
-    outputs:
-      model_output:
-        mode: rw_mount
+    path: azureml:taxi-data@latest
 ```
 
-## {{< fa play >}} Running the Pipeline
+### Purpose
 
-**From the Azure ML CLI:**
+The dataset reference points to the most recent version of the registered dataset.
 
-```bash
-# Submit the pipeline job
-az ml job create -f pipeline.yml --workspace-name <your-workspace> --resource-group <your-rg>
+Using versioned datasets improves reproducibility and data governance.
 
-# Monitor job status
-az ml job show -n <job-name> --workspace-name <your-workspace>
+---
 
-# Stream logs
-az ml job stream -n <job-name> --workspace-name <your-workspace>
+# Azure ML Pipeline Execution Stages
+
+## 1. Preprocess Data
+
+The first stage executes the `preprocess.py` script.
+
+```yaml
+preprocess_data:
+  type: command
+  command: >-
+    python preprocess.py
+    --data-path ${{inputs.data_path}}
+    --output-dir ${{outputs.output_dir}}
 ```
 
-**From the Azure ML Studio UI:**
+### Purpose
 
-1. Navigate to **Jobs** in the left sidebar
-2. Select your pipeline run to see the visual graph
-3. Click on individual steps to inspect logs and outputs
-4. View metrics tracked during training in the **Metrics** tab
+This stage prepares the raw NYC Taxi dataset for model training by:
 
-::: {.callout-note}
-## GitHub Actions Integration
-In this lab, the pipeline is also triggered automatically via a GitHub Actions workflow when code is merged to `main`. This means every code change is tested end-to-end in Azure ML without manual intervention.
-:::
+* Removing invalid records
+* Handling missing values
+* Cleaning the dataset
+* Removing unnecessary columns
+* Preparing training features
 
-## {{< fa chart-bar >}} What Gets Logged
+The cleaned data is written to an Azure ML datastore-backed folder.
 
-Every pipeline run captures the following to Azure ML:
+---
 
-- **Parameters:** learning rate, max depth, number of estimators, feature list
-- **Metrics:** RMSE, MAE, R², training duration
-- **Artifacts:** trained model file, feature scaler, evaluation report
-- **Lineage:** which data version, which git commit SHA, which environment was used
+## 2. Supervised Learning
 
-::: {.callout-tip}
-## Why This Matters
-Full lineage means you can always trace a production model back to the exact data and code that produced it. This is critical for debugging, auditing, and reproducing results.
-:::
+After preprocessing completes, the supervised learning stage begins.
 
-## {{< fa circle-arrow-right >}} Next Steps
+```yaml
+supervised_learning:
+  type: command
+  command: >-
+    python supervised_learning.py
+    --data-path ${{inputs.data_path}}
+    --output-dir ${{outputs.output_dir}}
+```
 
-With the pipeline running, the next step is to retrieve the trained model from the Azure ML Model Registry and create a real-time endpoint for serving predictions.
+### Purpose
 
-Proceed to the **ML Foundations → Model Registry** section to learn how trained models are versioned, staged, and promoted to production.
+This stage trains a supervised machine learning model using the cleaned dataset.
+
+The model predicts:
+
+* Taxi fare amounts
+* Trip-related outcomes based on journey characteristics
+
+The input comes directly from the preprocessing stage.
+
+```yaml
+inputs:
+  data_path: ${{parent.jobs.preprocess_data.outputs.output_dir}}
+```
+
+This creates a dependency between preprocessing and model training.
+
+---
+
+## 3. Unsupervised Learning
+
+The unsupervised learning stage also uses the preprocessed dataset.
+
+```yaml
+unsupervised_learning:
+  type: command
+  command: >-
+    python unsupervised_learning.py
+    --data-path ${{inputs.data_path}}
+    --output-dir ${{outputs.output_dir}}
+```
+
+### Purpose
+
+This stage applies clustering techniques to identify patterns in taxi trip behavior.
+
+Examples include:
+
+* Short city trips
+* Airport trips
+* Peak-hour rides
+* Long-distance journeys
+
+The stage receives its input from the preprocessing output.
+
+---
+
+## 4. Register Models
+
+Once training completes, the generated models are registered.
+
+```yaml
+register_models:
+  type: command
+  command: >-
+    python register_models.py
+    --supervised-dir ${{inputs.supervised_dir}}
+    --unsupervised-dir ${{inputs.unsupervised_dir}}
+```
+
+### Purpose
+
+This stage stores trained models in the Azure Machine Learning Model Registry.
+
+Benefits include:
+
+* Version tracking
+* Model comparison
+* Reusability
+* Deployment readiness
+
+The registry becomes the centralized repository for trained models.
+
+---
+
+## 5. Monitoring
+
+The final stage executes the monitoring script.
+
+```yaml
+monitoring:
+  type: command
+  command: >-
+    python monitoring.py
+    --data-path ${{inputs.data_path}}
+    --supervised-output-dir ${{inputs.supervised_dir}}
+    --unsupervised-output-dir ${{inputs.unsupervised_dir}}
+    --output-dir ${{outputs.output_dir}}
+```
+
+### Purpose
+
+This stage generates:
+
+* Monitoring artifacts
+* Performance reports
+* Validation outputs
+* Execution logs
+
+These outputs help evaluate pipeline performance and support future model improvements.
+
+---
+
+# How the Jobs Run
+
+Each stage of the pipeline is implemented as an Azure ML Command Job.
+
+```yaml
+environment: azureml:taxi-ml-env@latest
+code: ./
+```
+
+### Environment
+
+Each job uses:
+
+```yaml
+azureml:taxi-ml-env@latest
+```
+
+This environment contains:
+
+* Python runtime
+* Machine learning libraries
+* Required dependencies
+
+### Source Code
+
+```yaml
+code: ./
+```
+
+This instructs Azure Machine Learning to use the current project directory as the source code location.
+
+### Execution Model
+
+All jobs execute as containerized workloads on Azure ML compute resources.
+
+Benefits include:
+
+* Consistent runtime environments
+* Dependency isolation
+* Reproducibility
+* Scalability
+
+---
+
+# {{< fa sync-alt >}} End-to-End Workflow
+
+The complete workflow executes in the following order:
+
+1. User manually triggers the GitHub Actions workflow.
+2. GitHub Actions retrieves configuration values.
+3. GitHub Actions authenticates with Azure.
+4. The Azure ML environment is registered.
+5. The NYC Taxi dataset is registered.
+6. GitHub Actions starts the Azure ML Pipeline.
+7. Azure ML preprocesses the data.
+8. Supervised learning models are trained.
+9. Unsupervised learning models are trained.
+10. Models are registered in Azure ML.
+11. Monitoring artifacts and logs are generated.
+12. Outputs are stored in Azure ML datastore locations.
+
+---
+
+# {{< fa clipboard-check >}} Summary
+
+This project combines GitHub Actions and Azure Machine Learning to create a complete MLOps workflow.
+
+The GitHub Actions pipeline acts as the orchestration layer responsible for starting and managing the workflow, while the Azure ML Pipeline performs the actual machine learning operations.
+
+Together they provide:
+
+* Automated model training
+* Reproducible experiments
+* Dataset versioning
+* Environment management
+* Model registration
+* Monitoring and tracking
+
+This architecture demonstrates a production-style machine learning workflow where data processing, model training, and model management are fully automated and repeatable.

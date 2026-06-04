@@ -111,23 +111,6 @@ jobs:
 The workflow above runs on every push to `main`. You can also add a `pull_request` trigger to run validation pipelines on PRs before they are merged.
 :::
 
-## {{< fa arrows-split-up-and-left >}} Branch Strategy for MLOps
-
-In this lab we follow a simple branch strategy:
-
-| Branch | Purpose |
-|--------|---------|
-| `main` | Production-ready code and configs |
-| `feature/*` | New features, experiments, model updates |
-| `fix/*` | Bug fixes in pipeline or scoring code |
-
-Pull requests from `feature/*` branches trigger a validation pipeline that checks code quality and runs lightweight tests before merging into `main`. Merging to `main` triggers the full training pipeline.
-
-::: {.callout-important}
-## Protect Your Main Branch
-Enable branch protection rules on `main` in GitHub Settings. Require at least one review and passing CI checks before any merge.
-:::
-
 ## {{< fa cloud-arrow-up >}} Connecting to Azure ML Workspace
 
 After authenticating, you configure GitHub Actions with your workspace details using repository variables:

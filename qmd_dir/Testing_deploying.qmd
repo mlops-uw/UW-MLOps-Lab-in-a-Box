@@ -3,267 +3,420 @@ title: "Endpoint Creation (Testing & Deployment)"
 subtitle: "Serving ML models as real-time REST APIs on Azure"
 ---
 
-::: {.callout-note}
-## What You'll Learn
-This page covers how registered models become live REST API endpoints on Azure ML. You will see how the scoring script works, how the endpoint and deployment are configured, how to call the API with a real request, and how deployment is automated through GitHub Actions — all using the actual files from this lab.
-:::
+---
 
-## {{< fa lightbulb >}} From Registered Model to Live API
+title: "Endpoint Deployment Pipelines"
+subtitle: "Deploying Azure ML Models as Real-Time Endpoints"
+------------------------------------------------------------
 
-Registering a model in Azure ML gives it a version and a home in the model registry. But a registered model cannot do anything on its own — it is still just a file. To serve predictions, you need two additional things:
+## {{< fa rocket >}} Endpoint Deployment Pipelines
 
-- an **endpoint**: a stable HTTPS URL that clients send requests to
-- a **deployment**: the compute + model + scoring code that runs behind that URL
+After machine learning models are trained and registered in Azure Machine Learning, separate GitHub Actions workflows are used to deploy them as real-time online endpoints.
 
-In this lab, the endpoint is named `taxi-mlops-endpoint` and the deployment is named `blue`. The scoring script loaded by that deployment is `ML/score.py`, which handles both the Linear Regression fare prediction model and the KMeans zone clustering model in a single endpoint.
+In this project, two endpoint deployment workflows are implemented:
 
-::: {.callout-tip}
-## Key Insight
-A single endpoint can host multiple deployments (e.g., `blue` and `green`). This enables zero-downtime model updates: you deploy a new version as `green`, test it, then shift traffic over from `blue` to `green` — and roll back instantly if something goes wrong.
-:::
+| Endpoint                   | Purpose                                                                |
+| -------------------------- | ---------------------------------------------------------------------- |
+| Linear Regression Endpoint | Performs real-time taxi fare prediction.                               |
+| KMeans Clustering Endpoint | Groups similar taxi trips into clusters based on trip characteristics. |
 
-## {{< fa file-code >}} The Endpoint Configuration (`endpoint.yaml`)
+Both deployment workflows follow the same deployment architecture but use different endpoint and deployment configuration files depending on the model being deployed.
 
-The endpoint definition is minimal — it just names the endpoint and sets authentication mode:
+---
 
-```yaml
-$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json
-name: taxi-mlops-endpoint
-auth_mode: key
+## {{< fa sitemap >}} Endpoint Deployment Architecture
+
+The endpoint deployment workflows are executed manually using GitHub Actions.
+
+```yaml id="cvw3s8"
+on:
+  workflow_dispatch:
 ```
 
-`auth_mode: key` means callers must include an API key in the request header. Azure ML generates this key automatically when the endpoint is created.
+This allows users to deploy or redeploy endpoints on demand directly from the GitHub Actions interface.
 
-## {{< fa server >}} The Deployment Configuration (`deployment.yaml`)
+### Common Deployment Workflow
 
-The deployment wires together the model, scoring script, environment, and compute:
+Both endpoint deployment pipelines perform the following tasks:
 
-```yaml
-$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
-name: blue
-endpoint_name: taxi-mlops-endpoint
-model: azureml:taxi-fare-linear-regression@latest
-code_configuration:
-  code: ./
-  scoring_script: score.py
-environment: azureml:taxi-ml-env@latest
-instance_type: Standard_DS2_v2
-instance_count: 1
-request_settings:
-  request_timeout_ms: 5000
-  max_concurrent_requests_per_instance: 10
+1. Read Azure configuration values.
+2. Authenticate GitHub Actions with Azure.
+3. Install the Azure Machine Learning CLI extension.
+4. Register the Azure ML environment if required.
+5. Create the online endpoint.
+6. Remove any existing deployment.
+7. Create a new deployment.
+8. Route traffic to the deployment.
+9. Test the endpoint using sample data.
+10. Display endpoint information.
+
+```{mermaid} id="pk1k4z"
+flowchart TD
+
+A[GitHub Actions Trigger] --> B[Authenticate with Azure]
+B --> C[Install Azure ML CLI]
+
+C --> D[Create Endpoint]
+D --> E[Delete Existing Deployment]
+
+E --> F[Create New Deployment]
+F --> G[Route Traffic]
+
+G --> H[Test Endpoint]
+H --> I[Display Endpoint Details]
 ```
 
-Key fields to understand:
+---
 
-- **`model`**: references `taxi-fare-linear-regression@latest` — the most recently registered version. The scoring script also loads the KMeans model at startup using `AZUREML_MODEL_DIR`.
-- **`scoring_script`**: points to `score.py` in the same directory
-- **`instance_type`**: `Standard_DS2_v2` — 2 vCPUs, 7 GB RAM, cost-effective for inference
-- **`request_timeout_ms`**: 5 seconds max per request before Azure ML returns a timeout error
-- **`max_concurrent_requests_per_instance`**: 10 parallel requests per container instance
+# {{< fa chart-line >}} Linear Regression Endpoint
 
-::: {.callout-warning}
-## Deployment Name Convention
-The deployment is named `blue` because this lab uses a blue/green deployment strategy. When you want to update the model, create a new `green` deployment alongside `blue`, test it, then shift 100% of traffic to `green`. This avoids downtime during model updates.
-:::
+The first deployment workflow publishes the trained Linear Regression model as an Azure Machine Learning Online Endpoint.
 
-## {{< fa python >}} The Scoring Script (`score.py`)
+```yaml id="fwv9zf"
+name: Deploy Model Endpoint
 
-Azure ML calls two functions in the scoring script: `init()` once when the container starts, and `run()` for every prediction request.
-
-**`init()` — loading models at startup**
-
-```python
-def init():
-    global lr_model, lr_scaler, kmeans_model
-    model_dir = os.environ["AZUREML_MODEL_DIR"]
-
-    # Load Linear Regression model
-    lr_path = find_model_file(model_dir, "linear_regression")
-    lr_model = load_model(lr_path)
-
-    # Load scaler if available
-    try:
-        scaler_path = find_model_file(model_dir, "feature_scaler")
-        lr_scaler = load_model(scaler_path)
-    except FileNotFoundError:
-        lr_scaler = None
-
-    # Load KMeans model
-    kmeans_path = find_model_file(model_dir, "kmeans")
-    kmeans_model = load_model(kmeans_path)
+on:
+  workflow_dispatch:
 ```
 
-**`run()` — routing requests to the right model**
+### Purpose
 
-The `run()` function reads the `"model"` field from the JSON request body and routes to either `predict_fare()` or `predict_cluster()`:
+This endpoint provides real-time taxi fare predictions.
 
-```python
-def run(data):
-    try:
-        data = json.loads(data) if isinstance(data, str) else data
-        model_type = data.get("model", "linear_regression")
+Applications can submit trip-related features and receive a predicted fare amount from the deployed model.
 
-        if model_type == "linear_regression":
-            return predict_fare(data)
-        elif model_type == "kmeans":
-            return predict_cluster(data)
-        else:
-            return json.dumps({"error": f"Unknown model: {model_type}"})
-    except Exception as e:
-        return json.dumps({"error": str(e)})
-```
+---
 
-::: {.callout-note}
-## Single Endpoint, Two Models
-A single `score.py` serves both the fare prediction model and the KMeans clustering model. The caller decides which model to invoke by setting `"model": "linear_regression"` or `"model": "kmeans"` in the request JSON. This design reduces infrastructure cost and simplifies the deployment.
-:::
+## Create Endpoint
 
-## {{< fa play >}} Deploying Step-by-Step
+The workflow creates the Azure ML endpoint using:
 
-**Step 1: Create the endpoint**
-
-```bash
+```bash id="g1y8n7"
 az ml online-endpoint create \
-  --file ML/endpoint.yaml \
-  --workspace-name <your-workspace> \
-  --resource-group <your-rg>
+  --file ML/endpoint.yaml
 ```
 
-This creates the HTTPS URL and generates the API key. The endpoint exists but has no model behind it yet.
+### Purpose
 
-**Step 2: Create the deployment**
+The endpoint acts as the public entry point through which applications can send prediction requests.
 
-```bash
-az ml online-deployment create \
-  --file ML/deployment.yaml \
-  --all-traffic \
-  --workspace-name <your-workspace> \
-  --resource-group <your-rg>
+The endpoint configuration is defined in:
+
+```text
+ML/endpoint.yaml
 ```
 
-The `--all-traffic` flag routes 100% of requests to this `blue` deployment immediately. Deployment typically takes 3–5 minutes while Azure provisions the container and loads the models.
+This file contains:
 
-**Step 3: Check endpoint status**
+* Endpoint name
+* Authentication configuration
+* Endpoint settings
+* Deployment routing configuration
 
-```bash
-az ml online-endpoint show \
-  --name taxi-mlops-endpoint \
-  --workspace-name <your-workspace>
-```
+---
 
-Wait until `provisioning_state` is `Succeeded` before testing.
+## Create Deployment
 
-## {{< fa paper-plane >}} Making Your First Prediction
+After the endpoint is created, a deployment is created.
 
-The request format is defined in `ML/sample-request.json`:
-
-```json
-{
-  "model": "linear_regression",
-  "trip_distance": 3.5,
-  "trip_duration_min": 15.0,
-  "pickup_hour": 14,
-  "passenger_count": 2
-}
-```
-
-**Using the Azure ML CLI:**
-
-```bash
-az ml online-endpoint invoke \
-  --name taxi-mlops-endpoint \
-  --request-file ML/sample-request.json \
-  --workspace-name <your-workspace>
-```
-
-**Expected response:**
-
-```json
-{
-  "predicted_fare_amount": 12.47,
-  "model": "linear_regression",
-  "input_features": {
-    "trip_distance": 3.5,
-    "trip_duration_min": 15.0,
-    "pickup_hour": 14,
-    "passenger_count": 2
-  }
-}
-```
-
-**Using curl:**
-
-```bash
-# Get the endpoint URL and key
-ENDPOINT_URL=$(az ml online-endpoint show --name taxi-mlops-endpoint --query scoring_uri -o tsv)
-API_KEY=$(az ml online-endpoint get-credentials --name taxi-mlops-endpoint --query primaryKey -o tsv)
-
-# Send a prediction request
-curl -X POST $ENDPOINT_URL \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d @ML/sample-request.json
-```
-
-::: {.callout-tip}
-## Testing the KMeans Model
-To call the zone clustering model instead, change `"model"` to `"kmeans"` and provide `"pickup_longitude"`, `"pickup_latitude"`, `"dropoff_longitude"`, and `"dropoff_latitude"` in the request body. The endpoint returns the predicted zone cluster number.
-:::
-
-## {{< fa triangle-exclamation >}} Input Validation
-
-The scoring script validates inputs before running inference. For the Linear Regression model, the required fields are:
-
-```python
-required = ["trip_distance", "trip_duration_min", "pickup_hour", "passenger_count"]
-missing = [f for f in required if f not in data]
-if missing:
-    return json.dumps({"error": f"Missing fields: {missing}"})
-```
-
-If any required field is absent, the endpoint returns an error JSON rather than crashing. This prevents silent failures and makes debugging straightforward.
-
-::: {.callout-warning}
-## Do Not Log Raw Payloads
-Never log the full request payload in production. Log request IDs, latency, error codes, and summary statistics instead. Raw payloads can contain sensitive user data and can fill storage quickly under high traffic.
-:::
-
-## {{< fa robot >}} GitHub Actions Automation
-
-Endpoint deployment is automated via `.github/workflows/deploy-endpoint.yaml`. When a new model version is registered and the deployment workflow is triggered, it runs:
-
-```bash
+```bash id="6r5k2m"
 az ml online-deployment create \
   --file ML/deployment.yaml \
   --all-traffic
 ```
 
-This means every successful pipeline run that registers a new model can automatically update the endpoint — no manual CLI commands required.
+### Purpose
 
-::: {.callout-note}
-## The KMeans Endpoint
-In addition to the supervised model endpoint, this lab includes a separate endpoint for the KMeans clustering model: `endpoint-kmeans.yaml`, `deployment-kmeans.yaml`, and `score-kmeans.py`. It follows the same pattern but serves zone cluster predictions independently, with its own compute and traffic settings. See the `ML/` directory for the full configuration.
-:::
+The deployment contains:
 
-## {{< fa list-check >}} Deployment Checklist
+* Registered model
+* Scoring script
+* Azure ML environment
+* Compute configuration
 
-Before declaring a deployment production-ready:
+The deployment configuration is stored in:
 
-- [ ] Endpoint status shows `Succeeded` in Azure ML Studio
-- [ ] Test with `sample-request.json` and verify the response shape
-- [ ] Confirm input validation returns descriptive errors for missing fields
-- [ ] Check endpoint logs in Azure ML Studio under **Deployments → Logs**
-- [ ] Verify Application Insights telemetry is flowing (latency, error rate)
-- [ ] Confirm the API key is stored in Azure Key Vault — not hardcoded anywhere
+```text
+ML/deployment.yaml
+```
 
-::: {.callout-important}
-## Enable Authentication
-The endpoint uses `auth_mode: key`. Always ensure the API key is treated as a secret — store it in Azure Key Vault and access it via Managed Identity. Rotate the key regularly and never commit it to Git.
-:::
+The option:
 
-## {{< fa circle-arrow-right >}} Next Steps
+```text
+--all-traffic
+```
 
-With a live endpoint serving predictions, the system is deployed. The next challenge is keeping it healthy — detecting when predictions drift, setting up alerts, and knowing when to retrain.
+routes 100% of incoming requests to the newly deployed version.
 
-Proceed to **Monitoring** to learn how to observe and maintain your production ML endpoint.
+---
+
+## Endpoint Testing
+
+The workflow validates the deployment by sending a sample prediction request.
+
+```bash id="y5h1e2"
+az ml online-endpoint invoke \
+  --name taxi-mlops-endpoint \
+  --request-file ML/sample-request.json
+```
+
+### Purpose
+
+This confirms that:
+
+* The endpoint is running.
+* The scoring script executes successfully.
+* Predictions are returned correctly.
+
+Successful execution indicates that the fare prediction endpoint is ready for use.
+
+---
+
+# {{< fa-project-diagram >}} KMeans Clustering Endpoint
+
+The second deployment workflow publishes the trained KMeans clustering model as a separate Azure Machine Learning Online Endpoint.
+
+```yaml id="9xj2r7"
+name: Deploy KMeans Cluster Endpoint
+
+on:
+  workflow_dispatch:
+```
+
+### Purpose
+
+This endpoint classifies taxi trips into clusters based on trip characteristics.
+
+Examples include:
+
+* Airport trips
+* Short-distance trips
+* Long-distance trips
+* Peak-hour journeys
+
+---
+
+## Create Endpoint
+
+The clustering endpoint is created using:
+
+```bash id="p8m4d6"
+az ml online-endpoint create \
+  --file ML/endpoint-kmeans.yaml
+```
+
+### Purpose
+
+This file contains the endpoint configuration specific to the clustering model.
+
+```text
+ML/endpoint-kmeans.yaml
+```
+
+---
+
+## Create Deployment
+
+The deployment is created using:
+
+```bash id="m4s8q3"
+az ml online-deployment create \
+  --file ML/deployment-kmeans.yaml \
+  --all-traffic
+```
+
+### Purpose
+
+The deployment configuration specifies:
+
+* Registered KMeans model
+* Scoring logic
+* Environment configuration
+* Compute resources
+
+All traffic is directed to the deployment after creation.
+
+---
+
+## Endpoint Testing
+
+The clustering endpoint is validated using sample taxi trip data.
+
+### Sample Request
+
+```json id="c7h5k9"
+{
+  "DOLocationID": 161,
+  "fare_amount": 12.50,
+  "trip_distance": 2.1,
+  "passenger_count": 1,
+  "pickup_hour": 9
+}
+```
+
+The request is sent using:
+
+```bash id="r2v7n1"
+az ml online-endpoint invoke \
+  --name taxi-cluster-endpoint \
+  --request-file /tmp/kmeans-request.json
+```
+
+### Purpose
+
+The deployed model analyzes the input data and returns the predicted cluster assignment.
+
+This allows applications to identify groups of similar taxi trips in real time.
+
+---
+
+# {{< fa cogs >}} Common Deployment Logic
+
+Although the deployed models differ, both workflows follow the same deployment pattern.
+
+---
+
+## Step 1: Create Endpoint
+
+```bash id="t4m6z8"
+az ml online-endpoint create \
+  --file <endpoint-yaml-file>
+```
+
+### Purpose
+
+Creates the Azure Machine Learning Online Endpoint.
+
+The endpoint acts as the publicly accessible API entry point for prediction requests.
+
+If the endpoint already exists, the workflow continues without failing.
+
+---
+
+## Step 2: Delete Existing Deployment
+
+```bash id="n8p3q6"
+az ml online-deployment delete \
+  --name blue \
+  --endpoint-name <endpoint-name> \
+  --yes
+```
+
+### Purpose
+
+Removes the existing deployment named **blue**.
+
+Benefits include:
+
+* Preventing deployment conflicts.
+* Ensuring a clean deployment state.
+* Simplifying redeployment workflows.
+
+---
+
+## Step 3: Create Deployment
+
+```bash id="h7k9s2"
+az ml online-deployment create \
+  --file <deployment-yaml-file> \
+  --all-traffic
+```
+
+### Purpose
+
+Creates a fresh deployment containing:
+
+* Registered model
+* Environment
+* Scoring script
+* Compute configuration
+
+The deployment becomes the active endpoint version.
+
+---
+
+## Step 4: Test Endpoint
+
+```bash id="j5r2m4"
+az ml online-endpoint invoke \
+  --name <endpoint-name> \
+  --request-file <sample-request-file>
+```
+
+### Purpose
+
+Validates the deployment by sending sample data to the endpoint.
+
+This confirms that:
+
+* The endpoint is reachable.
+* The model loads successfully.
+* Predictions are generated correctly.
+
+---
+
+## Step 5: Display Endpoint Details
+
+```bash id="q1n6z5"
+az ml online-endpoint show \
+  --name <endpoint-name> \
+  --query "{name: name, scoring_uri: scoring_uri, state: provisioning_state}" \
+  -o table
+```
+
+### Purpose
+
+Displays deployment information including:
+
+* Endpoint Name
+* Scoring URI
+* Provisioning State
+
+The Scoring URI is later used by external applications such as the Streamlit frontend to obtain real-time predictions from the deployed model.
+
+---
+
+# {{< fa exchange-alt >}} Deployment Workflow Summary
+
+The complete deployment process follows the sequence below:
+
+```{mermaid} id="5mpf1x"
+flowchart LR
+
+A[Registered Model] --> B[GitHub Actions Workflow]
+
+B --> C[Create Endpoint]
+C --> D[Delete Existing Deployment]
+D --> E[Create New Deployment]
+
+E --> F[Route Traffic]
+F --> G[Test Endpoint]
+
+G --> H[Display Endpoint Details]
+H --> I[Ready for Real-Time Predictions]
+```
+
+---
+
+# {{< fa clipboard-check >}} Summary
+
+The Endpoint Deployment Pipelines take trained and registered models from Azure Machine Learning and make them available for real-time inference.
+
+Two independent deployment workflows are implemented:
+
+| Workflow                   | Purpose                                  |
+| -------------------------- | ---------------------------------------- |
+| Linear Regression Endpoint | Provides real-time taxi fare prediction. |
+| KMeans Clustering Endpoint | Provides real-time taxi trip clustering. |
+
+Both workflows use GitHub Actions and Azure Machine Learning deployment configurations to automate endpoint creation, deployment, validation, and traffic routing.
+
+This approach ensures that model deployments are:
+
+* Automated
+* Repeatable
+* Consistent
+* Easy to redeploy
+* Suitable for production-style MLOps workflows
+
+Once deployed, the endpoints can be consumed by external applications such as dashboards, APIs, and Streamlit frontends for real-time machine learning predictions.
