@@ -32,7 +32,7 @@ website:
           - text: "{{< fa cloud-arrow-up >}} Git to Azure"
             href: vc.qmd
           - text: "{{< fa cube >}} Terraform"
-            href: terraform_modules.qmd
+            href: terraform.qmd
           - text: "{{< fa diagram-project >}} ML Pipeline"
             href: ml_pipeline.qmd
           - text: "{{< fa download >}} Data Ingestion"
