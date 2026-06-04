@@ -52,5 +52,17 @@
   },
   "terraform_root.qmd": {
     "terraform_root.html": "a6af5c99"
+  },
+  "going_forward.qmd": {
+    "going_forward.html": "8f511205"
+  },
+  "terraform.qmd": {
+    "terraform.html": "f59745dd"
+  },
+  "git_resources.qmd": {
+    "git_resources.html": "8efa2570"
+  },
+  "ml_pipeline.qmd": {
+    "ml_pipeline.html": "a33aa1cb"
   }
 }

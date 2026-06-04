@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data Ingestion – MLOps Lab: Boeing x WIC x UW</title>
+<title>Data Ingestion – MLSecOps Lab: Boeing x WIC x UW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,41 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -270,7 +235,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">{{&lt; fa brain &gt;}} ML Foundations</a></li><li class="breadcrumb-item"><a href="./data_ingestion.html">{{&lt; fa download &gt;}} Data Ingestion</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vc.html">{{&lt; fa server &gt;}} Infra Setup</a></li><li class="breadcrumb-item"><a href="./data_ingestion.html">{{&lt; fa download &gt;}} Data Ingestion</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -282,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">MLOps Lab: Boeing x WIC x UW</a> 
+      <a href="./">MLSecOps Lab: Boeing x WIC x UW</a> 
         <div class="sidebar-tools-main">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
@@ -302,16 +267,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"> Need for MLOps</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Python.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Python resources</span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text"><i class="fa-solid fa-brain" aria-label="brain"></i> ML Foundations</span></a>
+ <span class="menu-text"><i class="fa-solid fa-toolbox" aria-label="toolbox"></i> Resources</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -319,14 +278,66 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dataset.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Understanding dataset</span></a>
+  <a href="./Python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Python Resources</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./git_resources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Git Resources</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><i class="fa-solid fa-server" aria-label="server"></i> Infra Setup</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Git to Azure</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./terraform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Terraform</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ml_pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> ML Pipeline</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data_ingestion.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"> Data Ingestion</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text"><i class="fa-solid fa-brain" aria-label="brain"></i> ML Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dataset.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Understanding Dataset</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -337,13 +348,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text"><i class="fa-solid fa-chart-line" aria-label="chart-line"></i> Algorithms</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./supervised.html" class="sidebar-item-text sidebar-link">
@@ -358,54 +369,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
-      </ul>
-  </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./vc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Version Control</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./azure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Azure Cloud</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./containers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Containerization</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./DE.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Data Engineering</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Registry.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"> Model Registry</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Testing_deploying.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Testing &amp; Deployment</span></a>
+ <span class="menu-text"> Endpoint Creation (Testing &amp; Deployment)</span></a>
   </div>
 </li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./monitoring_maintainance.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Monitoring &amp; Maintainance</span></a>
+ <span class="menu-text"> Monitoring</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./security_best_practices.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"> Security &amp; Best Practices</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./going_forward.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Going Forward &amp; Endnotes</span></a>
   </div>
 </li>
     </ul>
@@ -438,7 +431,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- Load Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dataset.html">{{&lt; fa brain &gt;}} ML Foundations</a></li><li class="breadcrumb-item"><a href="./data_ingestion.html">{{&lt; fa download &gt;}} Data Ingestion</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vc.html">{{&lt; fa server &gt;}} Infra Setup</a></li><li class="breadcrumb-item"><a href="./data_ingestion.html">{{&lt; fa download &gt;}} Data Ingestion</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Data Ingestion</h1>
 <p class="subtitle lead">Azure-based ingestion</p>
@@ -500,74 +493,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Always stop your Azure ML compute instance when not in use to avoid Azure credits consumption.</p>
 </div>
 </div>
-</section>
-<section id="part-a---getting-data-into-azure-ingestion" class="level2">
-<h2 class="anchored" data-anchor-id="part-a---getting-data-into-azure-ingestion"><i class="fa-solid fa-download" aria-label="download"></i> Part A - Getting data into Azure (Ingestion)</h2>
-<p>Below are 2 clear ingestion pathways:</p>
-<ul>
-<li><strong>Path 1:</strong> Use Azure Open Datasets (no manual file downloads)</li>
-<li><strong>Path 2:</strong> Manual download from TLC + upload to Blob (if you want to understand externally ingesting)</li>
-</ul>
-<section id="path-1---ingestion-using-azure-open-datasets" class="level3">
-<h3 class="anchored" data-anchor-id="path-1---ingestion-using-azure-open-datasets"><i class="fa-solid fa-cloud" aria-label="cloud"></i> Path 1 - Ingestion using Azure Open Datasets</h3>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Recommended Approach
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This is the easiest way to get started. Azure Open Datasets provides pre-hosted NYC taxi data without manual downloads.</p>
-</div>
-</div>
-<p><span style="background-color: yellow;"> Add photos to explain how to create, use compute, get to ML Studio</span></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># verify environment -- anything between 3.8-3.12 is good</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sys.executable)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sys.version)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>{sys.executable} <span class="op">-</span>m pip install <span class="op">-</span>q <span class="op">--</span>upgrade pip</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>{sys.executable} <span class="op">-</span>m pip install <span class="op">-</span>q azureml<span class="op">-</span>opendatasets</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># restart kernel</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install <span class="op">-</span>q azureml<span class="op">-</span>opendatasets pandas pyarrow</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> azureml.opendatasets <span class="im">import</span> NycTlcYellow</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"OK: NycTlcYellow imported"</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># pyarrow handles parquet files</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dateutil <span class="im">import</span> parser</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>start_date <span class="op">=</span> parser.parse(<span class="st">'2018-05-01'</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>end_date <span class="op">=</span> parser.parse(<span class="st">'2018-06-01'</span>)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>nyc_tlc <span class="op">=</span> NycTlcYellow(start_date<span class="op">=</span>start_date, end_date<span class="op">=</span>end_date)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>nyc_tlc_df <span class="op">=</span> nyc_tlc.to_pandas_dataframe()</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>nyc_tlc_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Date Range Selection
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>We use a limited date range (1-2 months) to keep compute and storage costs manageable for learning purposes.</p>
-</div>
-</div>
-</section>
-<section id="path-2-ingestion-using-azure-blob-storage-manual-upload" class="level3">
-<h3 class="anchored" data-anchor-id="path-2-ingestion-using-azure-blob-storage-manual-upload"><i class="fa-solid fa-box-archive" aria-label="box-archive"></i> Path 2 – Ingestion using Azure Blob Storage (manual upload)</h3>
-<p>This ingestion path demonstrates how data typically enters Azure from an external source, such as a public data portal or a partner system. Unlike Azure Open Datasets, this approach requires explicit storage management, which is common in real production pipelines.</p>
+<section id="path-ingestion-using-azure-blob-storage-terraform-automated-infrastructure" class="level3">
+<h3 class="anchored" data-anchor-id="path-ingestion-using-azure-blob-storage-terraform-automated-infrastructure"><i class="fa-solid fa-code" aria-label="code"></i> Path – Ingestion using Azure Blob Storage (Terraform-Automated Infrastructure)</h3>
+<p>This path demonstrates a production-grade approach where infrastructure is provisioned automatically using <strong>Infrastructure as Code (IaC)</strong>, while data upload remains a manual step.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -578,107 +506,271 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Use this approach when: - Data comes from external partners or systems - You need full control over storage configuration - You want to understand the complete ingestion workflow</p>
+<p>Use this approach when: - You need reproducible infrastructure across environments - You want to automate resource provisioning - You’re following DevOps best practices - You need consistent configuration management</p>
 </div>
 </div>
-<p><strong>Download data from</strong> https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page</p>
-<p>File name: <code>yellow_tripdata_2025-07.parquet</code></p>
-<p><strong>Search for Storage Account in Azure</strong></p>
-<p>In the Azure Portal:</p>
+<section id="infrastructure-setup-automated" class="level4">
+<h4 class="anchored" data-anchor-id="infrastructure-setup-automated">Infrastructure Setup (Automated)</h4>
+<p>The Azure Storage infrastructure is provisioned automatically using <strong>Terraform</strong>.</p>
+<p>During deployment, the following resources are created:</p>
 <ul>
-<li>Search for <strong>Storage accounts</strong></li>
-<li>Click <strong>Create</strong></li>
-<li>Choose:
-<ul>
-<li>Subscription: Azure Student</li>
-<li>Resource group: create a new one (example: <code>rg-mlops-lab</code>)</li>
-<li>Storage account name: unique name (example: <code>mlopslabstorage</code>)</li>
-</ul></li>
+<li><strong>Azure Storage Account</strong> (<code>taxizonelookup</code>)</li>
+<li><strong>Blob Container</strong> (<code>taxidata</code>)</li>
+<li>Private access configuration for secure data storage</li>
 </ul>
-<p>Click <strong>Review + Create</strong> → <strong>Create</strong></p>
-<p><strong>Create a Blob container</strong></p>
-<p>Once the storage account is created:</p>
+<p>This ensures a consistent, reproducible environment across deployments.</p>
+</section>
+<section id="data-upload-manual-step" class="level4">
+<h4 class="anchored" data-anchor-id="data-upload-manual-step">Data Upload (Manual Step)</h4>
+<p>While infrastructure is automated, the dataset itself must be uploaded manually.</p>
+<p><strong>Required Format:</strong></p>
 <ul>
-<li>Open the Storage Account</li>
-<li>Go to <strong>Containers</strong></li>
-<li>Click <strong>+ Container</strong></li>
-<li>Name: <code>nyc-tlc-blob</code></li>
-<li>Public access level: <strong>Private</strong></li>
+<li>File type: <strong><code>.parquet</code></strong></li>
+<li>Uploaded to: <code>taxizonelookup → taxidata</code> container</li>
 </ul>
-<p>This container will hold raw data.</p>
-<p><strong>Upload the raw Parquet file</strong></p>
-<ul>
-<li>Open the <code>nyc-tlc-blob</code> container</li>
+<p><strong>Steps to Upload:</strong></p>
+<ol type="1">
+<li>Go to <strong>Azure Portal</strong></li>
+<li>Open <strong>Storage Accounts</strong></li>
+<li>Select storage account name: <code>taxizonelookup</code></li>
+<li>Navigate to <strong>Containers</strong></li>
+<li>Open container name: <code>taxidata</code></li>
 <li>Click <strong>Upload</strong></li>
-<li>Select <code>yellow_tripdata_2025-07.parquet</code></li>
-<li>Click <strong>Upload</strong></li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled">
+<li>Select your <code>.parquet</code> file</li>
+<li>Confirm upload</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Security Note
+<span class="screen-reader-only">Note</span>Why Manual Upload?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Always set container access to <strong>Private</strong>. Never expose raw data publicly unless absolutely necessary.</p>
+<p>The dataset is approximately <strong>180 MB</strong> in size, which is too large to store in version control. Manual upload:</p>
+<ul>
+<li>Keeps large datasets out of GitHub</li>
+<li>Maintains clean DevOps practices</li>
+<li>Separates infrastructure from data</li>
+<li>Ensures secure handling of production datasets</li>
+</ul>
 </div>
 </div>
-<p><strong>Read data from Blob Storage</strong></p>
-<p>Once uploaded, you can read the file directly for processing in Azure ML Studio.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip <span class="op">-</span>q install azure<span class="op">-</span>storage<span class="op">-</span>blob pandas pyarrow</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> azure.storage.blob <span class="im">import</span> BlobServiceClient</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># copy paste from Azure Portal</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>CONNECTION_STRING <span class="op">=</span> <span class="st">"Enter connection string from Security + networking -&gt; Access keys"</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Blob details</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>CONTAINER_NAME <span class="op">=</span> <span class="st">"nyc-tlc-blob"</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>BLOB_NAME <span class="op">=</span> <span class="st">"yellow_tripdata_2025-07.parquet"</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Local destination inside notebook VM</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>LOCAL_DIR <span class="op">=</span> Path(<span class="st">"data_raw"</span>)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>LOCAL_DIR.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>LOCAL_PATH <span class="op">=</span> LOCAL_DIR <span class="op">/</span> <span class="st">"yellow_tripdata_2025-07.parquet"</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>blob_service <span class="op">=</span> BlobServiceClient.from_connection_string(CONNECTION_STRING)</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>blob_client <span class="op">=</span> blob_service.get_blob_client(</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    container<span class="op">=</span>CONTAINER_NAME,</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    blob<span class="op">=</span>BLOB_NAME</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(LOCAL_PATH, <span class="st">"wb"</span>) <span class="im">as</span> f:</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    f.write(blob_client.download_blob().readall())</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Downloaded to:"</span>, LOCAL_PATH)</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(LOCAL_PATH)</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>df.shape</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="pipeline-flow" class="level4">
+<h4 class="anchored" data-anchor-id="pipeline-flow">Pipeline Flow</h4>
+<pre><code>Terraform → Creates Storage Account + Container
+User → Uploads .parquet file manually
+Azure ML → Reads data via Datastore
+Notebook → Performs EDA/Training</code></pre>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Production Best Practice
+<span class="screen-reader-only">Important</span>Infrastructure vs Data
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In production, use Managed Identity instead of connection strings. Connection strings should never be committed to code or notebooks.</p>
+<p>Infrastructure is code (automated). Data is content (manual). This separation is a best practice in production MLOps workflows.</p>
 </div>
 </div>
-
-
 </section>
+</section>
+</section>
+<section id="knowledge-check" class="level2">
+<h2 class="anchored" data-anchor-id="knowledge-check">Knowledge Check</h2>
+<div style="background:#f0f4ff;border:2px solid #0b3d91;border-radius:10px;padding:20px 24px;margin:24px 0">
+<style>
+.kcaz-q{margin-bottom:16px}
+.kcaz-q p{font-weight:700;margin:0 0 8px;font-size:.95rem}
+.kcaz-opts label{
+  display:block;
+  padding:7px 12px;
+  margin:3px 0;
+  background:#fff;
+  border:1.5px solid #d0d7de;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:.9rem
+}
+.kcaz-opts label:hover{border-color:#0b3d91}
+.kcaz-opts input{margin-right:8px}
+.kcaz-btn{
+  margin-top:12px;
+  background:#0b3d91;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  padding:9px 22px;
+  cursor:pointer;
+  font-size:.9rem;
+  font-weight:600
+}
+.kcaz-btn:hover{background:#093080}
+.kcaz-score-box{
+  margin-top:12px;
+  padding:12px 16px;
+  border-radius:6px;
+  font-weight:600;
+  font-size:.95rem;
+  display:none
+}
+</style>
+
+<h4 style="margin:0 0 16px;color:#0b3d91;font-size:1.1rem" class="anchored">
+🎯 Knowledge Check: Azure Infrastructure Services
+</h4>
+
+<form id="kcAzure">
+
+<div class="kcaz-q">
+<p>1. What is the role of Azure ML Datastore in this project?</p>
+<div class="kcaz-opts">
+<label><input type="radio" name="q1" value="a"> Stores model code</label>
+<label><input type="radio" name="q1" value="b"> Acts as a bridge between Azure ML Workspace and Storage Account</label>
+<label><input type="radio" name="q1" value="c"> Creates compute instances</label>
+<label><input type="radio" name="q1" value="d"> Stores GitHub credentials</label>
+</div>
+</div>
+
+<div class="kcaz-q">
+<p>2. Where is the NYC Taxi dataset stored?</p>
+<div class="kcaz-opts">
+<label><input type="radio" name="q2" value="a"> Azure Key Vault</label>
+<label><input type="radio" name="q2" value="b"> Azure ML Workspace</label>
+<label><input type="radio" name="q2" value="c"> Azure Blob Storage Container</label>
+<label><input type="radio" name="q2" value="d"> GitHub Repository</label>
+</div>
+</div>
+
+<div class="kcaz-q">
+<p>3. Why do we use Azure Key Vault?</p>
+<div class="kcaz-opts">
+<label><input type="radio" name="q3" value="a"> To train ML models</label>
+<label><input type="radio" name="q3" value="b"> To store datasets</label>
+<label><input type="radio" name="q3" value="c"> To securely store secrets, credentials, and connection strings</label>
+<label><input type="radio" name="q3" value="d"> To deploy endpoints</label>
+</div>
+</div>
+
+<div class="kcaz-q">
+<p>4. How does Azure ML Datastore securely access data in Blob Storage?</p>
+<div class="kcaz-opts">
+<label><input type="radio" name="q4" value="a"> Through GitHub Actions</label>
+<label><input type="radio" name="q4" value="b"> Through secrets and connection information stored in Key Vault</label>
+<label><input type="radio" name="q4" value="c"> Through Terraform outputs only</label>
+<label><input type="radio" name="q4" value="d"> Through manual uploads</label>
+</div>
+</div>
+
+<div class="kcaz-q">
+<p>5. Which Azure service executes the ML pipeline jobs in this project?</p>
+<div class="kcaz-opts">
+<label><input type="radio" name="q5" value="a"> Azure Key Vault</label>
+<label><input type="radio" name="q5" value="b"> Azure Storage Account</label>
+<label><input type="radio" name="q5" value="c"> Azure ML Compute Instance</label>
+<label><input type="radio" name="q5" value="d"> Azure Virtual Network</label>
+</div>
+</div>
+
+<div class="kcaz-q">
+<p>6. Scenario: You need to allow an Azure ML pipeline to access data stored in a Blob Container without hardcoding credentials in your code. Which combination of services would you use?</p>
+<div class="kcaz-opts">
+<label><input type="radio" name="q6" value="a"> Azure Storage + GitHub Actions</label>
+<label><input type="radio" name="q6" value="b"> Azure Key Vault + Azure ML Datastore</label>
+<label><input type="radio" name="q6" value="c"> Azure ML Compute + VNet</label>
+<label><input type="radio" name="q6" value="d"> Terraform + Blob Storage</label>
+</div>
+</div>
+
+<button type="button" class="kcaz-btn" onclick="gradeAzureKC()">
+Check Answers
+</button>
+
+</form>
+
+<div class="kcaz-score-box" id="kcaz-score"></div>
+</div>
+
+<script>
+function gradeAzureKC(){
+
+  var ans = {
+    q1:'b',
+    q2:'c',
+    q3:'c',
+    q4:'b',
+    q5:'c',
+    q6:'b'
+  };
+
+  var score = 0;
+  var total = 6;
+
+  var form = document.getElementById('kcAzure');
+
+  ['q1','q2','q3','q4','q5','q6'].forEach(function(q){
+
+    var sel = form.querySelector('input[name="'+q+'"]:checked');
+
+    form.querySelectorAll('input[name="'+q+'"]').forEach(function(o){
+      var l = o.parentElement;
+      l.style.background = '#fff';
+      l.style.borderColor = '#d0d7de';
+    });
+
+    if(sel){
+
+      if(sel.value === ans[q]){
+        sel.parentElement.style.background = '#d1fae5';
+        sel.parentElement.style.borderColor = '#34d399';
+        score++;
+      } else {
+
+        sel.parentElement.style.background = '#fee2e2';
+        sel.parentElement.style.borderColor = '#f87171';
+
+        var correct =
+          form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]');
+
+        correct.parentElement.style.background = '#d1fae5';
+        correct.parentElement.style.borderColor = '#34d399';
+      }
+    }
+  });
+
+  var pct = Math.round(score/total*100);
+
+  var box = document.getElementById('kcaz-score');
+  box.style.display = 'block';
+
+  box.style.background =
+    pct === 100 ? '#d1fae5' :
+    pct >= 80 ? '#e0f2fe' :
+    '#fef9c3';
+
+  box.style.border =
+    '1.5px solid ' +
+    (pct === 100 ? '#34d399' :
+    pct >= 80 ? '#38bdf8' :
+    '#fbbf24');
+
+  box.innerHTML =
+    '📊 Score: ' + score + '/' + total +
+    ' (' + pct + '%) ' +
+    (pct === 100
+      ? '🎉 Perfect! You understand the Azure infrastructure architecture.'
+      : pct >= 80
+      ? '✅ Great work! You have a strong understanding of Azure services and their integration.'
+      : '📚 Review the Azure Infrastructure Services section and try again.');
+}
+</script>
+
+
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

@@ -1,1 +1,1 @@
-{"entries":[],"headings":["objective","load-cleaned-data","feature-selection-and-scaling","elbow-method-finding-optimal-k","fit-k-means-k4","cluster-profiles","visualize-clusters","summary"]}
+{"entries":[],"headings":["objective","load-cleaned-data","feature-selection-and-normalization","regularization-in-clustering","regularization-techniques-applied","elbow-method-finding-optimal-k","fit-k-means-k4","cluster-profiles","visualize-clusters","summary","knowledge-check"]}

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>monitoring_maintainance – MLOps Lab: Boeing x WIC x UW</title>
+<title>Monitoring – MLSecOps Lab: Boeing x WIC x UW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -235,7 +270,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./monitoring_maintainance.html">{{&lt; fa chart-simple &gt;}} Monitoring &amp; Maintainance</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./monitoring_maintainance.html">{{&lt; fa chart-simple &gt;}} Monitoring</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -247,7 +282,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">MLOps Lab: Boeing x WIC x UW</a> 
+      <a href="./">MLSecOps Lab: Boeing x WIC x UW</a> 
         <div class="sidebar-tools-main">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
@@ -267,16 +302,10 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"> Need for MLOps</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Python.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Python resources</span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text"><i class="fa-solid fa-brain" aria-label="brain"></i> ML Foundations</span></a>
+ <span class="menu-text"><i class="fa-solid fa-toolbox" aria-label="toolbox"></i> Resources</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -284,14 +313,66 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dataset.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Understanding dataset</span></a>
+  <a href="./Python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Python Resources</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./git_resources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Git Resources</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text"><i class="fa-solid fa-server" aria-label="server"></i> Infra Setup</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Git to Azure</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./terraform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Terraform</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ml_pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> ML Pipeline</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./data_ingestion.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"> Data Ingestion</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text"><i class="fa-solid fa-brain" aria-label="brain"></i> ML Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dataset.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Understanding Dataset</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -302,13 +383,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text"><i class="fa-solid fa-chart-line" aria-label="chart-line"></i> Algorithms</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./supervised.html" class="sidebar-item-text sidebar-link">
@@ -323,54 +404,36 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
   </li>
-      </ul>
-  </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./vc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Version Control</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./azure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Azure Cloud</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./containers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Containerization</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./DE.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Data Engineering</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Registry.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"> Model Registry</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Testing_deploying.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"> Testing &amp; Deployment</span></a>
+ <span class="menu-text"> Endpoint Creation (Testing &amp; Deployment)</span></a>
   </div>
 </li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./monitoring_maintainance.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"> Monitoring &amp; Maintainance</span></a>
+ <span class="menu-text"> Monitoring</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./security_best_practices.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"> Security &amp; Best Practices</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./going_forward.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"> Going Forward &amp; Endnotes</span></a>
   </div>
 </li>
     </ul>
@@ -380,7 +443,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
 
 <nav class="navbar fixed-top">
   <div class="container-fluid d-flex justify-content-between align-items-center">
@@ -403,11 +466,317 @@ ul.task-list li input[type="checkbox"] {
 <!-- Load Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Monitoring</h1>
+<p class="subtitle lead">Keeping ML systems healthy in production</p>
+</div>
 
 
 
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
 
 
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What You’ll Learn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This page covers how to monitor a deployed ML system on Azure, detect model and data drift, set up alerts, and maintain prediction quality over time using the NYC Taxi model as a running example.</p>
+</div>
+</div>
+<section id="why-monitoring-is-not-optional" class="level2">
+<h2 class="anchored" data-anchor-id="why-monitoring-is-not-optional"><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Why Monitoring Is Not Optional</h2>
+<p>Training a model is the beginning, not the end. Once a model is deployed to production, the real challenge begins: the world keeps changing, but your model is frozen in time.</p>
+<p>For the NYC Taxi prediction system, consider what happens after deployment:</p>
+<ul>
+<li>a new subway line opens, changing trip patterns across entire neighborhoods</li>
+<li>surge pricing rules change, shifting the relationship between distance and fare</li>
+<li>a major event brings an influx of riders to areas the model rarely saw in training</li>
+<li>a data pipeline bug introduces null values that the model was never trained to handle</li>
+</ul>
+<p>In each of these cases, the model silently degrades. Without monitoring, users experience increasingly poor predictions while the engineering team has no idea anything is wrong.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>The Silent Failure Pattern
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Model degradation in production rarely causes crashes. Predictions keep returning — they just become less and less accurate. Monitoring is the only way to catch this before it becomes a serious problem.</p>
+</div>
+</div>
+</section>
+<section id="types-of-monitoring" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-monitoring"><i class="fa-solid fa-chart-line" aria-label="chart-line"></i> Types of Monitoring</h2>
+<p><strong>Service health monitoring</strong> tracks whether your endpoint is running correctly:</p>
+<ul>
+<li>latency: how long each prediction request takes</li>
+<li>error rate: what fraction of requests return errors or exceptions</li>
+<li>throughput: how many requests per second the endpoint handles</li>
+<li>availability: is the endpoint reachable and responding?</li>
+</ul>
+<p><strong>Data quality monitoring</strong> checks whether incoming prediction requests look like the training data:</p>
+<ul>
+<li>schema validation: are all required features present and of the correct type?</li>
+<li>range checks: are feature values within expected bounds?</li>
+<li>null / missing value rate: is the fraction of nulls higher than at training time?</li>
+</ul>
+<p><strong>Model performance monitoring</strong> tracks whether predictions are still accurate:</p>
+<ul>
+<li>if ground truth labels become available (e.g., actual trip durations after the fact), compute live RMSE and compare it to training performance</li>
+<li>if labels are not available, use proxy metrics and statistical tests on prediction distributions</li>
+</ul>
+<p><strong>Drift detection</strong> compares the statistical properties of live input data to the training data distribution:</p>
+<ul>
+<li>feature drift: individual features shifting in mean, variance, or distribution shape</li>
+<li>concept drift: the relationship between inputs and outputs changing over time</li>
+<li>prediction drift: the distribution of model outputs shifting significantly</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Drift Does Not Always Mean Retraining
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Not all drift requires an immediate response. Assess whether drift is causing measurable performance degradation before triggering a full retraining cycle.</p>
+</div>
+</div>
+</section>
+<section id="monitoring-in-azure-ml" class="level2">
+<h2 class="anchored" data-anchor-id="monitoring-in-azure-ml"><i class="fa-solid fa-gears" aria-label="gears"></i> Monitoring in Azure ML</h2>
+<p>Azure ML provides built-in monitoring through a combination of Application Insights and the Azure ML monitoring toolkit.</p>
+<p><strong>Application Insights</strong> collects telemetry from your managed online endpoint automatically:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In your scoring script, you can log custom metrics</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> logging.getLogger(<span class="va">__name__</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run(data):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Log latency and request info</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Prediction request received"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> model.predict(data)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="ss">f"Prediction complete: </span><span class="sc">{</span>result<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Azure ML Model Monitoring</strong> (preview feature) provides automated drift detection:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># monitor_config.yml</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">$schema</span><span class="kw">:</span><span class="at"> https://azuremlschemas.azureedge.net/latest/monitor.schema.json</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> nyc-taxi-monitor</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">target</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">ml_task</span><span class="kw">:</span><span class="at"> regression</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">endpoint_deployment_id</span><span class="kw">:</span><span class="at"> azureml:nyc-taxi-endpoint:nyc-taxi-deployment</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">monitoring_signals</span><span class="kw">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">data_drift</span><span class="kw">:</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> data_drift</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">reference_data</span><span class="kw">:</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">input_data</span><span class="kw">:</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">path</span><span class="kw">:</span><span class="at"> azureml://datastores/workspaceblobstore/paths/nyc-taxi/training/</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">type</span><span class="kw">:</span><span class="at"> uri_folder</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">top_n_feature_importance</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metric_thresholds</span><span class="kw">:</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">numerical</span><span class="kw">:</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">metric_name</span><span class="kw">:</span><span class="at"> normalized_wasserstein_distance</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">threshold</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.2</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="at">  </span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">prediction_drift</span><span class="kw">:</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> prediction_drift</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">reference_data</span><span class="kw">:</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">input_data</span><span class="kw">:</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">path</span><span class="kw">:</span><span class="at"> azureml://datastores/workspaceblobstore/paths/nyc-taxi/training/</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">type</span><span class="kw">:</span><span class="at"> uri_folder</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">metric_thresholds</span><span class="kw">:</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">numerical</span><span class="kw">:</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">metric_name</span><span class="kw">:</span><span class="at"> normalized_wasserstein_distance</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">threshold</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.2</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="fu">alert_notification</span><span class="kw">:</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">emails</span><span class="kw">:</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> your-team@company.com</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="setting-up-alerts" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-alerts"><i class="fa-solid fa-bell" aria-label="bell"></i> Setting Up Alerts</h2>
+<p>Alerts ensure your team is notified before small problems become large ones.</p>
+<p><strong>In Azure Monitor, set up alerts for:</strong></p>
+<ul>
+<li>endpoint latency exceeding 500ms p99</li>
+<li>error rate exceeding 1% of requests</li>
+<li>data drift score exceeding your threshold for any key feature</li>
+<li>prediction distribution shift exceeding threshold</li>
+</ul>
+<p><strong>Creating an alert via the Azure CLI:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an alert rule for high endpoint latency</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> monitor metrics alert create <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> <span class="st">"high-endpoint-latency"</span> <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--resource-group</span> <span class="op">&lt;</span>rg-name<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--scopes</span> /subscriptions/<span class="op">&lt;</span>sub<span class="op">&gt;</span>/resourceGroups/<span class="op">&lt;</span>rg<span class="op">&gt;</span>/providers/Microsoft.MachineLearningServices/workspaces/<span class="op">&lt;</span>ws<span class="op">&gt;</span>/onlineEndpoints/nyc-taxi-endpoint <span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--condition</span> <span class="st">"avg RequestLatency_P99 &gt; 500"</span> <span class="dt">\</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--window-size</span> 5m <span class="dt">\</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">--evaluation-frequency</span> 1m <span class="dt">\</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--action</span> <span class="op">&lt;</span>action-group-id<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Start Conservative with Thresholds
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Set initial alert thresholds conservatively so you get notified early. You can always tune them after seeing real production traffic patterns.</p>
+</div>
+</div>
+</section>
+<section id="the-monitor-retrain-loop" class="level2">
+<h2 class="anchored" data-anchor-id="the-monitor-retrain-loop"><i class="fa-solid fa-rotate" aria-label="rotate"></i> The Monitor → Retrain Loop</h2>
+<p>Monitoring feeds directly into the retraining workflow. Here is the cycle:</p>
+<ol type="1">
+<li><strong>Drift detected</strong> — the monitoring job flags that a key feature (e.g., <code>trip_distance</code>) has drifted beyond the threshold</li>
+<li><strong>Alert triggered</strong> — the team is notified via email or a Teams channel</li>
+<li><strong>Investigation</strong> — engineers inspect the drift dashboard to understand what changed</li>
+<li><strong>Decision</strong> — if performance has degraded, schedule a retraining run</li>
+<li><strong>Retrain</strong> — submit the training pipeline with fresh data</li>
+<li><strong>Evaluate</strong> — compare the new model to the current production model on a held-out evaluation set</li>
+<li><strong>Promote</strong> — if the new model is better, promote it through the model registry and redeploy</li>
+<li><strong>Monitor again</strong> — the cycle continues</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Automated vs.&nbsp;Manual Retraining
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can automate the entire loop by adding a drift-triggered GitHub Actions workflow. This is MLOps maturity level 2. For this lab, we focus on the monitoring and detection pieces; you can add automated retraining as a next step.</p>
+</div>
+</div>
+</section>
+<section id="monitoring-checklist" class="level2">
+<h2 class="anchored" data-anchor-id="monitoring-checklist"><i class="fa-solid fa-list-check" aria-label="list-check"></i> Monitoring Checklist</h2>
+<p>Before declaring a deployed model production-ready, verify that:</p>
+<ul class="task-list">
+<li><label><input type="checkbox">Application Insights is enabled on the managed online endpoint</label></li>
+<li><label><input type="checkbox">A drift monitoring job is scheduled (daily or weekly)</label></li>
+<li><label><input type="checkbox">Alert rules are configured for latency, error rate, and drift thresholds</label></li>
+<li><label><input type="checkbox">The team has reviewed alert notification destinations</label></li>
+<li><label><input type="checkbox">A runbook exists describing how to respond to each alert type</label></li>
+<li><label><input type="checkbox">The retraining pipeline has been tested end-to-end at least once</label></li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Monitoring Is an Ongoing Commitment
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Setting up monitoring once is not enough. Review monitoring dashboards regularly, tune thresholds as traffic patterns stabilize, and update reference datasets as the data distribution evolves.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="knowledge-check" class="level2">
+<h2 class="anchored" data-anchor-id="knowledge-check">Knowledge Check</h2>
+<div style="background:#f0f4ff;border:2px solid #0b3d91;border-radius:10px;padding:20px 24px;margin:24px 0">
+<style>
+.kc3-q{margin-bottom:16px}.kc3-q p{font-weight:700;margin:0 0 8px;font-size:.95rem}
+.kc3-opts label{display:block;padding:7px 12px;margin:3px 0;background:#fff;border:1.5px solid #d0d7de;border-radius:6px;cursor:pointer;font-size:.9rem}
+.kc3-opts label:hover{border-color:#0b3d91}
+.kc3-opts input{margin-right:8px}
+.kc3-btn{margin-top:12px;background:#0b3d91;color:#fff;border:none;border-radius:6px;padding:9px 22px;cursor:pointer;font-size:.9rem;font-weight:600}
+.kc3-btn:hover{background:#093080}
+.kc3-score-box{margin-top:12px;padding:12px 16px;border-radius:6px;font-weight:600;font-size:.95rem;display:none}
+</style>
+<h4 style="margin:0 0 16px;color:#0b3d91;font-size:1.1rem" class="anchored">🎯 Knowledge Check: Monitoring &amp; Maintenance</h4>
+<form id="kcf3">
+<div class="kc3-q"><p>1. What is "data drift" in the context of ML monitoring?</p><div class="kc3-opts">
+<label><input type="radio" name="q1" value="a"> A bug in the model code</label>
+<label><input type="radio" name="q1" value="b"> A change in the statistical properties of input data over time</label>
+<label><input type="radio" name="q1" value="c"> The model running too slowly</label>
+<label><input type="radio" name="q1" value="d"> Loss of training data</label>
+</div></div>
+<div class="kc3-q"><p>2. Which Azure service is used for ML model monitoring in this lab?</p><div class="kc3-opts">
+<label><input type="radio" name="q2" value="a"> Azure DevOps</label>
+<label><input type="radio" name="q2" value="b"> Azure Functions</label>
+<label><input type="radio" name="q2" value="c"> Azure Machine Learning + Application Insights</label>
+<label><input type="radio" name="q2" value="d"> Azure Blob Storage</label>
+</div></div>
+<div class="kc3-q"><p>3. What triggers automated retraining in a well-designed MLOps system?</p><div class="kc3-opts">
+<label><input type="radio" name="q3" value="a"> A scheduled calendar event only</label>
+<label><input type="radio" name="q3" value="b"> Manual requests from developers</label>
+<label><input type="radio" name="q3" value="c"> Performance degradation or drift exceeding defined thresholds</label>
+<label><input type="radio" name="q3" value="d"> When the server restarts</label>
+</div></div>
+<div class="kc3-q"><p>4. What is a "reference dataset" used for in drift monitoring?</p><div class="kc3-opts">
+<label><input type="radio" name="q4" value="a"> Storing model weights</label>
+<label><input type="radio" name="q4" value="b"> A baseline of the training data distribution to compare against production data</label>
+<label><input type="radio" name="q4" value="c"> A backup of model predictions</label>
+<label><input type="radio" name="q4" value="d"> The test dataset from model evaluation</label>
+</div></div>
+<button type="button" class="kc3-btn" onclick="gradeKC3()">Check Answers</button>
+</form>
+<div class="kc3-score-box" id="kcs3"></div>
+</div>
+<script>
+function gradeKC3(){
+  var ans={q1:'b',q2:'c',q3:'c',q4:'b'},score=0,total=4;
+  var form=document.getElementById('kcf3');
+  ['q1','q2','q3','q4'].forEach(function(q){
+    var sel=form.querySelector('input[name="'+q+'"]:checked');
+    form.querySelectorAll('input[name="'+q+'"]').forEach(function(o){
+      var l=o.parentElement;l.style.background='#fff';l.style.borderColor='#d0d7de';
+    });
+    if(sel){
+      if(sel.value===ans[q]){sel.parentElement.style.background='#d1fae5';sel.parentElement.style.borderColor='#34d399';score++;}
+      else{sel.parentElement.style.background='#fee2e2';sel.parentElement.style.borderColor='#f87171';
+        form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]').parentElement.style.background='#d1fae5';
+        form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]').parentElement.style.borderColor='#34d399';
+      }
+    }
+  });
+  var pct=Math.round(score/total*100);
+  var box=document.getElementById('kcs3');box.style.display='block';
+  box.style.background=pct===100?'#d1fae5':pct>=75?'#e0f2fe':'#fef9c3';
+  box.style.border='1.5px solid '+(pct===100?'#34d399':pct>=75?'#38bdf8':'#fbbf24');
+  box.innerHTML='📊 Score: '+score+'/'+total+' ('+pct+'%) '+(pct===100?'🎉 Perfect!':pct>=75?'✅ Good job!':'📚 Review the page and try again.');
+}
+</script>
+</section>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps"><i class="fa-solid fa-circle-arrow-right" aria-label="circle-arrow-right"></i> Next Steps</h2>
+<p>With monitoring in place, the system is observable and maintainable. The next section covers the security practices that keep your entire MLOps stack safe and auditable.</p>
+<p>Proceed to <strong>Security &amp; Best Practices</strong> to learn about RBAC, secrets management, and production-grade safeguards.</p>
+
+
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <footer class="footer">

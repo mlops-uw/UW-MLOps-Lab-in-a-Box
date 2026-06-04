@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Security and best practices for MLOps on Azure – MLSecOps Lab: Boeing x WIC x UW</title>
+<title>Git Resources – MLSecOps Lab: Boeing x WIC x UW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -235,7 +270,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./security_best_practices.html">{{&lt; fa shield-halved &gt;}} Security &amp; Best Practices</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Python.html">{{&lt; fa toolbox &gt;}} Resources</a></li><li class="breadcrumb-item"><a href="./git_resources.html">{{&lt; fa code-branch &gt;}} Git Resources</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -284,7 +319,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./git_resources.html" class="sidebar-item-text sidebar-link">
+  <a href="./git_resources.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"> Git Resources</span></a>
   </div>
 </li>
@@ -391,7 +426,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./security_best_practices.html" class="sidebar-item-text sidebar-link active">
+  <a href="./security_best_practices.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"> Security &amp; Best Practices</span></a>
   </div>
 </li>
@@ -431,9 +466,10 @@ ul.task-list li input[type="checkbox"] {
 <!-- Load Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Python.html">{{&lt; fa toolbox &gt;}} Resources</a></li><li class="breadcrumb-item"><a href="./git_resources.html">{{&lt; fa code-branch &gt;}} Git Resources</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Security and best practices for MLOps on Azure</h1>
+<h1 class="title">Git Resources</h1>
+<p class="subtitle lead">Version control essentials for MLOps</p>
 </div>
 
 
@@ -460,38 +496,17 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This page covers the security principles, access controls, and operational best practices that make MLOps systems on Azure safe, reproducible, and production-ready.</p>
+<p>This page introduces Git and GitHub as essential tools for MLOps workflows, covering the core concepts and commands you’ll need to version-control your code, data pipelines, and infrastructure throughout this lab.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Core Security Principles
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<section id="why-git-for-mlops" class="level2">
+<h2 class="anchored" data-anchor-id="why-git-for-mlops"><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Why Git for MLOps?</h2>
+<p>In machine learning projects, reproducibility is everything. Git ensures that:</p>
 <ul>
-<li>Least privilege everywhere</li>
-<li>Prefer identity-based (RBAC) access</li>
-<li>Separate dev, staging, and prod</li>
-<li>Make pipelines reproducible and auditable</li>
-<li>Log enough to detect issues without leaking sensitive data</li>
-</ul>
-</div>
-</div>
-<section id="identity-and-access-rbac---role-based-access-control" class="level2">
-<h2 class="anchored" data-anchor-id="identity-and-access-rbac---role-based-access-control"><i class="fa-solid fa-user-shield" aria-label="user-shield"></i> Identity and access (RBAC - Role Based Access Control)</h2>
-<ul>
-<li>Assign roles at the smallest scope possible (resource group, workspace, storage container)</li>
-<li>Separate duties
-<ul>
-<li>Data owners manage data access</li>
-<li>ML engineers run training jobs</li>
-<li>Release owners deploy to production</li>
-</ul></li>
+<li>every change to your code, configs, and pipeline definitions is tracked</li>
+<li>teammates can collaborate without overwriting each other’s work</li>
+<li>you can roll back to a previous version if a model or pipeline breaks</li>
+<li>experiments are linked to specific code commits for full auditability</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -499,27 +514,75 @@ ul.task-list li input[type="checkbox"] {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Best Practice
+<span class="screen-reader-only">Tip</span>Key Insight
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Use Azure’s built-in roles (Contributor, Reader, Data Scientist) when possible. Create custom roles only when necessary.</p>
+<p>MLOps without version control is like science without a lab notebook. Git is the foundation everything else is built on.</p>
 </div>
 </div>
 </section>
-<section id="secrets-management" class="level2">
-<h2 class="anchored" data-anchor-id="secrets-management"><i class="fa-solid fa-key" aria-label="key"></i> Secrets management</h2>
-<ul>
-<li>Store secrets in Azure Key Vault</li>
-<li>Access Key Vault using Managed Identity (avoid connection strings in code)</li>
-<li>Do not put secrets in
-<ul>
-<li>Git repos</li>
-<li>notebooks</li>
-<li>environment variables committed to YAML files</li>
-</ul></li>
-<li>Rotate secrets regularly if any must exist</li>
-</ul>
+<section id="core-git-concepts" class="level2">
+<h2 class="anchored" data-anchor-id="core-git-concepts"><i class="fa-solid fa-book" aria-label="book"></i> Core Git Concepts</h2>
+<p><strong>Repository (repo)</strong></p>
+<p>A repo is the project folder that Git tracks. In this lab, the entire MLOps project lives in one GitHub repository.</p>
+<p><strong>Commit</strong></p>
+<p>A commit is a snapshot of your changes. Every time you commit, you record what changed, who changed it, and why.</p>
+<p><strong>Branch</strong></p>
+<p>A branch is an isolated line of development. You work on a feature or fix in a branch without affecting the main codebase.</p>
+<p><strong>Pull Request (PR)</strong></p>
+<p>A PR is a proposal to merge your branch into the main branch. It enables code review before changes go to production.</p>
+<p><strong>Remote</strong></p>
+<p>The remote is the version of the repo hosted on GitHub (or Azure Repos). You push your local commits to the remote to share them.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>In This Lab
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We use GitHub as our remote repository. All pipeline definitions, model training scripts, and infrastructure code are version-controlled here.</p>
+</div>
+</div>
+</section>
+<section id="essential-git-commands" class="level2">
+<h2 class="anchored" data-anchor-id="essential-git-commands"><i class="fa-solid fa-terminal" aria-label="terminal"></i> Essential Git Commands</h2>
+<p><strong>Getting started</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clone the lab repository</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/shakshi-gandhi/UW-MLOps-Boeing-x-WIC.git</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the status of your working directory</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># See the commit history</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--oneline</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Making changes</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stage all changes for commit</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Commit with a descriptive message</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"feat: add data ingestion pipeline script"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Push your changes to the remote</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Branching and merging</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new branch and switch to it</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feature/data-preprocessing</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Switch back to main</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge a feature branch into main</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge feature/data-preprocessing</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Syncing with the remote</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull the latest changes from the remote</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull origin main</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch updates without merging</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> fetch origin</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -530,290 +593,82 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Never hardcode connection strings or API keys in notebooks or code. Always use Key Vault with Managed Identity.</p>
+<p>Never commit secrets, API keys, or connection strings to a Git repository. Use <code>.gitignore</code> to exclude sensitive files, and use Azure Key Vault to store secrets securely.</p>
 </div>
 </div>
 </section>
-<section id="data-protection" class="level2">
-<h2 class="anchored" data-anchor-id="data-protection"><i class="fa-solid fa-database" aria-label="database"></i> Data protection</h2>
-<ul>
-<li>Store data in Azure Storage (Blob or ADLS Gen2)</li>
-<li>Disable public blob access</li>
-<li>Use RBAC for data access instead of storage account keys when possible</li>
-<li>Keep clear data zones
-<ul>
-<li>raw</li>
-<li>processed</li>
-<li>features</li>
-<li>evaluation</li>
-</ul></li>
-<li>Track dataset versions (Azure ML Data assets) and record which version trained each model</li>
-</ul>
+<section id="setting-up-.gitignore-for-ml-projects" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-.gitignore-for-ml-projects"><i class="fa-solid fa-file-lines" aria-label="file-lines"></i> Setting Up .gitignore for ML Projects</h2>
+<p>A <code>.gitignore</code> file tells Git which files to skip. For ML projects, always ignore:</p>
+<pre><code># Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data and model files (use Azure Storage instead)
+*.csv
+*.parquet
+*.pkl
+*.joblib
+data/raw/
+data/processed/
+
+# Credentials
+.env
+*.key
+secrets.yaml
+
+# OS files
+.DS_Store
+Thumbs.db</code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Data Versioning
+<span class="screen-reader-only">Note</span>Data in Git
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Tracking which dataset version trained each model is critical for reproducibility and debugging production issues.</p>
+<p>Never store large data files in Git. Use Azure Blob Storage for data and register datasets in Azure ML. Git tracks the code that processes the data, not the data itself.</p>
 </div>
 </div>
 </section>
-<section id="network-protection" class="level2">
-<h2 class="anchored" data-anchor-id="network-protection"><i class="fa-solid fa-network-wired" aria-label="network-wired"></i> Network protection</h2>
-<ul>
-<li>Prefer private access when data is sensitive</li>
-</ul>
+<section id="git-workflow-for-this-lab" class="level2">
+<h2 class="anchored" data-anchor-id="git-workflow-for-this-lab"><i class="fa-solid fa-arrows-spin" aria-label="arrows-spin"></i> Git Workflow for This Lab</h2>
+<p>In this lab, we follow a simple feature-branch workflow:</p>
+<ol type="1">
+<li><strong>Pull</strong> the latest <code>main</code> branch before starting new work</li>
+<li><strong>Create a branch</strong> for your feature or fix</li>
+<li><strong>Commit often</strong> with clear messages describing what you changed and why</li>
+<li><strong>Open a pull request</strong> when your work is ready for review</li>
+<li><strong>Merge</strong> after review and CI checks pass</li>
+</ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Production Recommendation
+<span class="screen-reader-only">Tip</span>Commit Message Convention
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For production workloads with sensitive data, use Azure Private Link to keep traffic within the Azure network.</p>
+<p>Use descriptive prefixes in commit messages: - <code>feat:</code> for new features - <code>fix:</code> for bug fixes - <code>docs:</code> for documentation updates - <code>chore:</code> for setup or maintenance tasks</p>
+<p>Example: <code>feat: add Azure ML pipeline YAML for model training</code></p>
 </div>
 </div>
 </section>
-<section id="reproducible-pipelines" class="level2">
-<h2 class="anchored" data-anchor-id="reproducible-pipelines"><i class="fa-solid fa-rotate" aria-label="rotate"></i> Reproducible pipelines</h2>
-<ul>
-<li>Run preprocessing and training as Azure ML Jobs (not only notebooks)</li>
-<li>Pin dependencies (requirements or conda environment)</li>
-<li>Version everything in git
-<ul>
-<li>code</li>
-<li>environment files</li>
-<li>pipeline definitions</li>
-<li>deployment configs</li>
-</ul></li>
-<li>Capture metadata in every run
-<ul>
-<li>data version</li>
-<li>git commit SHA</li>
-<li>metrics</li>
-<li>environment version</li>
-</ul></li>
-</ul>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Reproducibility Checklist
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Every training run should be fully reproducible. If you can’t recreate a model from its metadata, your pipeline needs improvement.</p>
-</div>
-</div>
-</section>
-<section id="model-registry-and-promotion" class="level2">
-<h2 class="anchored" data-anchor-id="model-registry-and-promotion"><i class="fa-solid fa-folder-open" aria-label="folder-open"></i> Model registry and promotion</h2>
-<ul>
-<li>Register models in Azure ML Model Registry</li>
-<li>Require minimum metadata tags
-<ul>
-<li>data_version</li>
-<li>git_sha</li>
-<li>metric_summary</li>
-<li>owner</li>
-</ul></li>
-<li>Use promotion stages
-<ul>
-<li>candidate</li>
-<li>validated</li>
-<li>production</li>
-</ul></li>
-<li>Avoid “latest” for prod deployments (deploy specific versions only)</li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Deployment Safety
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Never deploy “latest” to production. Always deploy specific, validated model versions with known performance characteristics.</p>
-</div>
-</div>
-</section>
-<section id="deployment-hardening" class="level2">
-<h2 class="anchored" data-anchor-id="deployment-hardening"><i class="fa-solid fa-rocket" aria-label="rocket"></i> Deployment hardening</h2>
-<ul>
-<li>Enable authentication</li>
-<li>Validate inputs (types, ranges, schema) before scoring</li>
-<li>Do not log raw sensitive payloads
-<ul>
-<li>log request IDs, latency, error codes, and summary stats instead</li>
-</ul></li>
-</ul>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Input Validation
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Always validate input data before scoring. Invalid inputs can cause errors, security issues, or incorrect predictions.</p>
-</div>
-</div>
-</section>
-<section id="monitoring-and-alerts" class="level2">
-<h2 class="anchored" data-anchor-id="monitoring-and-alerts"><i class="fa-solid fa-chart-line" aria-label="chart-line"></i> Monitoring and alerts</h2>
-<ul>
-<li>Use Application Insights + Log Analytics for endpoint telemetry</li>
-<li>Monitor service health
-<ul>
-<li>latency</li>
-<li>error rate</li>
-<li>throughput</li>
-</ul></li>
-<li>Monitor model signals
-<ul>
-<li>feature drift (compare to training stats)</li>
-<li>prediction drift</li>
-</ul></li>
-<li>Set alerts to notify owners when thresholds are exceeded</li>
-</ul>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Drift Detection
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Model drift and data drift are inevitable in production. Set up monitoring to detect them early before they impact users.</p>
-</div>
-</div>
-</section>
-<section id="code-safety" class="level2">
-<h2 class="anchored" data-anchor-id="code-safety"><i class="fa-solid fa-code" aria-label="code"></i> Code Safety</h2>
-<ul>
-<li>Require PR reviews and CI checks before merge</li>
-<li>Pin dependencies and avoid installing random packages at runtime</li>
-<li>Store images in Azure Container Registry (ACR)</li>
-</ul>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Dependency Management
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Pin exact versions in requirements.txt (e.g., <code>pandas==2.0.3</code> not <code>pandas&gt;=2.0</code>). This prevents unexpected breaking changes.</p>
-</div>
-</div>
-</section>
-<section id="compute-hygiene-and-cost-guardrails" class="level2">
-<h2 class="anchored" data-anchor-id="compute-hygiene-and-cost-guardrails"><i class="fa-solid fa-server" aria-label="server"></i> Compute hygiene and cost guardrails</h2>
-<ul>
-<li>Prefer autoscaling compute clusters for jobs and scale down to zero</li>
-<li>Stop/delete unused compute instances</li>
-<li>Set budgets and alerts per resource group</li>
-<li>Tag resources with owner and environment</li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Cost Management
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Unused compute instances can drain your Azure credits quickly. Always stop or delete them when not in use, and set up budget alerts.</p>
-</div>
-</div>
-<hr>
-</section>
-<section id="knowledge-check" class="level2">
-<h2 class="anchored" data-anchor-id="knowledge-check">Knowledge Check</h2>
-<div style="background:#f0f4ff;border:2px solid #0b3d91;border-radius:10px;padding:20px 24px;margin:24px 0">
-<style>
-.kc4-q{margin-bottom:16px}.kc4-q p{font-weight:700;margin:0 0 8px;font-size:.95rem}
-.kc4-opts label{display:block;padding:7px 12px;margin:3px 0;background:#fff;border:1.5px solid #d0d7de;border-radius:6px;cursor:pointer;font-size:.9rem}
-.kc4-opts label:hover{border-color:#0b3d91}
-.kc4-opts input{margin-right:8px}
-.kc4-btn{margin-top:12px;background:#0b3d91;color:#fff;border:none;border-radius:6px;padding:9px 22px;cursor:pointer;font-size:.9rem;font-weight:600}
-.kc4-btn:hover{background:#093080}
-.kc4-score-box{margin-top:12px;padding:12px 16px;border-radius:6px;font-weight:600;font-size:.95rem;display:none}
-</style>
-<h4 style="margin:0 0 16px;color:#0b3d91;font-size:1.1rem" class="anchored">🎯 Knowledge Check: Security &amp; Best Practices</h4>
-<form id="kcf4">
-<div class="kc4-q"><p>1. Where should secrets and credentials be stored in an MLOps system?</p><div class="kc4-opts">
-<label><input type="radio" name="q1" value="a"> Hardcoded in the Python script</label>
-<label><input type="radio" name="q1" value="b"> In a .env file committed to git</label>
-<label><input type="radio" name="q1" value="c"> In Azure Key Vault or a secrets manager</label>
-<label><input type="radio" name="q1" value="d"> In a README file</label>
-</div></div>
-<div class="kc4-q"><p>2. What does RBAC stand for in Azure?</p><div class="kc4-opts">
-<label><input type="radio" name="q2" value="a"> Random Binary Access Control</label>
-<label><input type="radio" name="q2" value="b"> Role-Based Access Control</label>
-<label><input type="radio" name="q2" value="c"> Restricted Binary Authentication Code</label>
-<label><input type="radio" name="q2" value="d"> Remote Backup and Control</label>
-</div></div>
-<div class="kc4-q"><p>3. Why should you pin exact package versions (e.g., pandas==2.0.3) in requirements.txt?</p><div class="kc4-opts">
-<label><input type="radio" name="q3" value="a"> To make the file look more professional</label>
-<label><input type="radio" name="q3" value="b"> To save disk space</label>
-<label><input type="radio" name="q3" value="c"> To ensure reproducibility and prevent unexpected breaking changes</label>
-<label><input type="radio" name="q3" value="d"> It is required by Azure</label>
-</div></div>
-<div class="kc4-q"><p>4. What is the "principle of least privilege" in security?</p><div class="kc4-opts">
-<label><input type="radio" name="q4" value="a"> Give all users admin access for convenience</label>
-<label><input type="radio" name="q4" value="b"> Grant users and services only the minimum permissions needed to do their job</label>
-<label><input type="radio" name="q4" value="c"> Restrict all access and require manual approval for every action</label>
-<label><input type="radio" name="q4" value="d"> Share all credentials openly within the team</label>
-</div></div>
-<button type="button" class="kc4-btn" onclick="gradeKC4()">Check Answers</button>
-</form>
-<div class="kc4-score-box" id="kcs4"></div>
-</div>
-<script>
-function gradeKC4(){
-  var ans={q1:'c',q2:'b',q3:'c',q4:'b'},score=0,total=4;
-  var form=document.getElementById('kcf4');
-  ['q1','q2','q3','q4'].forEach(function(q){
-    var sel=form.querySelector('input[name="'+q+'"]:checked');
-    form.querySelectorAll('input[name="'+q+'"]').forEach(function(o){
-      var l=o.parentElement;l.style.background='#fff';l.style.borderColor='#d0d7de';
-    });
-    if(sel){
-      if(sel.value===ans[q]){sel.parentElement.style.background='#d1fae5';sel.parentElement.style.borderColor='#34d399';score++;}
-      else{sel.parentElement.style.background='#fee2e2';sel.parentElement.style.borderColor='#f87171';
-        form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]').parentElement.style.background='#d1fae5';
-        form.querySelector('input[name="'+q+'"][value="'+ans[q]+'"]').parentElement.style.borderColor='#34d399';
-      }
-    }
-  });
-  var pct=Math.round(score/total*100);
-  var box=document.getElementById('kcs4');box.style.display='block';
-  box.style.background=pct===100?'#d1fae5':pct>=75?'#e0f2fe':'#fef9c3';
-  box.style.border='1.5px solid '+(pct===100?'#34d399':pct>=75?'#38bdf8':'#fbbf24');
-  box.innerHTML='📊 Score: '+score+'/'+total+' ('+pct+'%) '+(pct===100?'🎉 Perfect!':pct>=75?'✅ Good job!':'📚 Review the page and try again.');
-}
-</script>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps"><i class="fa-solid fa-circle-arrow-right" aria-label="circle-arrow-right"></i> Next Steps</h2>
+<p>With Git set up, you’re ready to connect your repository to Azure and start building the infrastructure for your ML system.</p>
+<p>Proceed to the <strong>Infra Setup</strong> section to learn how to push your code to Azure and provision your ML environment.</p>
 
 
 </section>
