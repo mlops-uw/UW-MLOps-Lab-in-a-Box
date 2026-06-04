@@ -87,6 +87,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -316,188 +319,378 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-What You’ll Learn
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This page covers how we build, configure, and run an automated ML pipeline on Azure Machine Learning, using the NYC Taxi dataset to walk through every stage from data preparation to model training.</p>
-</div>
-</div>
 <section id="what-is-an-ml-pipeline" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-an-ml-pipeline"><i class="fa-solid fa-diagram-project" aria-label="diagram-project"></i> What Is an ML Pipeline?</h2>
-<p>An ML pipeline is a series of automated, reproducible steps that take raw data and produce a trained, registered model. Instead of running scripts manually in a notebook, a pipeline chains each step together so the entire workflow can be triggered, tracked, and repeated on demand.</p>
-<p>In this lab, our pipeline does the following:</p>
+<h2 class="anchored" data-anchor-id="what-is-an-ml-pipeline"><i class="fa-solid fa-project-diagram" aria-label="project-diagram"></i> What Is an ML Pipeline?</h2>
+<p>A Machine Learning (ML) Pipeline is a series of automated and reproducible steps that transform raw data into trained, evaluated, monitored, and registered machine learning models.</p>
+<p>Instead of executing individual scripts manually, a pipeline connects all stages of the machine learning workflow together, allowing the entire process to be triggered, tracked, and repeated consistently.</p>
+<p>In this project, the ML pipeline uses the NYC Taxi dataset stored in Azure and performs:</p>
 <ul>
-<li>ingests raw NYC taxi trip data from Azure Blob Storage</li>
-<li>applies preprocessing and feature engineering</li>
-<li>trains a regression model to predict trip duration</li>
-<li>evaluates model performance against a validation set</li>
-<li>registers the best-performing model in the Azure ML Model Registry</li>
+<li>Data preprocessing</li>
+<li>Supervised learning</li>
+<li>Unsupervised learning</li>
+<li>Model registration</li>
+<li>Monitoring and artifact generation</li>
 </ul>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Key Insight
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Pipelines make your ML work reproducible. Anyone with access to the repo and the Azure workspace can re-run the exact same experiment and get the same results.</p>
-</div>
-</div>
+<p>This approach follows MLOps best practices by ensuring that model training and evaluation can be executed repeatedly in a controlled and automated manner.</p>
+<hr>
 </section>
 <section id="pipeline-architecture" class="level2">
-<h2 class="anchored" data-anchor-id="pipeline-architecture"><i class="fa-solid fa-cogs" aria-label="cogs"></i> Pipeline Architecture</h2>
-<p>Our ML pipeline consists of four sequential components, each defined as an Azure ML Component:</p>
-<p><strong>Component 1 — Data Preparation</strong></p>
-<ul>
-<li>Reads the raw Parquet files from Azure Blob Storage</li>
-<li>Validates schema and drops rows with missing critical fields</li>
-<li>Outputs a cleaned dataset to the pipeline’s scratch space</li>
-</ul>
-<p><strong>Component 2 — Feature Engineering</strong></p>
-<ul>
-<li>Computes derived features: trip distance bins, hour-of-day, day-of-week</li>
-<li>Scales numeric features using StandardScaler</li>
-<li>Encodes categorical variables</li>
-</ul>
-<p><strong>Component 3 — Model Training</strong></p>
-<ul>
-<li>Trains a LightGBM regressor on the processed training split</li>
-<li>Logs hyperparameters, training metrics (RMSE, MAE, R²) to Azure ML</li>
-<li>Saves the trained model artifact</li>
-</ul>
-<p><strong>Component 4 — Model Evaluation &amp; Registration</strong></p>
-<ul>
-<li>Evaluates the model on the held-out test split</li>
-<li>Compares performance to the currently registered production model</li>
-<li>Registers the new model only if it beats the baseline</li>
-</ul>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Pipeline Component Philosophy
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Each component runs in its own isolated environment. This means you can update the feature engineering logic without touching the training code, and vice versa.</p>
-</div>
-</div>
-</section>
-<section id="pipeline-definition-yaml" class="level2">
-<h2 class="anchored" data-anchor-id="pipeline-definition-yaml"><i class="fa-solid fa-file-code" aria-label="file-code"></i> Pipeline Definition (YAML)</h2>
-<p>Pipelines in Azure ML are defined as YAML jobs. Here is a simplified version of our pipeline configuration:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$schema</span><span class="kw">:</span><span class="at"> https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">type</span><span class="kw">:</span><span class="at"> pipeline</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">display_name</span><span class="kw">:</span><span class="at"> nyc-taxi-training-pipeline</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">settings</span><span class="kw">:</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">default_compute</span><span class="kw">:</span><span class="at"> azureml:cpu-cluster</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">default_datastore</span><span class="kw">:</span><span class="at"> azureml:workspaceblobstore</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">inputs</span><span class="kw">:</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">raw_data</span><span class="kw">:</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> uri_folder</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> azureml://datastores/workspaceblobstore/paths/nyc-taxi/raw/</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">data_prep</span><span class="kw">:</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> azureml:nyc_taxi_data_prep:1</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">inputs</span><span class="kw">:</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">raw_data</span><span class="kw">:</span><span class="at"> ${{parent.inputs.raw_data}}</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">outputs</span><span class="kw">:</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cleaned_data</span><span class="kw">:</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">mode</span><span class="kw">:</span><span class="at"> rw_mount</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">feature_engineering</span><span class="kw">:</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> azureml:nyc_taxi_features:1</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">inputs</span><span class="kw">:</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">cleaned_data</span><span class="kw">:</span><span class="at"> ${{parent.jobs.data_prep.outputs.cleaned_data}}</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">outputs</span><span class="kw">:</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">feature_data</span><span class="kw">:</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">mode</span><span class="kw">:</span><span class="at"> rw_mount</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">model_training</span><span class="kw">:</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span><span class="at"> azureml:nyc_taxi_train:1</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">inputs</span><span class="kw">:</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">feature_data</span><span class="kw">:</span><span class="at"> ${{parent.jobs.feature_engineering.outputs.feature_data}}</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">outputs</span><span class="kw">:</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">model_output</span><span class="kw">:</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">mode</span><span class="kw">:</span><span class="at"> rw_mount</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="running-the-pipeline" class="level2">
-<h2 class="anchored" data-anchor-id="running-the-pipeline"><i class="fa-solid fa-play" aria-label="play"></i> Running the Pipeline</h2>
-<p><strong>From the Azure ML CLI:</strong></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Submit the pipeline job</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml job create <span class="at">-f</span> pipeline.yml <span class="at">--workspace-name</span> <span class="op">&lt;</span>your-workspace<span class="op">&gt;</span> --resource-group <span class="op">&lt;</span>your-rg<span class="op">&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Monitor job status</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml job show <span class="at">-n</span> <span class="op">&lt;</span>job-name<span class="op">&gt;</span> --workspace-name <span class="op">&lt;</span>your-workspace<span class="op">&gt;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Stream logs</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml job stream <span class="at">-n</span> <span class="op">&lt;</span>job-name<span class="op">&gt;</span> --workspace-name <span class="op">&lt;</span>your-workspace<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>From the Azure ML Studio UI:</strong></p>
+<h2 class="anchored" data-anchor-id="pipeline-architecture"><i class="fa-solid fa-sitemap" aria-label="sitemap"></i> Pipeline Architecture</h2>
+<p>This project uses two layers of automation:</p>
 <ol type="1">
-<li>Navigate to <strong>Jobs</strong> in the left sidebar</li>
-<li>Select your pipeline run to see the visual graph</li>
-<li>Click on individual steps to inspect logs and outputs</li>
-<li>View metrics tracked during training in the <strong>Metrics</strong> tab</li>
+<li><strong>GitHub Actions CI/CD Pipeline</strong></li>
+<li><strong>Azure Machine Learning Pipeline</strong></li>
 </ol>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<p>Together, these components automate the workflow from source code execution in GitHub to model training and tracking in Azure Machine Learning.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+
+A[User Triggers Workflow] --&gt; B[GitHub Actions Pipeline]
+
+B --&gt; C[Get Configuration]
+C --&gt; D[Register Environment]
+D --&gt; E[Register Dataset]
+E --&gt; F[Run Azure ML Pipeline]
+
+F --&gt; G[Preprocess Data]
+G --&gt; H[Supervised Learning]
+G --&gt; I[Unsupervised Learning]
+
+H --&gt; J[Register Models]
+I --&gt; J
+
+J --&gt; K[Monitoring]
+K --&gt; L[Azure ML Model Registry &amp; Artifacts]
+</pre>
 </div>
-<div class="callout-title-container flex-fill">
-GitHub Actions Integration
+<p></p></figure><p></p>
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>In this lab, the pipeline is also triggered automatically via a GitHub Actions workflow when code is merged to <code>main</code>. This means every code change is tested end-to-end in Azure ML without manual intervention.</p>
 </div>
-</div>
+<hr>
 </section>
-<section id="what-gets-logged" class="level2">
-<h2 class="anchored" data-anchor-id="what-gets-logged"><i class="fa-solid fa-chart-bar" aria-label="chart-bar"></i> What Gets Logged</h2>
-<p>Every pipeline run captures the following to Azure ML:</p>
+<section id="github-actions-cicd-pipeline" class="level1">
+<h1>GitHub Actions CI/CD Pipeline</h1>
+<p>The GitHub Actions workflow acts as the automation layer responsible for triggering and managing the Azure Machine Learning workflow.</p>
+<p>The workflow is started manually using GitHub’s <code>workflow_dispatch</code> trigger.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> deploy-model-training-pipeline</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This allows users to execute the machine learning workflow on demand from the GitHub Actions interface.</p>
+<p>The workflow runs on:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>and uses Azure CLI commands to communicate with Azure Machine Learning resources.</p>
+<hr>
+<section id="github-actions-pipeline-components" class="level2">
+<h2 class="anchored" data-anchor-id="github-actions-pipeline-components">GitHub Actions Pipeline Components</h2>
+<section id="get-config" class="level3">
+<h3 class="anchored" data-anchor-id="get-config">1. Get Config</h3>
+<p>The first job retrieves shared configuration values used throughout the workflow.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get-config</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">outputs</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">resource_group</span><span class="kw">:</span><span class="at"> ${{ steps.config.outputs.resource_group }}</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">aml_workspace</span><span class="kw">:</span><span class="at"> ${{ steps.config.outputs.aml_workspace }}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="purpose" class="level3">
+<h3 class="anchored" data-anchor-id="purpose">Purpose</h3>
 <ul>
-<li><strong>Parameters:</strong> learning rate, max depth, number of estimators, feature list</li>
-<li><strong>Metrics:</strong> RMSE, MAE, R², training duration</li>
-<li><strong>Artifacts:</strong> trained model file, feature scaler, evaluation report</li>
-<li><strong>Lineage:</strong> which data version, which git commit SHA, which environment was used</li>
+<li>Defines common configuration values.</li>
+<li>Retrieves the Azure Resource Group name.</li>
+<li>Retrieves the Azure Machine Learning Workspace name.</li>
+<li>Exposes these values as outputs for downstream jobs.</li>
 </ul>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Why This Matters
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Full lineage means you can always trace a production model back to the exact data and code that produced it. This is critical for debugging, auditing, and reproducing results.</p>
-</div>
-</div>
+<p>This prevents configuration values from being duplicated throughout the workflow.</p>
+<hr>
 </section>
-<section id="next-steps" class="level2">
-<h2 class="anchored" data-anchor-id="next-steps"><i class="fa-solid fa-circle-arrow-right" aria-label="circle-arrow-right"></i> Next Steps</h2>
-<p>With the pipeline running, the next step is to retrieve the trained model from the Azure ML Model Registry and create a real-time endpoint for serving predictions.</p>
-<p>Proceed to the <strong>ML Foundations → Model Registry</strong> section to learn how trained models are versioned, staged, and promoted to production.</p>
+<section id="register-environment" class="level3">
+<h3 class="anchored" data-anchor-id="register-environment">2. Register Environment</h3>
+<p>This job registers the Azure Machine Learning environment.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml environment create <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--file</span> ML/environment.yaml <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--resource-group</span> <span class="st">"</span><span class="va">${</span><span class="er">{ needs.get-config.outputs.resource_group </span><span class="va">}</span><span class="st">}"</span> <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--workspace-name</span> <span class="st">"</span><span class="va">${</span><span class="er">{ needs.get-config.outputs.aml_workspace </span><span class="va">}</span><span class="st">}"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="purpose-1" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-1">Purpose</h3>
+<p>The environment defines the runtime configuration used by all machine learning jobs, including:</p>
+<ul>
+<li>Python version</li>
+<li>Required packages</li>
+<li>Library dependencies</li>
+<li>Runtime settings</li>
+</ul>
+<p>Registering the environment ensures that all jobs execute in a consistent and reproducible environment.</p>
+<hr>
+</section>
+<section id="register-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="register-dataset">3. Register Dataset</h3>
+<p>This job registers the dataset inside Azure Machine Learning.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml data create <span class="dt">\</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--file</span> ML/data.yml <span class="dt">\</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--resource-group</span> <span class="st">"</span><span class="va">${</span><span class="er">{ needs.get-config.outputs.resource_group </span><span class="va">}</span><span class="st">}"</span> <span class="dt">\</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--workspace-name</span> <span class="st">"</span><span class="va">${</span><span class="er">{ needs.get-config.outputs.aml_workspace </span><span class="va">}</span><span class="st">}"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="purpose-2" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-2">Purpose</h3>
+<ul>
+<li>Registers the NYC Taxi dataset.</li>
+<li>Creates a reusable dataset reference.</li>
+<li>Makes the dataset available to Azure ML jobs.</li>
+</ul>
+<p>After registration, the dataset can be accessed consistently across multiple pipeline executions.</p>
+<hr>
+</section>
+<section id="run-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="run-pipeline">4. Run Pipeline</h3>
+<p>This job starts the Azure Machine Learning Pipeline.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> ml job create <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--file</span> ML/pipeline.yaml <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--resource-group</span> <span class="st">"</span><span class="va">${</span><span class="er">{ needs.get-config.outputs.resource_group </span><span class="va">}</span><span class="st">}"</span> <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--workspace-name</span> <span class="st">"</span><span class="va">${</span><span class="er">{ needs.get-config.outputs.aml_workspace </span><span class="va">}</span><span class="st">}"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="purpose-3" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-3">Purpose</h3>
+<p>This is the primary workflow step that initiates the end-to-end machine learning process inside Azure Machine Learning.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="azure-machine-learning-pipeline" class="level1">
+<h1>Azure Machine Learning Pipeline</h1>
+<p>The Azure Machine Learning Pipeline is defined in the <code>pipeline.yaml</code> file.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$schema</span><span class="kw">:</span><span class="at"> https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">type</span><span class="kw">:</span><span class="at"> pipeline</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">display_name</span><span class="kw">:</span><span class="at"> NYC_Taxi_ML_Pipeline</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> ML pipeline for NYC taxi analysis</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The pipeline runs inside the Azure Machine Learning Workspace and executes multiple machine learning jobs in sequence.</p>
+<hr>
+<section id="compute-target" class="level2">
+<h2 class="anchored" data-anchor-id="compute-target">Compute Target</h2>
+<p>All jobs run on the Azure Machine Learning compute target named <strong>capstone</strong>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">settings</span><span class="kw">:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">default_compute</span><span class="kw">:</span><span class="at"> azureml:capstone</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="purpose-4" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-4">Purpose</h3>
+<p>The compute target provides:</p>
+<ul>
+<li>CPU resources</li>
+<li>GPU resources (if configured)</li>
+<li>Managed execution environment</li>
+<li>Scalable compute for ML workloads</li>
+</ul>
+<p>All stages of the pipeline execute using this compute resource.</p>
+<hr>
+</section>
+</section>
+<section id="pipeline-input" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline-input">Pipeline Input</h2>
+<p>The pipeline uses the latest registered NYC Taxi dataset.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inputs</span><span class="kw">:</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">data_path</span><span class="kw">:</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> uri_folder</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> azureml:taxi-data@latest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="purpose-5" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-5">Purpose</h3>
+<p>The dataset reference points to the most recent version of the registered dataset.</p>
+<p>Using versioned datasets improves reproducibility and data governance.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="azure-ml-pipeline-execution-stages" class="level1">
+<h1>Azure ML Pipeline Execution Stages</h1>
+<section id="preprocess-data" class="level2">
+<h2 class="anchored" data-anchor-id="preprocess-data">1. Preprocess Data</h2>
+<p>The first stage executes the <code>preprocess.py</code> script.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">preprocess_data</span><span class="kw">:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">  command</span><span class="kw">: </span><span class="ch">&gt;-</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    python preprocess.py</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    --data-path ${{inputs.data_path}}</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    --output-dir ${{outputs.output_dir}}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="purpose-6" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-6">Purpose</h3>
+<p>This stage prepares the raw NYC Taxi dataset for model training by:</p>
+<ul>
+<li>Removing invalid records</li>
+<li>Handling missing values</li>
+<li>Cleaning the dataset</li>
+<li>Removing unnecessary columns</li>
+<li>Preparing training features</li>
+</ul>
+<p>The cleaned data is written to an Azure ML datastore-backed folder.</p>
+<hr>
+</section>
+</section>
+<section id="supervised-learning" class="level2">
+<h2 class="anchored" data-anchor-id="supervised-learning">2. Supervised Learning</h2>
+<p>After preprocessing completes, the supervised learning stage begins.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">supervised_learning</span><span class="kw">:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">  command</span><span class="kw">: </span><span class="ch">&gt;-</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    python supervised_learning.py</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    --data-path ${{inputs.data_path}}</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    --output-dir ${{outputs.output_dir}}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="purpose-7" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-7">Purpose</h3>
+<p>This stage trains a supervised machine learning model using the cleaned dataset.</p>
+<p>The model predicts:</p>
+<ul>
+<li>Taxi fare amounts</li>
+<li>Trip-related outcomes based on journey characteristics</li>
+</ul>
+<p>The input comes directly from the preprocessing stage.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inputs</span><span class="kw">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">data_path</span><span class="kw">:</span><span class="at"> ${{parent.jobs.preprocess_data.outputs.output_dir}}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This creates a dependency between preprocessing and model training.</p>
+<hr>
+</section>
+</section>
+<section id="unsupervised-learning" class="level2">
+<h2 class="anchored" data-anchor-id="unsupervised-learning">3. Unsupervised Learning</h2>
+<p>The unsupervised learning stage also uses the preprocessed dataset.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unsupervised_learning</span><span class="kw">:</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">  command</span><span class="kw">: </span><span class="ch">&gt;-</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    python unsupervised_learning.py</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    --data-path ${{inputs.data_path}}</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    --output-dir ${{outputs.output_dir}}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="purpose-8" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-8">Purpose</h3>
+<p>This stage applies clustering techniques to identify patterns in taxi trip behavior.</p>
+<p>Examples include:</p>
+<ul>
+<li>Short city trips</li>
+<li>Airport trips</li>
+<li>Peak-hour rides</li>
+<li>Long-distance journeys</li>
+</ul>
+<p>The stage receives its input from the preprocessing output.</p>
+<hr>
+</section>
+</section>
+<section id="register-models" class="level2">
+<h2 class="anchored" data-anchor-id="register-models">4. Register Models</h2>
+<p>Once training completes, the generated models are registered.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">register_models</span><span class="kw">:</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">  command</span><span class="kw">: </span><span class="ch">&gt;-</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    python register_models.py</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    --supervised-dir ${{inputs.supervised_dir}}</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    --unsupervised-dir ${{inputs.unsupervised_dir}}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="purpose-9" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-9">Purpose</h3>
+<p>This stage stores trained models in the Azure Machine Learning Model Registry.</p>
+<p>Benefits include:</p>
+<ul>
+<li>Version tracking</li>
+<li>Model comparison</li>
+<li>Reusability</li>
+<li>Deployment readiness</li>
+</ul>
+<p>The registry becomes the centralized repository for trained models.</p>
+<hr>
+</section>
+</section>
+<section id="monitoring" class="level2">
+<h2 class="anchored" data-anchor-id="monitoring">5. Monitoring</h2>
+<p>The final stage executes the monitoring script.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">monitoring</span><span class="kw">:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> command</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">  command</span><span class="kw">: </span><span class="ch">&gt;-</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    python monitoring.py</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    --data-path ${{inputs.data_path}}</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    --supervised-output-dir ${{inputs.supervised_dir}}</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    --unsupervised-output-dir ${{inputs.unsupervised_dir}}</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    --output-dir ${{outputs.output_dir}}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="purpose-10" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-10">Purpose</h3>
+<p>This stage generates:</p>
+<ul>
+<li>Monitoring artifacts</li>
+<li>Performance reports</li>
+<li>Validation outputs</li>
+<li>Execution logs</li>
+</ul>
+<p>These outputs help evaluate pipeline performance and support future model improvements.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="how-the-jobs-run" class="level1">
+<h1>How the Jobs Run</h1>
+<p>Each stage of the pipeline is implemented as an Azure ML Command Job.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">environment</span><span class="kw">:</span><span class="at"> azureml:taxi-ml-env@latest</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">code</span><span class="kw">:</span><span class="at"> ./</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="environment" class="level3">
+<h3 class="anchored" data-anchor-id="environment">Environment</h3>
+<p>Each job uses:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="at">azureml:taxi-ml-env@latest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This environment contains:</p>
+<ul>
+<li>Python runtime</li>
+<li>Machine learning libraries</li>
+<li>Required dependencies</li>
+</ul>
+</section>
+<section id="source-code" class="level3">
+<h3 class="anchored" data-anchor-id="source-code">Source Code</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">code</span><span class="kw">:</span><span class="at"> ./</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This instructs Azure Machine Learning to use the current project directory as the source code location.</p>
+</section>
+<section id="execution-model" class="level3">
+<h3 class="anchored" data-anchor-id="execution-model">Execution Model</h3>
+<p>All jobs execute as containerized workloads on Azure ML compute resources.</p>
+<p>Benefits include:</p>
+<ul>
+<li>Consistent runtime environments</li>
+<li>Dependency isolation</li>
+<li>Reproducibility</li>
+<li>Scalability</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="end-to-end-workflow" class="level1">
+<h1><i class="fa-solid fa-sync-alt" aria-label="sync-alt"></i> End-to-End Workflow</h1>
+<p>The complete workflow executes in the following order:</p>
+<ol type="1">
+<li>User manually triggers the GitHub Actions workflow.</li>
+<li>GitHub Actions retrieves configuration values.</li>
+<li>GitHub Actions authenticates with Azure.</li>
+<li>The Azure ML environment is registered.</li>
+<li>The NYC Taxi dataset is registered.</li>
+<li>GitHub Actions starts the Azure ML Pipeline.</li>
+<li>Azure ML preprocesses the data.</li>
+<li>Supervised learning models are trained.</li>
+<li>Unsupervised learning models are trained.</li>
+<li>Models are registered in Azure ML.</li>
+<li>Monitoring artifacts and logs are generated.</li>
+<li>Outputs are stored in Azure ML datastore locations.</li>
+</ol>
+<hr>
+</section>
+<section id="summary" class="level1">
+<h1><i class="fa-solid fa-clipboard-check" aria-label="clipboard-check"></i> Summary</h1>
+<p>This project combines GitHub Actions and Azure Machine Learning to create a complete MLOps workflow.</p>
+<p>The GitHub Actions pipeline acts as the orchestration layer responsible for starting and managing the workflow, while the Azure ML Pipeline performs the actual machine learning operations.</p>
+<p>Together they provide:</p>
+<ul>
+<li>Automated model training</li>
+<li>Reproducible experiments</li>
+<li>Dataset versioning</li>
+<li>Environment management</li>
+<li>Model registration</li>
+<li>Monitoring and tracking</li>
+</ul>
+<p>This architecture demonstrates a production-style machine learning workflow where data processing, model training, and model management are fully automated and repeatable.</p>
 
 
 </section>

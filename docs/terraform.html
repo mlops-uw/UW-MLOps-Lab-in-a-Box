@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>MLSecOps Lab: Boeing x WIC x UW - Data Ingestion</title>
+<title>MLSecOps Lab: Boeing x WIC x UW - Terraform</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -67,7 +67,9 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vc.html">{{&lt; fa server &gt;}} Infra Setup</a></li><li class="breadcrumb-item"><a href="./data_ingestion.html">{{&lt; fa download &gt;}} Data Ingestion</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
+      MLSecOps Lab: Boeing x WIC x UW
+      </li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -151,7 +153,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data_ingestion.html" class="sidebar-item-text sidebar-link active">
+  <a href="./data_ingestion.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"> Data Ingestion</span></a>
   </div>
 </li>
@@ -262,10 +264,10 @@ ul.task-list li input[type="checkbox"] {
 <!-- Load Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./vc.html">{{&lt; fa server &gt;}} Infra Setup</a></li><li class="breadcrumb-item"><a href="./data_ingestion.html">{{&lt; fa download &gt;}} Data Ingestion</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data Ingestion</h1>
-<p class="subtitle lead">Azure-based ingestion</p>
+<h1 class="title">Terraform</h1>
+<p class="subtitle lead">Learning Infrastructure</p>
 </div>
 
 
@@ -282,143 +284,751 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="machine-learning-module" class="level2">
+<h2 class="anchored" data-anchor-id="machine-learning-module"><i class="fa-solid fa-brain" aria-label="brain"></i> Machine Learning Module</h2>
+<p>The <code>machine_learning</code> module is responsible for creating all the core resources required to run machine learning workloads in Azure. This module provisions the Azure Machine Learning Workspace, connects it to storage resources, and creates a compute environment for experimentation.</p>
+<p>The key resources created inside this module are:</p>
+<table class="table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 74%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Azure Machine Learning Workspace</td>
+<td>Acts as the central environment for managing machine learning experiments, datasets, models, and pipelines.</td>
+</tr>
+<tr class="even">
+<td>Machine Learning Datastore (Blob Storage)</td>
+<td>Connects the ML workspace to a storage container where datasets, experiment outputs, and model artifacts are stored.</td>
+</tr>
+<tr class="odd">
+<td>Machine Learning Compute Instance</td>
+<td>Provides a managed compute environment where users can run Jupyter notebooks, develop models, and execute ML experiments.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="azure-machine-learning-workspace" class="level2">
+<h2 class="anchored" data-anchor-id="azure-machine-learning-workspace">Azure Machine Learning Workspace</h2>
+<p>The Azure Machine Learning Workspace serves as the central hub for all machine learning operations.</p>
+<p>It integrates with the following supporting services:</p>
+<table class="table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 77%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dependency</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Storage Account</td>
+<td>Stores datasets, models, and experiment artifacts.</td>
+</tr>
+<tr class="even">
+<td>Key Vault</td>
+<td>Securely stores secrets such as connection strings and credentials.</td>
+</tr>
+<tr class="odd">
+<td>Application Insights</td>
+<td>Collects logs and monitoring data from ML experiments.</td>
+</tr>
+</tbody>
+</table>
+<p>These dependencies ensure that the workspace has access to secure storage, secret management, and monitoring capabilities.</p>
+<hr>
+</section>
+<section id="machine-learning-datastore-blob-storage" class="level2">
+<h2 class="anchored" data-anchor-id="machine-learning-datastore-blob-storage">Machine Learning Datastore (Blob Storage)</h2>
+<p>The Machine Learning Datastore connects the ML workspace to an Azure Blob Storage container.</p>
+<section id="purpose" class="level3">
+<h3 class="anchored" data-anchor-id="purpose">Purpose</h3>
+<ul>
+<li>Enables the workspace to access datasets stored in Blob Storage.</li>
+<li>Allows machine learning experiments to read input data.</li>
+<li>Stores model outputs, experiment artifacts, and intermediate results.</li>
+</ul>
+<p>The datastore acts as the connection layer between Azure Machine Learning and the storage resources created by the storage module.</p>
+<hr>
+</section>
+</section>
+<section id="machine-learning-compute-instance" class="level2">
+<h2 class="anchored" data-anchor-id="machine-learning-compute-instance">Machine Learning Compute Instance</h2>
+<p>The Compute Instance provides an interactive development environment for data scientists.</p>
+<section id="purpose-1" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-1">Purpose</h3>
+<p>All machine learning pipeline jobs run on the Azure Machine Learning Compute Instance, which provides the required CPU or GPU resources for execution.</p>
+<p>The pipeline performs the following workflow:</p>
+<ol type="1">
+<li>Reads input data from Azure Blob Storage through the configured datastore.</li>
+<li>Processes the data and executes machine learning experiments.</li>
+<li>Trains machine learning models.</li>
+<li>Stores outputs, trained models, and execution logs back into Azure Blob Storage.</li>
+</ol>
+<p>This compute environment also supports:</p>
+<ul>
+<li>Jupyter Notebook</li>
+<li>Jupyter Lab</li>
+<li>Interactive experimentation</li>
+<li>Model development and testing</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="user-assignment" class="level2">
+<h2 class="anchored" data-anchor-id="user-assignment">User Assignment</h2>
+<p>The compute instance is assigned to an Azure Active Directory identity using the following configuration:</p>
+<pre class="hcl"><code>assign_to_user {
+  object_id = var.object_id
+  tenant_id = var.tenant_id
+}</code></pre>
+<section id="configuration-fields" class="level3">
+<h3 class="anchored" data-anchor-id="configuration-fields">Configuration Fields</h3>
+<table class="table">
+<colgroup>
+<col style="width: 4%">
+<col style="width: 95%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>object_id</code></td>
+<td>The Azure Active Directory Object ID of the user (in this case, a Service Principal). This ensures that the compute instance is assigned to the correct identity that will access the environment through Jupyter Notebook or Jupyter Lab.</td>
+</tr>
+<tr class="even">
+<td><code>tenant_id</code></td>
+<td>The Azure Active Directory Tenant ID representing the organization. It identifies the directory where the assigned identity exists.</td>
+</tr>
+</tbody>
+</table>
+<p>Assigning the compute instance to a Service Principal ensures secure access and proper ownership of the development environment.</p>
+<hr>
+</section>
+</section>
+<section id="storage-module" class="level2">
+<h2 class="anchored" data-anchor-id="storage-module"><i class="fa-solid fa-database" aria-label="database"></i> Storage Module</h2>
+<p>The <code>storage</code> module is responsible for creating the storage resources required for the machine learning environment. These resources store datasets, experiment outputs, and model artifacts used throughout the MLOps workflow.</p>
+<p>The main resources created inside this module are:</p>
+<table class="table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 76%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Azure Storage Account</td>
+<td>Provides scalable cloud storage for datasets, ML artifacts, and intermediate results used during experiments.</td>
+</tr>
+<tr class="even">
+<td>Storage Container (Blob Container)</td>
+<td>Stores the dataset files that will be accessed by the Azure Machine Learning Workspace.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="azure-storage-account" class="level2">
+<h2 class="anchored" data-anchor-id="azure-storage-account">Azure Storage Account</h2>
+<p>The Azure Storage Account acts as the primary data storage service for the machine learning environment.</p>
+<section id="purpose-2" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-2">Purpose</h3>
+<ul>
+<li>Stores machine learning datasets and experiment artifacts.</li>
+<li>Provides secure and scalable Blob Storage used by Azure Machine Learning.</li>
+<li>Serves as the underlying storage layer for the ML datastore.</li>
+</ul>
+<p>This storage account is connected to the Azure Machine Learning Workspace datastore, enabling the workspace to access stored datasets.</p>
+<hr>
+</section>
+</section>
+<section id="storage-container" class="level2">
+<h2 class="anchored" data-anchor-id="storage-container">Storage Container</h2>
+<p>A Blob Storage container is created inside the Storage Account to store dataset files.</p>
+<section id="purpose-3" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-3">Purpose</h3>
+<ul>
+<li>Organizes dataset files used during machine learning experiments.</li>
+<li>Serves as the data source for the ML datastore.</li>
+</ul>
+<p>The container access level is configured as:</p>
+<p><strong>Private</strong></p>
+<p>This ensures that only authorized users and services can access the data, preventing public exposure of datasets.</p>
+<hr>
+</section>
+</section>
+<section id="dataset-files" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-files">Dataset Files</h2>
+<p>The dataset files stored within the container are Parquet files (<code>.parquet</code>).</p>
+<section id="characteristics" class="level3">
+<h3 class="anchored" data-anchor-id="characteristics">Characteristics</h3>
+<ul>
+<li>Each file is approximately <strong>89 MB</strong> in size.</li>
+<li>The files exceed GitHub repository size recommendations and therefore cannot be stored directly within the repository.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="manual-data-upload" class="level2">
+<h2 class="anchored" data-anchor-id="manual-data-upload">Manual Data Upload</h2>
+<p>After Terraform creates the storage resources, dataset files must be uploaded manually.</p>
+<section id="steps" class="level3">
+<h3 class="anchored" data-anchor-id="steps">Steps</h3>
+<ol type="1">
+<li>Navigate to the Azure Storage Account.</li>
+<li>Open <strong>Blob Containers</strong>.</li>
+<li>Select the created container.</li>
+<li>Upload the <code>.parquet</code> files.</li>
+</ol>
+<p>Once uploaded, the Azure Machine Learning Datastore can access these files during model training and experimentation.</p>
+<hr>
+</section>
+</section>
+<section id="network-module" class="level2">
+<h2 class="anchored" data-anchor-id="network-module"><i class="fa-solid fa-network-wired" aria-label="network-wired"></i> Network Module</h2>
+<p>The <code>network</code> module is responsible for creating the networking infrastructure required by the machine learning environment.</p>
+<p>The main resources created inside this module are:</p>
+<table class="table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Virtual Network (VNet)</td>
+<td>Provides a private network environment where Azure resources can communicate securely.</td>
+</tr>
+<tr class="even">
+<td>Subnet</td>
+<td>A smaller network segment inside the Virtual Network where specific resources are deployed.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="virtual-network-vnet" class="level2">
+<h2 class="anchored" data-anchor-id="virtual-network-vnet">Virtual Network (VNet)</h2>
+<p>The Virtual Network acts as the primary networking layer for the infrastructure.</p>
+<section id="purpose-4" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-4">Purpose</h3>
+<ul>
+<li>Provides a secure and isolated network environment.</li>
+<li>Allows Azure resources to communicate privately.</li>
+<li>Protects compute resources from unnecessary public exposure.</li>
+</ul>
+<p>The VNet ensures that machine learning resources operate within a controlled network boundary.</p>
+<hr>
+</section>
+</section>
+<section id="subnet" class="level2">
+<h2 class="anchored" data-anchor-id="subnet">Subnet</h2>
+<p>A Subnet is a logical subdivision of the Virtual Network.</p>
+<section id="purpose-5" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-5">Purpose</h3>
+<ul>
+<li>Organizes resources within the Virtual Network.</li>
+<li>Provides dedicated network segments for specific services.</li>
+</ul>
+<p>In this environment, the subnet is dedicated to the Azure Machine Learning Compute Instance.</p>
+<hr>
+</section>
+</section>
+<section id="integration-with-machine-learning-compute" class="level2">
+<h2 class="anchored" data-anchor-id="integration-with-machine-learning-compute">Integration with Machine Learning Compute</h2>
+<p>The Azure Machine Learning Compute Instance is deployed inside the subnet created by this module.</p>
+<section id="purpose-6" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-6">Purpose</h3>
+<ul>
+<li>Ensures the compute instance operates within a private network.</li>
+<li>Enables controlled communication with storage and workspace resources.</li>
+<li>Supports network isolation best practices.</li>
+</ul>
+<p>By deploying the compute instance inside a subnet, the infrastructure follows Azure networking and security recommendations.</p>
+<hr>
+</section>
+</section>
+<section id="key-vault-module" class="level2">
+<h2 class="anchored" data-anchor-id="key-vault-module"><i class="fa-solid fa-key" aria-label="key"></i> Key Vault Module</h2>
+<p>The <code>key_vault</code> module is responsible for creating Azure Key Vault and securely managing sensitive information used throughout the infrastructure.</p>
+<p>The main resources created inside this module are:</p>
+<table class="table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 75%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Azure Key Vault</td>
+<td>Securely stores secrets, keys, and credentials required by the infrastructure.</td>
+</tr>
+<tr class="even">
+<td>Key Vault Access Policies</td>
+<td>Defines which identities are allowed to access secrets stored in the vault.</td>
+</tr>
+<tr class="odd">
+<td>Key Vault Secret</td>
+<td>Stores the Storage Account connection string securely inside the vault.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="azure-key-vault" class="level2">
+<h2 class="anchored" data-anchor-id="azure-key-vault">Azure Key Vault</h2>
+<p>Azure Key Vault acts as the secure storage service for sensitive configuration values.</p>
+<section id="purpose-7" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-7">Purpose</h3>
+<ul>
+<li>Stores secrets securely instead of hardcoding them in Terraform or source code.</li>
+<li>Provides controlled access through access policies.</li>
+<li>Protects credentials and connection strings from unauthorized access.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="key-vault-access-policies" class="level2">
+<h2 class="anchored" data-anchor-id="key-vault-access-policies">Key Vault Access Policies</h2>
+<p>Access policies define which identities are allowed to manage and retrieve secrets.</p>
+<p>The following identities are granted access:</p>
+<table class="table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Identity</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Current Azure User</td>
+<td>Allows the infrastructure administrator to manage secrets.</td>
+</tr>
+<tr class="even">
+<td>Service Principal (GitHub Actions)</td>
+<td>Allows the CI/CD pipeline to retrieve secrets during automated deployments.</td>
+</tr>
+</tbody>
+</table>
+<section id="permissions" class="level3">
+<h3 class="anchored" data-anchor-id="permissions">Permissions</h3>
+<ul>
+<li><strong>Get</strong> – Retrieve secret values.</li>
+<li><strong>List</strong> – View available secrets.</li>
+<li><strong>Set</strong> – Create or update secrets.</li>
+</ul>
+<p>These permissions allow both users and automation workflows to securely access required secrets.</p>
+<hr>
+</section>
+</section>
+<section id="key-vault-secret" class="level2">
+<h2 class="anchored" data-anchor-id="key-vault-secret">Key Vault Secret</h2>
+<p>A secret is created to store the primary connection string of the Azure Storage Account.</p>
+<section id="purpose-8" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-8">Purpose</h3>
+<ul>
+<li>Provides secure access to the Storage Account.</li>
+<li>Prevents credentials from being exposed in Terraform code or repositories.</li>
+<li>Enables Azure services and applications to retrieve connection information securely.</li>
+</ul>
+<p>The secret creation depends on the following access policy:</p>
+<pre class="hcl"><code>azurerm_key_vault_access_policy.pipeline_sp_policy</code></pre>
+<p>This dependency ensures that the Service Principal receives the required permissions before Terraform attempts to create the secret.</p>
+<hr>
+<p>title: “Terraform Module Structure” subtitle: “Infrastructure as Code Organization” ———————————————–</p>
+</section>
+</section>
 <section id="objective" class="level2">
 <h2 class="anchored" data-anchor-id="objective"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Objective</h2>
-<p>In this lab, we focus on data ingestion. By the end of this, you will be able to:</p>
+<p>To maintain a clear and scalable Infrastructure as Code (IaC) setup, the Terraform configuration is organized into modules. This approach separates infrastructure components into logical units, making the code easier to maintain, manage, and reuse.</p>
+<p>Terraform uses two types of modules:</p>
 <ul>
-<li>[Part A] Ingest real-world data into Azure</li>
+<li><strong>Root Module</strong> – The entry point of the Terraform configuration.</li>
+<li><strong>Child Modules</strong> – Reusable components that create specific infrastructure resources.</li>
 </ul>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Scope
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This section intentionally stops before processing &amp; model training. The processed output will later be used for:</p>
+<p>The child modules used in this project are:</p>
 <ul>
-<li>Supervised learning (Linear Regression)</li>
-<li>Unsupervised learning (K-Means clustering)</li>
+<li><code>machine_learning</code></li>
+<li><code>storage</code></li>
+<li><code>network</code></li>
+<li><code>key_vault</code></li>
 </ul>
-</div>
-</div>
+<p>Together, these modules provision all resources required for the Azure Machine Learning environment.</p>
+<hr>
 </section>
-<section id="what-you-need" class="level2">
-<h2 class="anchored" data-anchor-id="what-you-need"><i class="fa-solid fa-list-check" aria-label="list-check"></i> What you need:</h2>
-<ul>
-<li><a href="https://azure.microsoft.com/en-us/pricing/offers/ms-azr-0170p">An Azure student account</a></li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Cost Management
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Always stop your Azure ML compute instance when not in use to avoid Azure credits consumption.</p>
-</div>
-</div>
-<section id="path-ingestion-using-azure-blob-storage-terraform-automated-infrastructure" class="level3">
-<h3 class="anchored" data-anchor-id="path-ingestion-using-azure-blob-storage-terraform-automated-infrastructure"><i class="fa-solid fa-code" aria-label="code"></i> Path – Ingestion using Azure Blob Storage (Terraform-Automated Infrastructure)</h3>
-<p>This path demonstrates a production-grade approach where infrastructure is provisioned automatically using <strong>Infrastructure as Code (IaC)</strong>, while data upload remains a manual step.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-When to Use This Path
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Use this approach when: - You need reproducible infrastructure across environments - You want to automate resource provisioning - You’re following DevOps best practices - You need consistent configuration management</p>
-</div>
-</div>
-<section id="infrastructure-setup-automated" class="level4">
-<h4 class="anchored" data-anchor-id="infrastructure-setup-automated">Infrastructure Setup (Automated)</h4>
-<p>The Azure Storage infrastructure is provisioned automatically using <strong>Terraform</strong>.</p>
-<p>During deployment, the following resources are created:</p>
-<ul>
-<li><strong>Azure Storage Account</strong> (<code>taxizonelookup</code>)</li>
-<li><strong>Blob Container</strong> (<code>taxidata</code>)</li>
-<li>Private access configuration for secure data storage</li>
-</ul>
-<p>This ensures a consistent, reproducible environment across deployments.</p>
+<section id="purpose-of-each-terraform-file" class="level2">
+<h2 class="anchored" data-anchor-id="purpose-of-each-terraform-file"><i class="fa-solid fa-file-code" aria-label="file-code"></i> Purpose of Each Terraform File</h2>
+<p>The Terraform configuration is organized into standard files, each serving a specific purpose within both the root module and child modules.</p>
+<table class="table">
+<colgroup>
+<col style="width: 4%">
+<col style="width: 42%">
+<col style="width: 53%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File Name</th>
+<th>Root Module Purpose</th>
+<th>Child Module Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>main.tf</code></td>
+<td>Acts as the main orchestration file. It calls the child modules such as network, storage, key_vault, and machine_learning, and passes the required variables to each module.</td>
+<td>Defines the Azure resources created by that module. For example, the network module creates the Virtual Network and Subnet, while the machine_learning module creates the ML Workspace, Datastore, and Compute Instance.</td>
+</tr>
+<tr class="even">
+<td><code>variables.tf</code></td>
+<td>Declares input variables used by the root module and passed to child modules. This allows the infrastructure to remain flexible and reusable.</td>
+<td>Declares variables required specifically by the module, such as storage account names, subnet names, workspace names, and compute configurations.</td>
+</tr>
+<tr class="odd">
+<td><code>outputs.tf</code></td>
+<td>Displays important outputs after deployment and exposes outputs returned by child modules.</td>
+<td>Returns key resource attributes such as IDs and names so they can be referenced by the root module or other modules.</td>
+</tr>
+<tr class="even">
+<td><code>terraform.tfvars</code></td>
+<td>Provides actual values for variables declared in <code>variables.tf</code>. Terraform automatically reads this file during <code>terraform plan</code> and <code>terraform apply</code>.</td>
+<td>Typically not used inside child modules because values are passed from the root module during module invocation.</td>
+</tr>
+</tbody>
+</table>
+<hr>
 </section>
-<section id="data-upload-manual-step" class="level4">
-<h4 class="anchored" data-anchor-id="data-upload-manual-step">Data Upload (Manual Step)</h4>
-<p>While infrastructure is automated, the dataset itself must be uploaded manually.</p>
-<p><strong>Required Format:</strong></p>
+<section id="root-module-structure" class="level2">
+<h2 class="anchored" data-anchor-id="root-module-structure"><i class="fa-solid fa-sitemap" aria-label="sitemap"></i> Root Module Structure</h2>
+<p>The root module acts as the orchestration layer for the infrastructure deployment.</p>
+<section id="responsibilities" class="level3">
+<h3 class="anchored" data-anchor-id="responsibilities">Responsibilities</h3>
 <ul>
-<li>File type: <strong><code>.parquet</code></strong></li>
-<li>Uploaded to: <code>taxizonelookup → taxidata</code> container</li>
+<li>Calls all child modules.</li>
+<li>Passes required input variables to each module.</li>
+<li>Consumes outputs returned from child modules.</li>
+<li>Coordinates dependencies between infrastructure components.</li>
 </ul>
-<p><strong>Steps to Upload:</strong></p>
+<p>The root module provides a centralized location for managing the overall Azure Machine Learning infrastructure deployment.</p>
+<hr>
+</section>
+</section>
+<section id="input-variables" class="level2">
+<h2 class="anchored" data-anchor-id="input-variables"><i class="fa-solid fa-sliders-h" aria-label="sliders-h"></i> Input Variables</h2>
+<p>The following input variables are defined in the root module and passed to child modules as needed.</p>
+<table class="table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 60%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>resource_group_name</code></td>
+<td>Name of the Azure Resource Group where all resources will be created.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>name</code></td>
+<td>Name of the Azure Storage Account.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="odd">
+<td><code>account_tier</code></td>
+<td>Performance tier of the Storage Account (Standard or Premium).</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>account_replication_type</code></td>
+<td>Replication strategy for the Storage Account such as LRS, GRS, RAGRS, or ZRS.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="odd">
+<td><code>container_name</code></td>
+<td>Name of the Blob Storage container used to store dataset files.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>container_access_type</code></td>
+<td>Access level for the container (private, blob, or container).</td>
+<td><code>string</code></td>
+</tr>
+<tr class="odd">
+<td><code>virtual_network_name</code></td>
+<td>Name of the Virtual Network that hosts the compute resources.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>address_space</code></td>
+<td>Address range used by the Virtual Network.</td>
+<td><code>list(string)</code></td>
+</tr>
+<tr class="odd">
+<td><code>subnet_name</code></td>
+<td>Name of the subnet created within the Virtual Network.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>address_prefixes</code></td>
+<td>Address ranges assigned to the subnet.</td>
+<td><code>list(string)</code></td>
+</tr>
+<tr class="odd">
+<td><code>application_insights_name</code></td>
+<td>Name of the Azure Application Insights resource used for monitoring ML experiments.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>application_type</code></td>
+<td>Type of Application Insights instance being created.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="odd">
+<td><code>key_vault_name</code></td>
+<td>Name of the Azure Key Vault used to store secrets securely.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>secret_name</code></td>
+<td>Name of the secret stored inside the Key Vault.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="odd">
+<td><code>sku_name</code></td>
+<td>SKU or pricing tier of the Key Vault.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>workspace_name</code></td>
+<td>Name of the Azure Machine Learning Workspace.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="odd">
+<td><code>type</code></td>
+<td>Type of Managed Identity assigned to the ML Workspace.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>datastore_name</code></td>
+<td>Name of the Azure Machine Learning Datastore.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="odd">
+<td><code>ml_instance_name</code></td>
+<td>Name of the Machine Learning Compute Instance.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>machine_size</code></td>
+<td>Virtual machine size used for the Compute Instance.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="odd">
+<td><code>authorization_type</code></td>
+<td>Authorization type used for the ML Compute Instance.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>object_id</code></td>
+<td>Azure Active Directory Object ID of the assigned user or Service Principal.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="odd">
+<td><code>description</code></td>
+<td>Description assigned to the Machine Learning Compute Instance.</td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>tags</code></td>
+<td>Tags assigned to the Compute Instance for resource organization.</td>
+<td><code>object({ name = string })</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="output-variables" class="level2">
+<h2 class="anchored" data-anchor-id="output-variables"><i class="fa-solid fa-share-alt" aria-label="share-alt"></i> Output Variables</h2>
+<p>Output variables expose important information from child modules so that it can be consumed by other modules or displayed after deployment.</p>
+<table class="table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 83%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>storage_account_id</code></td>
+<td>The resource ID of the Azure Storage Account created by the storage module.</td>
+</tr>
+<tr class="even">
+<td><code>storage_container_name</code></td>
+<td>The name of the Blob Storage container used to store machine learning datasets.</td>
+</tr>
+<tr class="odd">
+<td><code>storage_primary_key</code></td>
+<td>The primary access key of the Storage Account. Marked as sensitive because it contains confidential credentials.</td>
+</tr>
+<tr class="even">
+<td><code>primary_connection_string</code></td>
+<td>The primary connection string of the Storage Account. Used by services that require authenticated access to storage. Marked as sensitive.</td>
+</tr>
+<tr class="odd">
+<td><code>subnet_id</code></td>
+<td>The resource ID of the subnet created by the network module. Used when deploying the Machine Learning Compute Instance.</td>
+</tr>
+<tr class="even">
+<td><code>key_id</code></td>
+<td>The ID of the Key Vault secret containing the Storage Account connection string.</td>
+</tr>
+<tr class="odd">
+<td><code>instance_id</code></td>
+<td>The resource ID of the Azure Machine Learning Compute Instance created by the machine_learning module.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="accessing-output-variables-between-modules" class="level2">
+<h2 class="anchored" data-anchor-id="accessing-output-variables-between-modules"><i class="fa-solid fa-exchange-alt" aria-label="exchange-alt"></i> Accessing Output Variables Between Modules</h2>
+<p>Terraform output variables allow information created inside one module to be shared with other modules or with the root module.</p>
+<section id="purpose-9" class="level3">
+<h3 class="anchored" data-anchor-id="purpose-9">Purpose</h3>
+<p>When a resource is created inside a child module, important attributes such as:</p>
+<ul>
+<li>Resource IDs</li>
+<li>Names</li>
+<li>Keys</li>
+<li>Connection Strings</li>
+</ul>
+<p>may need to be used elsewhere in the infrastructure.</p>
+<p>To make these values available outside the module, they are declared as output variables.</p>
+<hr>
+</section>
+</section>
+<section id="output-variable-syntax" class="level2">
+<h2 class="anchored" data-anchor-id="output-variable-syntax">Output Variable Syntax</h2>
+<p>Once an output variable is defined in a child module, it can be accessed using the following syntax:</p>
+<pre class="hcl"><code>module.&lt;module_name&gt;.&lt;output_variable_name&gt;</code></pre>
+<hr>
+</section>
+<section id="how-it-works" class="level2">
+<h2 class="anchored" data-anchor-id="how-it-works">How It Works</h2>
 <ol type="1">
-<li>Go to <strong>Azure Portal</strong></li>
-<li>Open <strong>Storage Accounts</strong></li>
-<li>Select storage account name: <code>taxizonelookup</code></li>
-<li>Navigate to <strong>Containers</strong></li>
-<li>Open container name: <code>taxidata</code></li>
-<li>Click <strong>Upload</strong></li>
-<li>Select your <code>.parquet</code> file</li>
-<li>Confirm upload</li>
+<li>A resource is created inside a child module.</li>
+<li>An important attribute from that resource is exposed through an output variable.</li>
+<li>The root module calls the child module.</li>
+<li>The root module accesses the output value using module syntax.</li>
 </ol>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Why Manual Upload?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The dataset is approximately <strong>180 MB</strong> in size, which is too large to store in version control. Manual upload:</p>
+<p>This mechanism enables modules to remain independent while still sharing required information.</p>
+<hr>
+</section>
+<section id="example" class="level2">
+<h2 class="anchored" data-anchor-id="example">Example</h2>
+<p>Suppose the storage module defines the following output:</p>
+<pre class="hcl"><code>output "storage_account_id" {
+  value = azurerm_storage_account.storage.id
+}</code></pre>
+<p>The root module can access this value as:</p>
+<pre class="hcl"><code>module.storage.storage_account_id</code></pre>
+<section id="breakdown" class="level3">
+<h3 class="anchored" data-anchor-id="breakdown">Breakdown</h3>
+<table class="table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 74%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>module</code></td>
+<td>Indicates that Terraform is accessing a module output.</td>
+</tr>
+<tr class="even">
+<td><code>storage</code></td>
+<td>The name assigned to the storage module when it is called.</td>
+</tr>
+<tr class="odd">
+<td><code>storage_account_id</code></td>
+<td>The output variable defined inside the storage module.</td>
+</tr>
+</tbody>
+</table>
+<p>This pattern is used throughout the infrastructure to connect resources between modules while maintaining modularity and reusability.</p>
+<hr>
+</section>
+</section>
+<section id="benefits-of-using-terraform-modules" class="level2">
+<h2 class="anchored" data-anchor-id="benefits-of-using-terraform-modules">Benefits of Using Terraform Modules</h2>
+<p>Using Terraform modules provides several advantages:</p>
 <ul>
-<li>Keeps large datasets out of GitHub</li>
-<li>Maintains clean DevOps practices</li>
-<li>Separates infrastructure from data</li>
-<li>Ensures secure handling of production datasets</li>
+<li>Improved code organization.</li>
+<li>Better reusability across environments.</li>
+<li>Easier maintenance and troubleshooting.</li>
+<li>Clear separation of responsibilities.</li>
+<li>Reduced code duplication.</li>
+<li>Simplified infrastructure scaling.</li>
 </ul>
-</div>
-</div>
-</section>
-<section id="pipeline-flow" class="level4">
-<h4 class="anchored" data-anchor-id="pipeline-flow">Pipeline Flow</h4>
-<pre><code>Terraform → Creates Storage Account + Container
-User → Uploads .parquet file manually
-Azure ML → Reads data via Datastore
-Notebook → Performs EDA/Training</code></pre>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Infrastructure vs Data
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Infrastructure is code (automated). Data is content (manual). This separation is a best practice in production MLOps workflows.</p>
-</div>
-</div>
-</section>
-</section>
+<p>By organizing the Azure Machine Learning infrastructure into dedicated modules, the deployment remains maintainable, scalable, and aligned with Infrastructure as Code best practices.</p>
 </section>
 <section id="knowledge-check" class="level2">
 <h2 class="anchored" data-anchor-id="knowledge-check">Knowledge Check</h2>
 <div style="background:#f0f4ff;border:2px solid #0b3d91;border-radius:10px;padding:20px 24px;margin:24px 0">
 <style>
-.kcaz-q{margin-bottom:16px}
-.kcaz-q p{font-weight:700;margin:0 0 8px;font-size:.95rem}
-.kcaz-opts label{
+.kct-q{margin-bottom:16px}
+.kct-q p{font-weight:700;margin:0 0 8px;font-size:.95rem}
+.kct-opts label{
   display:block;
   padding:7px 12px;
   margin:3px 0;
@@ -428,9 +1038,9 @@ Infrastructure vs Data
   cursor:pointer;
   font-size:.9rem
 }
-.kcaz-opts label:hover{border-color:#0b3d91}
-.kcaz-opts input{margin-right:8px}
-.kcaz-btn{
+.kct-opts label:hover{border-color:#0b3d91}
+.kct-opts input{margin-right:8px}
+.kct-btn{
   margin-top:12px;
   background:#0b3d91;
   color:#fff;
@@ -441,8 +1051,8 @@ Infrastructure vs Data
   font-size:.9rem;
   font-weight:600
 }
-.kcaz-btn:hover{background:#093080}
-.kcaz-score-box{
+.kct-btn:hover{background:#093080}
+.kct-score-box{
   margin-top:12px;
   padding:12px 16px;
   border-radius:6px;
@@ -453,98 +1063,87 @@ Infrastructure vs Data
 </style>
 
 <h4 style="margin:0 0 16px;color:#0b3d91;font-size:1.1rem" class="anchored">
-🎯 Knowledge Check: Azure Infrastructure Services
+🎯 Knowledge Check: Terraform
 </h4>
 
-<form id="kcAzure">
+<form id="kctf">
 
-<div class="kcaz-q">
-<p>1. What is the role of Azure ML Datastore in this project?</p>
-<div class="kcaz-opts">
-<label><input type="radio" name="q1" value="a"> Stores model code</label>
-<label><input type="radio" name="q1" value="b"> Acts as a bridge between Azure ML Workspace and Storage Account</label>
-<label><input type="radio" name="q1" value="c"> Creates compute instances</label>
-<label><input type="radio" name="q1" value="d"> Stores GitHub credentials</label>
-</div>
-</div>
-
-<div class="kcaz-q">
-<p>2. Where is the NYC Taxi dataset stored?</p>
-<div class="kcaz-opts">
-<label><input type="radio" name="q2" value="a"> Azure Key Vault</label>
-<label><input type="radio" name="q2" value="b"> Azure ML Workspace</label>
-<label><input type="radio" name="q2" value="c"> Azure Blob Storage Container</label>
-<label><input type="radio" name="q2" value="d"> GitHub Repository</label>
+<div class="kct-q">
+<p>1. What is the purpose of a Terraform resource block?</p>
+<div class="kct-opts">
+<label><input type="radio" name="q1" value="a"> Store secrets securely</label>
+<label><input type="radio" name="q1" value="b"> Define and create infrastructure resources</label>
+<label><input type="radio" name="q1" value="c"> Execute Python scripts</label>
+<label><input type="radio" name="q1" value="d"> Register ML models</label>
 </div>
 </div>
 
-<div class="kcaz-q">
-<p>3. Why do we use Azure Key Vault?</p>
-<div class="kcaz-opts">
-<label><input type="radio" name="q3" value="a"> To train ML models</label>
-<label><input type="radio" name="q3" value="b"> To store datasets</label>
-<label><input type="radio" name="q3" value="c"> To securely store secrets, credentials, and connection strings</label>
-<label><input type="radio" name="q3" value="d"> To deploy endpoints</label>
+<div class="kct-q">
+<p>2. What is the primary purpose of variables.tf?</p>
+<div class="kct-opts">
+<label><input type="radio" name="q2" value="a"> Store output values from resources</label>
+<label><input type="radio" name="q2" value="b"> Define reusable input values and avoid hardcoding</label>
+<label><input type="radio" name="q2" value="c"> Deploy Azure resources</label>
+<label><input type="radio" name="q2" value="d"> Store Terraform state</label>
 </div>
 </div>
 
-<div class="kcaz-q">
-<p>4. How does Azure ML Datastore securely access data in Blob Storage?</p>
-<div class="kcaz-opts">
-<label><input type="radio" name="q4" value="a"> Through GitHub Actions</label>
-<label><input type="radio" name="q4" value="b"> Through secrets and connection information stored in Key Vault</label>
-<label><input type="radio" name="q4" value="c"> Through Terraform outputs only</label>
-<label><input type="radio" name="q4" value="d"> Through manual uploads</label>
+<div class="kct-q">
+<p>3. What is the purpose of outputs.tf?</p>
+<div class="kct-opts">
+<label><input type="radio" name="q3" value="a"> Define resource dependencies</label>
+<label><input type="radio" name="q3" value="b"> Store secrets in Key Vault</label>
+<label><input type="radio" name="q3" value="c"> Expose resource values for use by other modules or users</label>
+<label><input type="radio" name="q3" value="d"> Configure Azure ML environments</label>
 </div>
 </div>
 
-<div class="kcaz-q">
-<p>5. Which Azure service executes the ML pipeline jobs in this project?</p>
-<div class="kcaz-opts">
-<label><input type="radio" name="q5" value="a"> Azure Key Vault</label>
-<label><input type="radio" name="q5" value="b"> Azure Storage Account</label>
-<label><input type="radio" name="q5" value="c"> Azure ML Compute Instance</label>
-<label><input type="radio" name="q5" value="d"> Azure Virtual Network</label>
+<div class="kct-q">
+<p>4. Why do we use terraform.tfvars?</p>
+<div class="kct-opts">
+<label><input type="radio" name="q4" value="a"> To define Azure ML pipelines</label>
+<label><input type="radio" name="q4" value="b"> To provide user-specific variable values without modifying code</label>
+<label><input type="radio" name="q4" value="c"> To register datasets</label>
+<label><input type="radio" name="q4" value="d"> To create GitHub Actions workflows</label>
 </div>
 </div>
 
-<div class="kcaz-q">
-<p>6. Scenario: You need to allow an Azure ML pipeline to access data stored in a Blob Container without hardcoding credentials in your code. Which combination of services would you use?</p>
-<div class="kcaz-opts">
-<label><input type="radio" name="q6" value="a"> Azure Storage + GitHub Actions</label>
-<label><input type="radio" name="q6" value="b"> Azure Key Vault + Azure ML Datastore</label>
-<label><input type="radio" name="q6" value="c"> Azure ML Compute + VNet</label>
-<label><input type="radio" name="q6" value="d"> Terraform + Blob Storage</label>
+<div class="kct-q">
+<p>5. What is the main benefit of using Terraform modules?</p>
+<div class="kct-opts">
+<label><input type="radio" name="q5" value="a"> Faster model training</label>
+<label><input type="radio" name="q5" value="b"> Better UI design</label>
+<label><input type="radio" name="q5" value="c"> Reusability, scalability, and easier maintenance</label>
+<label><input type="radio" name="q5" value="d"> Lower storage costs</label>
 </div>
 </div>
 
-<button type="button" class="kcaz-btn" onclick="gradeAzureKC()">
+<button type="button" class="kct-btn" onclick="gradeTerraformKC()">
 Check Answers
 </button>
 
 </form>
 
-<div class="kcaz-score-box" id="kcaz-score"></div>
+<div class="kct-score-box" id="kct-score"></div>
 </div>
 
 <script>
-function gradeAzureKC(){
+function gradeTerraformKC(){
 
   var ans = {
     q1:'b',
-    q2:'c',
+    q2:'b',
     q3:'c',
     q4:'b',
-    q5:'c',
-    q6:'b'
+    q5:'c'
   };
 
   var score = 0;
-  var total = 6;
+  var total = 5;
 
-  var form = document.getElementById('kcAzure');
+  var form = document.getElementById('kctf');
 
-  ['q1','q2','q3','q4','q5','q6'].forEach(function(q){
+  ['q1','q2','q3','q4','q5'].forEach(function(q){
 
     var sel = form.querySelector('input[name="'+q+'"]:checked');
 
@@ -572,11 +1171,12 @@ function gradeAzureKC(){
         correct.parentElement.style.borderColor = '#34d399';
       }
     }
+
   });
 
   var pct = Math.round(score/total*100);
 
-  var box = document.getElementById('kcaz-score');
+  var box = document.getElementById('kct-score');
   box.style.display = 'block';
 
   box.style.background =
@@ -594,10 +1194,10 @@ function gradeAzureKC(){
     '📊 Score: ' + score + '/' + total +
     ' (' + pct + '%) ' +
     (pct === 100
-      ? '🎉 Perfect! You understand the Azure infrastructure architecture.'
+      ? '🎉 Perfect! Terraform expert!'
       : pct >= 80
-      ? '✅ Great work! You have a strong understanding of Azure services and their integration.'
-      : '📚 Review the Azure Infrastructure Services section and try again.');
+      ? '✅ Great job! You understand the Terraform fundamentals.'
+      : '📚 Review the Terraform module section and try again.');
 }
 </script>
 
