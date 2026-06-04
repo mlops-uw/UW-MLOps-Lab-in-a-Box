@@ -3,12 +3,6 @@ title: "ML Pipeline"
 subtitle: "Orchestrating end-to-end ML workflows on Azure"
 ---
 
----
-
-title: "Machine Learning Pipeline"
-subtitle: "End-to-End MLOps Workflow"
--------------------------------------
-
 ## {{< fa project-diagram >}} What Is an ML Pipeline?
 
 A Machine Learning (ML) Pipeline is a series of automated and reproducible steps that transform raw data into trained, evaluated, monitored, and registered machine learning models.
